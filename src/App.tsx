@@ -6,8 +6,8 @@ function App() {
   return (
     <>  
     <div>
-      <h1>Hello Taste of Aloha 🌺</h1>
-      <p>Welcome to my Vite + TypeScript app!</p>
+      <h1>Taste of Aloha 🌺</h1>
+      <p>Mahalo for visiting my Vite + TypeScript app!</p>
     </div>
     <SnackCard 
       name="Hawaiian Snack"
