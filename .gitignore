@@ -30,7 +30,9 @@ pnpm-lock.yaml
 *.njsproj
 *.sln
 *.sw?
-.env# node modules
+.env# Node modules and nested installs
 node_modules/
 apps/*/node_modules/
 packages/*/node_modules/
+# ignore node_modules lockfile noise
+node_modules/.package-lock.json
