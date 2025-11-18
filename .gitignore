@@ -15,8 +15,9 @@ build/
 *.local
 
 # Ignore nested workspace lockfiles (keep single root lockfile)
-apps/*/package-lock.json
-packages/*/package-lock.json
+node_modules/
+apps/*/node_modules/
+packages/*/node_modules/
 pnpm-lock.yaml
 
 # Editor / OS
@@ -29,4 +30,7 @@ pnpm-lock.yaml
 *.njsproj
 *.sln
 *.sw?
-.env
+.env# node modules
+node_modules/
+apps/*/node_modules/
+packages/*/node_modules/
