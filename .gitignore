@@ -1,0 +1,32 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node + build
+node_modules/
+dist/
+dist-ssr/
+build/
+*.local
+
+# Ignore nested workspace lockfiles (keep single root lockfile)
+apps/*/package-lock.json
+packages/*/package-lock.json
+pnpm-lock.yaml
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.env

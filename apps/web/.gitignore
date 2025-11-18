@@ -7,12 +7,19 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Node + build
+node_modules/
+dist/
+dist-ssr/
+build/
 *.local
 
-# Editor directories and files
+# Ignore nested workspace lockfiles (keep single root lockfile)
+apps/*/package-lock.json
+packages/*/package-lock.json
+pnpm-lock.yaml
+
+# Editor / OS
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -22,3 +29,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.env
