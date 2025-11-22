@@ -1,7 +1,3 @@
-Perfect 🌺 — here’s a **Taste of Aloha README skeleton** you can drop into your repo. It replaces the boilerplate Vite text with a clear intro, onboarding instructions, and keeps the useful Vite/React notes under “Development Notes.”
-
----
-
 # Taste of Aloha Monorepo 🌺
 
 This repository powers the **Taste of Aloha** platform — a community‑driven snack and food delivery service.  
