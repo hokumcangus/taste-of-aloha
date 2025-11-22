@@ -105,8 +105,6 @@ curl -i -X PUT http://localhost:3000/api/snacks/1 \
 curl -i -X DELETE http://localhost:3000/api/snacks/1
 ```
 
----
-
 ## ✅ Expected Responses
 
 - **POST /api/snacks**
@@ -135,6 +133,30 @@ curl -i -X DELETE http://localhost:3000/api/snacks/1
   ```
 
 ---
+## 📸 Screenshots
+
+### Create Snack
+<img width="991" height="578" alt="Screenshot 2025-11-22 034546" src="https://github.com/user-attachments/assets/20c569c4-dba5-4d08-9729-d0e3da7317ed" />
+*Figure 1: POST /api/snacks request showing 201 Created response*
+
+### Get Snack by ID
+<img width="1005" height="526" alt="Screenshot 2025-11-22 034646" src="https://github.com/user-attachments/assets/63b363cc-14eb-40a7-b225-f60e760146a4" />
+*Figure 2: GET /api/snacks/1 showing full snack object*
+
+### Update Snack
+<img width="1014" height="594" alt="Screenshot 2025-11-22 034717" src="https://github.com/user-attachments/assets/7e16ec65-e1fe-4f91-9acf-bf6d37011c75" />
+*Figure 3: PUT /api/snacks/1 updating price field*
+
+### Delete Snack
+<img width="1008" height="639" alt="Screenshot 2025-11-22 034758" src="https://github.com/user-attachments/assets/7cb1d8f3-7107-433a-8e38-f39c36afa4cf" />
+*Figure 4: DELETE /api/snacks/1 confirming deletion message*
+
+### List Snacks
+<img width="1231" height="486" alt="Screenshot 2025-11-22 034223" src="https://github.com/user-attachments/assets/7081f6ea-d5da-4605-83b6-89219411c0be" />
+*Figure 5: GET /api/snacks showing empty array after deletion*
+---
+
+===
 
 ## 🛠️ Notes
 
