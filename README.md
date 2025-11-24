@@ -1,13 +1,22 @@
-# Taste of Aloha Monorepo 🌺
+# 🌺 Taste of Aloha Monorepo 🌺
 
-This repository powers the **Taste of Aloha** platform — a community‑driven snack and food delivery service.  
-It contains multiple apps and shared libraries:
+This repository powers the **Taste of Aloha Food Delivery Service**, the central platform that unifies our restaurant, grocery, and bakery into one seamless experience.  
 
-- **apps/web** → Vite.js frontend (React + Tailwind/Shadcn)  
-- **apps/backend** → Node.js/Express backend API  
-- **apps/mobile** → React Native wrapper (future)  
-- **shared/** → Configs and libraries shared across apps  
-- **infra/** → Docker and Kubernetes manifests for deployment  
+## Overview
+Taste of Aloha is a community‑driven Hawaiian business built around sharing authentic island flavors and culture.  
+This monorepo is dedicated to developing and maintaining our **delivery infrastructure**, ensuring customers can enjoy Hawaiian meals, baked goods, and snacks wherever they are.  
+
+## Ecosystem
+- **Restaurant** — serving traditional Hawaiian dishes with aloha spirit  
+- **Island Delights Grocery & Bakery** — offering baked goods, snacks, and local favorites  
+- **Food Delivery Service** — the core of this repo, connecting our offerings with customers through modern delivery workflows  
+
+## Tech Stack
+- **Frontend**: React / Next.js (customer ordering experience)  
+- **Backend**: Node.js / Express (order management, APIs)  
+- **Database**: PostgreSQL (menu, inventory, orders)  
+- **Infrastructure**: Docker, CI/CD pipelines, cloud deployment  
+- **Integrations**: Stripe (payments), Twilio/SendGrid (notifications), Firebase (push messaging)  
 
 ---
 
