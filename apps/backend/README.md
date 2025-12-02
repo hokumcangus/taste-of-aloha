@@ -23,6 +23,101 @@ The server will start at:
 
 ---
 
+## 🔧 CORS Configuration
+
+### Do I need to import CORS?
+
+**Yes!** You need to import and configure CORS to allow your frontend (running on a different port) to make requests to the backend.
+
+The `cors` package is already in your `package.json` dependencies, but you need to configure it in `index.js`.
+
+### Setup Instructions
+
+1. **Import cors** at the top of `apps/backend/index.js`:
+   ```javascript
+   const cors = require('cors');
+   ```
+
+2. **Add CORS middleware** before your routes:
+   ```javascript
+   app.use(cors());
+   ```
+
+Your `index.js` should look like this:
+```javascript
+const express = require('express');
+const cors = require('cors');
+const snackRoutes = require('./src/routes/snackRoutes');
+const logger = require('./src/utils/logger');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(cors());  // Enable CORS for all routes
+app.use(express.json());
+app.use(logger);
+
+// Routes
+app.use('/api/snacks', snackRoutes);
+// ... rest of your code
+```
+
+### Why CORS is needed
+
+- Your frontend runs on `http://localhost:5173` (Vite default)
+- Your backend runs on `http://localhost:3000`
+- Browsers block cross-origin requests by default
+- CORS allows the frontend to communicate with the backend
+
+---
+
+## 🧪 Testing Your Backend
+
+### Quick Browser Test
+
+1. **Test root endpoint:**
+   - Open `http://localhost:3000/` in your browser
+   - You should see: "Taste of Aloha backend is running 🌺"
+
+2. **Test API endpoint:**
+   - Open `http://localhost:3000/api/snacks` in your browser
+   - You should see an empty array `[]` (or snacks if any exist)
+
+### Using Browser Console (JavaScript)
+
+Open your browser's developer console (F12) and run:
+
+```javascript
+// Test root endpoint
+fetch('http://localhost:3000/')
+  .then(res => res.text())
+  .then(data => console.log(data));
+
+// Test get all snacks
+fetch('http://localhost:3000/api/snacks')
+  .then(res => res.json())
+  .then(data => console.log(data));
+
+// Test get snack by ID
+fetch('http://localhost:3000/api/snacks/1')
+  .then(res => res.json())
+  .then(data => console.log(data));
+```
+
+### Using Postman or Thunder Client (VS Code Extension)
+
+1. **Install Thunder Client** (VS Code extension) or use Postman
+2. Create a new request:
+   - Method: `GET`
+   - URL: `http://localhost:3000/api/snacks`
+3. Click "Send" and check the response
+
+### Using curl (Terminal)
+
+See the "Verification Commands" section below for detailed curl examples.
+
+---
+
 ## 📂 Project Structure
 
 ```
