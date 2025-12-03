@@ -15,5 +15,8 @@
   "devDependencies": {
     "eslint": "^9.39.1",
     "prettier": "^3.0.0"
+  },
+  "dependencies": {
+    "docker": "^1.0.0"
   }
 }
