@@ -1,0 +1,362 @@
+<mxfile host="65bd71144e">
+    <diagram id="TasteOfAlohaServices" name="Services Diagram">
+        <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1400" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                
+                <!-- Title -->
+                <mxCell id="title" value="🌺 Taste of Aloha - Services &amp; Data Flow Diagram" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="400" y="20" width="800" height="40" as="geometry"/>
+                </mxCell>
+                
+                <!-- Customer Services Layer -->
+                <mxCell id="customerServices" value="Customer-Facing Services" style="swimlane;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=16;fontStyle=1;startSize=40" vertex="1" parent="1">
+                    <mxGeometry x="80" y="90" width="740" height="400" as="geometry"/>
+                </mxCell>
+                
+                <!-- Menu Browse Service -->
+                <mxCell id="menuBrowse" value="Menu Browse Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1" vertex="1" parent="customerServices">
+                    <mxGeometry x="30" y="60" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="menuBrowseDetails" value="• List all menu items&#xa;• Filter by category&#xa;• Search functionality&#xa;• View item details&#xa;• Check availability" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="customerServices">
+                    <mxGeometry x="40" y="95" width="180" height="80" as="geometry"/>
+                </mxCell>
+                
+                <!-- Shopping Cart Service -->
+                <mxCell id="cartService" value="Shopping Cart Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;fontStyle=1" vertex="1" parent="customerServices">
+                    <mxGeometry x="270" y="60" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="cartServiceDetails" value="• Add/remove items&#xa;• Update quantities&#xa;• Calculate totals&#xa;• Apply taxes/fees&#xa;• Session management&#xa;• Persist for auth users" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="customerServices">
+                    <mxGeometry x="280" y="95" width="180" height="80" as="geometry"/>
+                </mxCell>
+                
+                <!-- Checkout Service -->
+                <mxCell id="checkoutService" value="Checkout Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;fontStyle=1" vertex="1" parent="customerServices">
+                    <mxGeometry x="510" y="60" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="checkoutServiceDetails" value="• Guest checkout&#xa;• User checkout&#xa;• Address validation&#xa;• Delivery scheduling&#xa;• Order summary&#xa;• Payment initiation" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="customerServices">
+                    <mxGeometry x="520" y="95" width="180" height="80" as="geometry"/>
+                </mxCell>
+                
+                <!-- Order History Service -->
+                <mxCell id="orderHistory" value="Order History Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontStyle=1" vertex="1" parent="customerServices">
+                    <mxGeometry x="30" y="220" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="orderHistoryDetails" value="• List past orders&#xa;• View order details&#xa;• Track order status&#xa;• Download receipts&#xa;• Reorder function&#xa;• Filter/search orders" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="customerServices">
+                    <mxGeometry x="40" y="255" width="180" height="80" as="geometry"/>
+                </mxCell>
+                
+                <!-- User Profile Service -->
+                <mxCell id="userProfile" value="User Profile Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;fontStyle=1" vertex="1" parent="customerServices">
+                    <mxGeometry x="270" y="220" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="userProfileDetails" value="• Manage addresses&#xa;• Payment methods&#xa;• Account settings&#xa;• Preferences&#xa;• Loyalty points&#xa;• Communication prefs" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="customerServices">
+                    <mxGeometry x="280" y="255" width="180" height="80" as="geometry"/>
+                </mxCell>
+                
+                <!-- Notification Service -->
+                <mxCell id="notificationService" value="Notification Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;fontStyle=1" vertex="1" parent="customerServices">
+                    <mxGeometry x="510" y="220" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="notificationDetails" value="• Order confirmations&#xa;• Status updates&#xa;• Delivery notifications&#xa;• Email service&#xa;• SMS alerts&#xa;• Push notifications" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="customerServices">
+                    <mxGeometry x="520" y="255" width="180" height="80" as="geometry"/>
+                </mxCell>
+                
+                <!-- Core Business Services -->
+                <mxCell id="coreServices" value="Core Business Services" style="swimlane;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=16;fontStyle=1;startSize=40" vertex="1" parent="1">
+                    <mxGeometry x="860" y="90" width="660" height="400" as="geometry"/>
+                </mxCell>
+                
+                <!-- Payment Processing Service -->
+                <mxCell id="paymentService" value="Payment Processing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;fontStyle=1" vertex="1" parent="coreServices">
+                    <mxGeometry x="30" y="60" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="paymentServiceDetails" value="• Stripe integration&#xa;• Process payments&#xa;• Handle refunds&#xa;• Webhook handling&#xa;• Payment validation&#xa;• Transaction logging" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="coreServices">
+                    <mxGeometry x="40" y="95" width="180" height="80" as="geometry"/>
+                </mxCell>
+                
+                <!-- Order Management Service -->
+                <mxCell id="orderManagement" value="Order Management" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1" vertex="1" parent="coreServices">
+                    <mxGeometry x="270" y="60" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="orderManagementDetails" value="• Create orders&#xa;• Update status&#xa;• Order tracking&#xa;• Order validation&#xa;• Kitchen tickets&#xa;• Delivery scheduling" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="coreServices">
+                    <mxGeometry x="280" y="95" width="180" height="80" as="geometry"/>
+                </mxCell>
+                
+                <!-- Inventory Service -->
+                <mxCell id="inventoryService" value="Inventory Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontStyle=1" vertex="1" parent="coreServices">
+                    <mxGeometry x="30" y="220" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="inventoryDetails" value="• Stock tracking&#xa;• Low stock alerts&#xa;• Availability updates&#xa;• Restock management&#xa;• Category management&#xa;• Product catalog" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="coreServices">
+                    <mxGeometry x="40" y="255" width="180" height="80" as="geometry"/>
+                </mxCell>
+                
+                <!-- Authentication Service -->
+                <mxCell id="authService" value="Authentication Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;fontStyle=1" vertex="1" parent="coreServices">
+                    <mxGeometry x="270" y="220" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="authDetails" value="• User registration&#xa;• Login/logout&#xa;• JWT tokens&#xa;• Password reset&#xa;• Email verification&#xa;• Role management" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="coreServices">
+                    <mxGeometry x="280" y="255" width="180" height="80" as="geometry"/>
+                </mxCell>
+                
+                <!-- Analytics Service -->
+                <mxCell id="analyticsService" value="Analytics Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;fontStyle=1" vertex="1" parent="coreServices">
+                    <mxGeometry x="450" y="140" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="analyticsDetails" value="• Sales metrics&#xa;• Order analytics&#xa;• Customer insights&#xa;• Performance reports&#xa;• Revenue tracking&#xa;• Popular items" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="coreServices">
+                    <mxGeometry x="460" y="175" width="180" height="80" as="geometry"/>
+                </mxCell>
+                
+                <!-- Admin Services Layer -->
+                <mxCell id="adminServices" value="Admin Dashboard Services" style="swimlane;fillColor=#f8cecc;strokeColor=#b85450;fontSize=16;fontStyle=1;startSize=40" vertex="1" parent="1">
+                    <mxGeometry x="80" y="530" width="740" height="280" as="geometry"/>
+                </mxCell>
+                
+                <!-- Menu Management Service -->
+                <mxCell id="menuManagement" value="Menu Management" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1" vertex="1" parent="adminServices">
+                    <mxGeometry x="30" y="60" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="menuManagementDetails" value="• CRUD menu items&#xa;• Upload images&#xa;• Set pricing&#xa;• Manage categories&#xa;• Bulk operations&#xa;• Item availability" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="adminServices">
+                    <mxGeometry x="40" y="95" width="180" height="80" as="geometry"/>
+                </mxCell>
+                
+                <!-- Order Dashboard Service -->
+                <mxCell id="orderDashboard" value="Order Dashboard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;fontStyle=1" vertex="1" parent="adminServices">
+                    <mxGeometry x="270" y="60" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="orderDashboardDetails" value="• Real-time orders&#xa;• Status management&#xa;• Customer details&#xa;• Print tickets&#xa;• Refund processing&#xa;• Order filters" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="adminServices">
+                    <mxGeometry x="280" y="95" width="180" height="80" as="geometry"/>
+                </mxCell>
+                
+                <!-- Reports Service -->
+                <mxCell id="reportsService" value="Reports Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontStyle=1" vertex="1" parent="adminServices">
+                    <mxGeometry x="510" y="60" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="reportsDetails" value="• Sales reports&#xa;• Revenue analytics&#xa;• Customer reports&#xa;• Inventory reports&#xa;• Export data&#xa;• Custom reports" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="adminServices">
+                    <mxGeometry x="520" y="95" width="180" height="80" as="geometry"/>
+                </mxCell>
+                
+                <!-- Data Layer -->
+                <mxCell id="dataLayer" value="Data Layer" style="swimlane;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=16;fontStyle=1;startSize=40" vertex="1" parent="1">
+                    <mxGeometry x="860" y="530" width="660" height="280" as="geometry"/>
+                </mxCell>
+                
+                <!-- Database Service -->
+                <mxCell id="databaseService" value="PostgreSQL Database" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1" vertex="1" parent="dataLayer">
+                    <mxGeometry x="50" y="70" width="150" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="databaseDetails" value="Tables:&#xa;• users&#xa;• menu_items&#xa;• orders&#xa;• order_items&#xa;• payments&#xa;• addresses&#xa;• categories" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="dataLayer">
+                    <mxGeometry x="60" y="110" width="130" height="90" as="geometry"/>
+                </mxCell>
+                
+                <!-- Cache Service -->
+                <mxCell id="cacheService" value="Redis Cache" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;fontStyle=1" vertex="1" parent="dataLayer">
+                    <mxGeometry x="250" y="70" width="150" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="cacheDetails" value="Cached:&#xa;• Menu items&#xa;• User sessions&#xa;• Cart data&#xa;• Auth tokens&#xa;• Rate limits&#xa;• API responses" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="dataLayer">
+                    <mxGeometry x="260" y="110" width="130" height="90" as="geometry"/>
+                </mxCell>
+                
+                <!-- File Storage Service -->
+                <mxCell id="fileStorage" value="S3 / Cloud Storage" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontStyle=1" vertex="1" parent="dataLayer">
+                    <mxGeometry x="450" y="70" width="150" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="fileStorageDetails" value="Files:&#xa;• Product images&#xa;• Receipts&#xa;• User avatars&#xa;• Documents&#xa;• Reports&#xa;• Backups" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="dataLayer">
+                    <mxGeometry x="460" y="110" width="130" height="90" as="geometry"/>
+                </mxCell>
+                
+                <!-- Data Flow Connections -->
+                
+                <!-- Menu Browse to Cart -->
+                <mxCell id="flow1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#0066CC;startArrow=classic;startFill=1" edge="1" parent="1" source="menuBrowse" target="cartService">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="flow1Label" value="Add to Cart" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;fillColor=#ffffff" vertex="1" connectable="0" parent="flow1">
+                    <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Cart to Checkout -->
+                <mxCell id="flow2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#009900;startArrow=classic;startFill=1" edge="1" parent="1" source="cartService" target="checkoutService">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="flow2Label" value="Proceed" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;fillColor=#ffffff" vertex="1" connectable="0" parent="flow2">
+                    <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Checkout to Payment -->
+                <mxCell id="flow3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#CC0000;" edge="1" parent="1" source="checkoutService" target="paymentService">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="flow3Label" value="Payment" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;fillColor=#ffffff" vertex="1" connectable="0" parent="flow3">
+                    <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Payment to Order Management -->
+                <mxCell id="flow4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#FF6600;" edge="1" parent="1" source="paymentService" target="orderManagement">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="flow4Label" value="Create Order" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;fillColor=#ffffff" vertex="1" connectable="0" parent="flow4">
+                    <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Order Management to Notification -->
+                <mxCell id="flow5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#9900CC;" edge="1" parent="1" source="orderManagement" target="notificationService">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="flow5Label" value="Send Notification" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;fillColor=#ffffff" vertex="1" connectable="0" parent="flow5">
+                    <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+                        <mxPoint x="20" y="-10" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Order Management to Order History -->
+                <mxCell id="flow6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#006699;" edge="1" parent="1" source="orderManagement" target="orderHistory">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="flow6Label" value="Save History" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;fillColor=#ffffff" vertex="1" connectable="0" parent="flow6">
+                    <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+                        <mxPoint x="-20" y="10" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Menu Management to Menu Browse -->
+                <mxCell id="flow7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#009999;dashed=1" edge="1" parent="1" source="menuManagement" target="menuBrowse">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="flow7Label" value="Updates Menu" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;fillColor=#ffffff" vertex="1" connectable="0" parent="flow7">
+                    <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Order Dashboard to Order Management -->
+                <mxCell id="flow8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#CC6600;startArrow=classic;startFill=1" edge="1" parent="1" source="orderDashboard" target="orderManagement">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="flow8Label" value="Manage Orders" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;fillColor=#ffffff" vertex="1" connectable="0" parent="flow8">
+                    <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Auth Service connections -->
+                <mxCell id="flow9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#990000;dashed=1" edge="1" parent="1" source="authService" target="userProfile">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="flow9Label" value="Authentication" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;fillColor=#ffffff" vertex="1" connectable="0" parent="flow9">
+                    <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Services to Database -->
+                <mxCell id="flow10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#003366;" edge="1" parent="1" source="orderManagement" target="databaseService">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1230" y="280" as="sourcePoint"/>
+                        <mxPoint x="985" y="600" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow10Label" value="Persist Data" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;fillColor=#ffffff" vertex="1" connectable="0" parent="flow10">
+                    <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Menu to Cache -->
+                <mxCell id="flow11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=90;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#FF9900;" edge="1" parent="1" source="menuBrowse" target="cacheService">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="200" y="490" as="sourcePoint"/>
+                        <mxPoint x="1105" y="660" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="flow11Label" value="Cache Menu" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;fillColor=#ffffff" vertex="1" connectable="0" parent="flow11">
+                    <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Analytics to Reports -->
+                <mxCell id="flow12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#006633;" edge="1" parent="1" source="analyticsService" target="reportsService">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="flow12Label" value="Generate Reports" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;fillColor=#ffffff" vertex="1" connectable="0" parent="flow12">
+                    <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Inventory to Menu Management -->
+                <mxCell id="flow13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;strokeWidth=2;strokeColor=#663399;startArrow=classic;startFill=1" edge="1" parent="1" source="inventoryService" target="menuManagement">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="flow13Label" value="Stock Updates" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;fillColor=#ffffff" vertex="1" connectable="0" parent="flow13">
+                    <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                
+                <!-- Legend -->
+                <mxCell id="legend" value="Data Flow Legend" style="swimlane;fillColor=#ffffff;strokeColor=#000000;fontSize=14;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="80" y="860" width="740" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="legendItem1" value="━━━  Synchronous API Call" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="legend">
+                    <mxGeometry x="20" y="40" width="220" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legendItem2" value="- - -  Asynchronous Update" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="legend">
+                    <mxGeometry x="20" y="65" width="220" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legendItem3" value="◄━━►  Bidirectional Communication" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="legend">
+                    <mxGeometry x="20" y="90" width="220" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legendItem4" value="🔵 Customer Service  🟡 Core Service" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="legend">
+                    <mxGeometry x="280" y="40" width="300" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legendItem5" value="🔴 Admin Service  ⚫ Data Layer" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="legend">
+                    <mxGeometry x="280" y="65" width="300" height="20" as="geometry"/>
+                </mxCell>
+                
+                <!-- Key Features Box -->
+                <mxCell id="features" value="MVP Service Features" style="swimlane;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="860" y="860" width="660" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="featureGuest" value="✓ Guest Checkout Support" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="features">
+                    <mxGeometry x="20" y="40" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="featureAuth" value="✓ Authenticated User Features" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="features">
+                    <mxGeometry x="20" y="65" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="featureReal" value="✓ Real-time Order Updates" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="features">
+                    <mxGeometry x="20" y="90" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="featurePayment" value="✓ Secure Payment Processing" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="features">
+                    <mxGeometry x="240" y="40" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="featureAdmin" value="✓ Comprehensive Admin Tools" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="features">
+                    <mxGeometry x="240" y="65" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="featureAnalytics" value="✓ Analytics &amp; Reporting" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="features">
+                    <mxGeometry x="240" y="90" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="featureNotif" value="✓ Multi-channel Notifications" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="features">
+                    <mxGeometry x="460" y="40" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="featureCache" value="✓ Performance Caching" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="features">
+                    <mxGeometry x="460" y="65" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="featureScale" value="✓ Scalable Architecture" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="features">
+                    <mxGeometry x="460" y="90" width="200" height="20" as="geometry"/>
+                </mxCell>
+                
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
