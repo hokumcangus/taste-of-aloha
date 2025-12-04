@@ -5,7 +5,6 @@ import { fetchSnacks } from '../store/slices/snackSlice';
 const Menu = () => {
     const dispatch = useDispatch();
     const { snacks, loading, error } = useSelector((state) => state.snacks);
-
     useEffect(() => {
         dispatch(fetchSnacks());
     }, [dispatch]);
