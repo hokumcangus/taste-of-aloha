@@ -24,14 +24,21 @@ This monorepo is dedicated to developing and maintaining our **delivery infrastr
 
 We have comprehensive documentation to help you understand and work with this project:
 
+### Architecture & Features
 - **[Documentation Index](docs/INDEX.md)** - Central hub for all documentation
 - **[MVP Features](docs/MVP_FEATURES.md)** - Complete feature specifications
 - **[System Architecture Diagram](docs/architecture/system-architecture.dio)** - Visual system overview
 - **[Services Diagram](docs/architecture/services-diagram.dio)** - Detailed service interactions
-- **[Quick Reference](docs/QUICK_REFERENCE.md)** - Developer quick reference guide
+- **[Developer Quick Reference](docs/QUICK_REFERENCE.md)** - Developer quick reference guide
 - **[How to View Diagrams](docs/HOW_TO_VIEW_DIAGRAMS.md)** - Guide for viewing architecture diagrams
 
-**New to the project?** Start with the [Documentation Index](docs/INDEX.md) for a guided tour!
+### Project Planning & Tasks
+- **[Quick Reference](QUICK_REFERENCE.md)** - ⭐ Start here! Quick guide to creating issues and organizing work
+- **[Task Breakdown](TASK_BREAKDOWN.md)** - Detailed breakdown of all tasks by sprint
+- **[Sprint Planning](SPRINT_PLANNING.md)** - Sprint overview, timelines, and dependencies
+- **[Issues Setup Guide](ISSUES_SETUP_GUIDE.md)** - Complete guide for using GitHub issues and project boards
+
+**New to the project?** Start with the [Quick Reference](QUICK_REFERENCE.md) to set up your issues and project board, then dive into the [Documentation Index](docs/INDEX.md) for technical details!
 
 ---
 
