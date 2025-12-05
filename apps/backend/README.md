@@ -4,22 +4,76 @@
 This is the backend service for **Taste of Aloha**, built with **Node.js + Express**.  
 It provides a simple in‑memory CRUD API for managing snacks.
 
+## ✅ Foundation Complete
+
+- Backend scaffold complete and verified
+- Dev server runs successfully at http://localhost:3000
+- Health endpoint `/health` returns 200 status
+- API endpoints `/api/snacks` working with CRUD operations
+- CORS configured for frontend communication
+
+See [LEARNING_GUIDE.md](../../LEARNING_GUIDE.md) for comprehensive documentation.
+
 ---
 
 ## 🚀 Getting Started
 
-### 1. Install dependencies
+### Option 1: Local Development
+
+#### 1. Install dependencies
 ```bash
 npm install
 ```
 
-### 2. Run the server
+#### 2. Run the server
 ```bash
 npm run dev
 ```
 
 The server will start at:  
 **http://localhost:3000**
+
+---
+
+### Option 2: Docker
+
+The backend can run in a Docker container, which includes:
+- Automatic hot reload in development mode
+- PostgreSQL database connection
+- Production-optimized builds
+
+#### Development Mode
+```bash
+# From project root
+docker-compose up backend
+```
+
+**What happens:**
+- Backend runs with nodemon for auto-restart on code changes
+- Your local `apps/backend` folder is mounted as a volume
+- Connected to PostgreSQL container via internal Docker network
+- Accessible at `http://localhost:3000`
+
+#### Production Mode
+```bash
+# From project root
+docker-compose -f docker-compose.prod.yml up backend
+```
+
+**What happens:**
+- Optimized Node.js image (smaller size)
+- Runs as non-root user for security
+- Only production dependencies installed
+- Health checks monitor API availability
+- Not exposed externally (only accessible via Nginx proxy)
+
+#### Build Backend Image Only
+```bash
+# From apps/backend
+docker build -t taste-of-aloha-backend --target development .
+# Or for production
+docker build -t taste-of-aloha-backend --target production .
+```
 
 ---
 
