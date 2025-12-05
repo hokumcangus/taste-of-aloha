@@ -21,7 +21,7 @@ A complete specification of all MVP features including:
 ### 2. **System Architecture Diagram** (`docs/architecture/system-architecture.dio`)
 A comprehensive diagram showing:
 - **Client Layer**: Web browsers, mobile browsers, native app (future), admin dashboard
-- **Application Layer**: Frontend (Next.js/React) and Backend (Node.js/Express)
+- **Application Layer**: Frontend (Vite + React) and Backend (Node.js/Express)
 - **Data Layer**: PostgreSQL, Redis Cache, Cloud Storage
 - **External Services**: Stripe, Firebase/Auth0, SendGrid/Twilio, Google Maps
 - **Infrastructure**: Docker, CI/CD, Cloud Hosting, CDN, Monitoring, Security

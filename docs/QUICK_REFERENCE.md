@@ -252,7 +252,7 @@ Backend (Express)
 ### Frontend Stack
 ```
 React 18+
-  └── Next.js (SSR/CSR)
+  └── Vite + React (SPA)
       └── Redux Toolkit (State Management)
           └── React Query (Server State)
               └── Tailwind CSS (Styling)
