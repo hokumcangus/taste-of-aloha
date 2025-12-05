@@ -3,19 +3,17 @@
   "version": "1.0.0",
   "description": "Backend service for Taste of Aloha",
   "main": "index.js",
-  
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
+    "dev": "nodemon --legacy-watch index.js",
     "test": "echo \"No tests specified\" && exit 0"
   },
-
   "keywords": [
     "taste-of-aloha",
     "backend",
     "api"
   ],
-  "author": "Hoku cAngus",
+  "author": "Hoku McAngus",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^9.39.1",
@@ -28,6 +26,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "nginx": "^1.1.0",
     "pg": "^8.16.3"
   }
 }

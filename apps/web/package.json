@@ -9,10 +9,12 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.0",
+    "nginx": "^1.1.0",
     "npx": "^10.2.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-redux": "^9.2.0"
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.10.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.17",

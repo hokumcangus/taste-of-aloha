@@ -1,77 +1,74 @@
-import React, { useState } from 'react'
-
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
-    // useState, Display Text, Button, On Click
-    const [text, setText] = useState("Aloha! Welcome to da Ohana!");
-    const [count, setCount] = useState(0);
-    const description = "This is the main landing page of our web application.";
-
-    const handleClick = () => {
-        setText("Aloha! You clicked the button!");
-    }
-    return (
-        <div style={{ 
-            padding: '2rem', 
-            textAlign: 'center',
-            minHeight: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center'
-        }}>
-            <h1 style={{ 
-                fontSize: '2.5rem', 
-                marginBottom: '1rem',
-                color: '#333'
-            }}>
-                {text}
-            </h1>
-            <p style={{ 
-                fontSize: '1.2rem', 
-                marginBottom: '2rem',
-                color: '#666'
-            }}>
-                {description}
-            </p>
-            <div style={{ 
-                marginBottom: '2rem',
-                padding: '1.5rem',
-                backgroundColor: '#f5f5f5',
-                borderRadius: '8px',
-                minWidth: '300px'
-            }}>
-                <p style={{ 
-                    fontSize: '1.5rem',
-                    fontWeight: 'bold',
-                    color: '#2c3e50'
-                }}>
-                    {text}
-                </p>
-            </div>
-            <button onClick={handleClick}
-            style={{ 
-                padding: '0.5rem 1rem',
-                fontSize: '1rem',
-                margin: '0.5rem',
-                backgroundColor: '#007bff',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                transition: 'background-color 0.3s'
-            }}
-            onMouseOver={(e) => e.target.style.backgroundColor = '#535bf2'}
-            onMouseOut={(e) => e.target.style.backgroundColor = '#646cff'}
-            >
-                {text}
-            </button>
-        
-        <p>You clicked {count} times</p>
-        <button onClick={() => setCount(count + 1)}>More clicks</button>
-        <button onClick={() => setCount(count - 1)}>Less clicks</button>
-        <button onClick={() => setCount(0)}>Reset</button>
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    // Check if mobile on mount
+    setIsMobile(window.innerWidth < 768);
+    
+    // Update on resize
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  
+  return (
+    <div className="relative h-screen w-full overflow-hidden">
+      {/* Background Video or Image */}
+      {!isMobile ? (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute top-0 left-0 w-full h-full object-cover"
+          poster="/hero-poster.jpg"
+        >
+          <source src="/videos/background.mp4" type="video/mp4" />
+          Your browser does not support video.
+        </video>
+      ) : (
+        // Static image on mobile to save data
+        <img 
+          src="/hero-poster.jpg" 
+          alt="Taste of Aloha Background" 
+          className="absolute top-0 left-0 w-full h-full object-cover"
+        />
+      )}
+      
+      {/* Dark overlay for text readability */}
+      <div className="absolute inset-0 bg-black/50"></div>
+      
+      {/* Content over video/image */}
+      <div className="relative z-10 flex flex-col items-center justify-center h-full text-white px-4">
+        <h1 className="text-5xl md:text-7xl font-bold mb-4 text-center">
+          🌺 Taste of Aloha
+        </h1>
+        <p className="text-xl md:text-3xl mb-8 text-center max-w-2xl">
+          Authentic Hawaiian Cuisine Delivered with Aloha Spirit
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Link 
+            to="/menu" 
+            className="bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded-lg text-lg md:text-xl font-semibold transition-colors text-center text-white"
+          >
+            Order Now
+          </Link>
+          <Link 
+            to="/about" 
+            className="bg-white/20 hover:bg-white/30 backdrop-blur-sm px-8 py-4 rounded-lg text-lg md:text-xl font-semibold transition-colors text-center border-2 border-white text-white"
+          >
+            Learn More
+          </Link>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
+
 export default Home;

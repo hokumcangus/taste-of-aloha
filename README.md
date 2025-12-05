@@ -12,10 +12,10 @@ This monorepo is dedicated to developing and maintaining our **delivery infrastr
 - **Food Delivery Service** — the core of this repo, connecting our offerings with customers through modern delivery workflows  
 
 ## Tech Stack
-- **Frontend**: React / Next.js (customer ordering experience)  
+- **Frontend**: React + Vite, Redux Toolkit (state management), Tailwind CSS v4 (styling)  
 - **Backend**: Node.js / Express (order management, APIs)  
 - **Database**: PostgreSQL (menu, inventory, orders)  
-- **Infrastructure**: Docker, CI/CD pipelines, cloud deployment  
+- **Infrastructure**: Docker, Nginx (production web server & reverse proxy), CI/CD pipelines, cloud deployment  
 - **Integrations**: Stripe (payments), Twilio/SendGrid (notifications), Firebase (push messaging)  
 
 ---
@@ -37,14 +37,25 @@ We have comprehensive documentation to help you understand and work with this pr
 
 ## 🚀 Getting Started
 
-### 1. Install Dependencies
+You can run the app in two ways: **Local Development** or **Docker**.
+
+### Option 1: Local Development (Recommended for Development)
+
+#### 1. Install Dependencies
 At the root:
 ```bash
 npm install
 ```
 This installs shared tools and links workspaces.
 
-### 2. Frontend (apps/web)
+#### 2. Set Up Environment Variables
+```bash
+# Copy the example file
+cp .env.example .env
+# Edit .env with your settings (default values work for local dev)
+```
+
+#### 3. Frontend (apps/web)
 ```bash
 cd apps/web
 npm install
@@ -52,16 +63,80 @@ npm run dev
 ```
 Runs Vite.js frontend at `http://localhost:5173`.
 
-### 3. Backend (apps/backend)
+#### 4. Backend (apps/backend)
 ```bash
 cd apps/backend
 npm install
 npm run dev
 ```
-Starts backend server (Express). Currently minimal, will expand later.
+Starts backend server (Express) at `http://localhost:3000`.
 
-### 4. Shared Packages
+#### 5. Shared Packages
 Shared libraries (`shared/libs`) are automatically linked via workspaces.
+
+---
+
+### Option 2: Docker (Production-like Environment)
+
+Docker runs the entire stack (frontend, backend, database) in isolated containers. Perfect for testing production builds or when you don't want to install dependencies locally.
+
+#### Development Mode (with hot reload)
+```bash
+# From project root
+docker-compose up --build
+```
+
+**What this does:**
+- Starts PostgreSQL database on port 5432
+- Starts backend (Node.js/Express) on port 3000 with nodemon for hot reload
+- Starts frontend (React/Vite) on port 5173 with hot reload
+- Your code changes are automatically reflected (volume mounts sync your local files)
+
+**Access:**
+- Frontend: `http://localhost:5173`
+- Backend API: `http://localhost:3000/api/snacks`
+- Database: `localhost:5432` (credentials in `.env`)
+
+**Stop containers:**
+```bash
+docker-compose down
+```
+
+#### Production Mode
+```bash
+# From project root
+docker-compose -f docker-compose.prod.yml up --build -d
+```
+
+**What this does:**
+- Builds optimized production images
+- Runs Nginx as reverse proxy serving static files
+- Backend runs as non-root user for security
+- All services have health checks and restart policies
+- Database not exposed externally
+
+**Access:**
+- Frontend + API: `http://localhost` (Nginx routes `/api` to backend)
+
+**Stop containers:**
+```bash
+docker-compose -f docker-compose.prod.yml down
+```
+
+---
+
+### Environment Variables Explained
+
+The `.env` file controls how services connect:
+
+- **DB_USER, DB_PASSWORD, DB_NAME**: PostgreSQL credentials
+- **CORS_ORIGIN**: Frontend URL for CORS (prevents unauthorized access)
+- **VITE_API_URL**: Backend URL the frontend calls
+- **DATABASE_URL**: Full connection string for backend to connect to database
+
+**Local dev**: Frontend and backend run separately, talk via `localhost:3000`
+**Docker dev**: Services use container names (e.g., `backend:3000`) via Docker network
+**Docker prod**: Nginx proxies everything, frontend calls `/api` which routes to backend
 
 ---
 
@@ -71,12 +146,19 @@ For the full file structure and detailed documentation, see the [Wiki](https://g
 ```
 taste-of-aloha/
   apps/
-    web/        # React + Vite frontend
-    backend/    # Node.js/Express backend
-    mobile/     # React Native wrapper (future)
-  shared/       # Configs + libraries
-  infra/        # Docker + Kubernetes
-  package.json  # Root workspace config
+    web/                    # React + Vite frontend
+      Dockerfile            # Multi-stage build (dev/prod)
+      nginx.conf            # Production web server config
+    backend/                # Node.js/Express backend
+      Dockerfile            # Multi-stage build (dev/prod)
+    mobile/                 # React Native wrapper (future)
+  shared/                   # Configs + libraries
+  infra/                    # Docker + Kubernetes
+  docker-compose.yml        # Development environment
+  docker-compose.prod.yml   # Production environment
+  .env.example              # Environment variables template
+  .env                      # Local environment (not committed)
+  package.json              # Root workspace config
   README.md
 ```
 
@@ -154,6 +236,45 @@ chore: bump dependency versions
   npm run dev:web
   npm run dev:backend
   ```
+
+---
+
+## ✅ Foundation Tasks Completed
+
+The following foundational setup tasks have been completed:
+
+### 1. Development Environment
+- ✅ **Node.js LTS**: v24.11.0 installed and verified
+- ✅ **Docker**: Installed and running
+- **Verification**: `node --version` and `docker ps` both work
+
+### 2. Frontend Scaffold
+- ✅ **Tech Stack**: Vite + React + JavaScript
+- ✅ **Dev Server**: Runs at http://localhost:5173 with hot reload
+- ✅ **Features**: React Router (Home, Menu, About), Tailwind CSS v4, Redux Toolkit
+- **Verification**: `npm run dev` in `apps/web` serves the site
+
+### 3. Backend Scaffold
+- ✅ **Tech Stack**: Node.js + Express + JavaScript
+- ✅ **Dev Server**: Runs at http://localhost:3000 with nodemon
+- ✅ **Health Check**: GET `/health` returns 200 with status JSON
+- ✅ **API Endpoints**: `/api/snacks` CRUD operations working
+- **Verification**: `npm run dev` in `apps/backend` starts server, `curl http://localhost:3000/health` returns status
+
+### 4. Docker Compose
+- ✅ **Services**: PostgreSQL database + backend + frontend
+- ✅ **Development Mode**: `docker-compose.yml` with hot reload and volume mounts
+- ✅ **Production Mode**: `docker-compose.prod.yml` with optimized builds and Nginx
+- ⚠️ **Note**: Cannot run local dev servers and Docker simultaneously on same ports
+- **Verification**: `docker-compose up` starts all services (stop local servers first)
+
+### 📖 Next Steps
+
+See **[LEARNING_GUIDE.md](./LEARNING_GUIDE.md)** for a comprehensive guide on:
+- Understanding what was built and why
+- Learning the technologies used
+- Implementing the order system (next major feature)
+- Best practices and resources
 
 ---
 
