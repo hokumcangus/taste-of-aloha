@@ -20,6 +20,21 @@ This monorepo is dedicated to developing and maintaining our **delivery infrastr
 
 ---
 
+## 📚 Documentation
+
+We have comprehensive documentation to help you understand and work with this project:
+
+- **[Documentation Index](docs/INDEX.md)** - Central hub for all documentation
+- **[MVP Features](docs/MVP_FEATURES.md)** - Complete feature specifications
+- **[System Architecture Diagram](docs/architecture/system-architecture.dio)** - Visual system overview
+- **[Services Diagram](docs/architecture/services-diagram.dio)** - Detailed service interactions
+- **[Quick Reference](docs/QUICK_REFERENCE.md)** - Developer quick reference guide
+- **[How to View Diagrams](docs/HOW_TO_VIEW_DIAGRAMS.md)** - Guide for viewing architecture diagrams
+
+**New to the project?** Start with the [Documentation Index](docs/INDEX.md) for a guided tour!
+
+---
+
 ## 🚀 Getting Started
 
 ### 1. Install Dependencies
@@ -157,3 +172,28 @@ To add it, see [React Compiler installation docs](https://react.dev/learn/react-
 ### ESLint
 For production apps, we recommend expanding ESLint with type‑aware rules.  
 Check out the [TypeScript template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for integration with [`typescript-eslint`](https://typescript-eslint.io).
+
+---
+
+## 🏗️ Architecture
+
+This project follows a modern, scalable architecture designed for growth. Key highlights:
+
+- **Client-Server Architecture**: Clear separation between frontend (React) and backend (Express)
+- **Service-Oriented Design**: Modular services for menu, cart, checkout, orders, payments, and admin
+- **Multi-Role Support**: Guest, authenticated customer, and admin user flows
+- **External Integrations**: Stripe (payments), Firebase/Auth0 (auth), SendGrid/Twilio (notifications)
+- **Scalable Infrastructure**: Docker containers, CI/CD pipeline, cloud hosting with CDN
+
+**Want to understand the complete system?**
+- 📊 View [System Architecture Diagram](docs/architecture/system-architecture.dio) for the big picture
+- 🔄 View [Services Diagram](docs/architecture/services-diagram.dio) for service interactions
+- 📖 Read [Architecture README](docs/architecture/README.md) for detailed documentation
+
+**Need the .dio files?** They're Draw.io diagrams! See [How to View Diagrams](docs/HOW_TO_VIEW_DIAGRAMS.md) for instructions.
+
+---
+
+## 🌺 About Taste of Aloha
+
+We're not just building a delivery platform—we're creating a way to share authentic Hawaiian culture and flavors with the world. Every feature is designed with aloha spirit: quality, community, and genuine care for our customers.
