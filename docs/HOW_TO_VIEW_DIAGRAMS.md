@@ -8,7 +8,7 @@ You now have comprehensive architecture documentation for the Taste of Aloha pla
 
 ## 📁 What Was Created
 
-### 1. **MVP Features List** (`docs/MVP_FEATURES.md`)
+### 1. **MVP Features List** (`docs/planning/MVP_FEATURES.md`)
 A complete specification of all MVP features including:
 - Menu Management (Admin)
 - Browse Menu (Customer)
@@ -42,7 +42,7 @@ Comprehensive documentation explaining:
 - Implementation roadmap
 - Best practices
 
-### 5. **Quick Reference Guide** (`docs/QUICK_REFERENCE.md`)
+### 5. **Quick Reference Guide** (`docs/reference/QUICK_REFERENCE.md`)
 Developer-friendly reference with:
 - User journey flows (Guest, Authenticated, Admin)
 - API endpoints list
@@ -202,8 +202,8 @@ docs/architecture/exports/
 
 ### For Developers
 
-1. **Start with**: `docs/MVP_FEATURES.md` to understand requirements
-2. **Reference**: `docs/QUICK_REFERENCE.md` for technical details
+1. **Start with**: `docs/planning/MVP_FEATURES.md` to understand requirements
+2. **Reference**: `docs/reference/QUICK_REFERENCE.md` for technical details
 3. **Consult diagrams** when implementing features
 4. **Update diagrams** when adding new services
 
@@ -216,9 +216,9 @@ docs/architecture/exports/
 ### For Onboarding
 
 1. Read `README.md` in project root
-2. Review `docs/MVP_FEATURES.md`
+2. Review `docs/planning/MVP_FEATURES.md`
 3. Study both architecture diagrams
-4. Reference `docs/QUICK_REFERENCE.md` while coding
+4. Reference `docs/reference/QUICK_REFERENCE.md` while coding
 
 ---
 
@@ -238,8 +238,8 @@ Update diagrams when:
 
 - [ ] Update the affected `.dio` file(s)
 - [ ] Update `docs/architecture/README.md` if needed
-- [ ] Update `docs/MVP_FEATURES.md` if features change
-- [ ] Update `docs/QUICK_REFERENCE.md` if APIs/flows change
+- [ ] Update `docs/planning/MVP_FEATURES.md` if features change
+- [ ] Update `docs/reference/QUICK_REFERENCE.md` if APIs/flows change
 - [ ] Export updated PNG/SVG versions
 - [ ] Commit changes with descriptive message
 - [ ] Update project wiki if applicable
