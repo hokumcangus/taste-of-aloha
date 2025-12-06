@@ -54,7 +54,7 @@ This directory contains comprehensive architecture and design documentation for 
   - Analytics and reporting
 
 #### **Application Layer**
-- **Frontend Server** (Next.js/React)
+- **Frontend Server** (Vite + React)
   - Server-Side Rendering (SSR) and Client-Side Rendering (CSR)
   - Component-based architecture
   - State management with Redux
@@ -328,7 +328,8 @@ This directory contains comprehensive architecture and design documentation for 
 
 **Frontend**:
 - React for component-based UI
-- Next.js for SSR and routing
+- Vite for fast dev server and optimized builds
+- React Router for client-side routing
 - Redux Toolkit for state management
 - Tailwind CSS for styling
 
@@ -419,7 +420,8 @@ This directory contains comprehensive architecture and design documentation for 
 
 ### Technology Documentation
 - [React Documentation](https://react.dev/)
-- [Next.js Documentation](https://nextjs.org/docs)
+- [Vite Documentation](https://vitejs.dev)
+- [React Router Documentation](https://reactrouter.com)
 - [Express.js Guide](https://expressjs.com/)
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
 - [Redis Documentation](https://redis.io/documentation)

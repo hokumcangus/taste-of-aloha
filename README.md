@@ -26,19 +26,19 @@ We have comprehensive documentation to help you understand and work with this pr
 
 ### Architecture & Features
 - **[Documentation Index](docs/INDEX.md)** - Central hub for all documentation
-- **[MVP Features](docs/MVP_FEATURES.md)** - Complete feature specifications
+- **[MVP Features](docs/planning/MVP_FEATURES.md)** - Complete feature specifications
 - **[System Architecture Diagram](docs/architecture/system-architecture.dio)** - Visual system overview
 - **[Services Diagram](docs/architecture/services-diagram.dio)** - Detailed service interactions
-- **[Developer Quick Reference](docs/QUICK_REFERENCE.md)** - Developer quick reference guide
+- **[Developer Quick Reference](docs/reference/QUICK_REFERENCE.md)** - Developer quick reference guide
 - **[How to View Diagrams](docs/HOW_TO_VIEW_DIAGRAMS.md)** - Guide for viewing architecture diagrams
 
 ### Project Planning & Tasks
-- **[Quick Reference](QUICK_REFERENCE.md)** - ⭐ Start here! Quick guide to creating issues and organizing work
-- **[Task Breakdown](TASK_BREAKDOWN.md)** - Detailed breakdown of all tasks by sprint
-- **[Sprint Planning](SPRINT_PLANNING.md)** - Sprint overview, timelines, and dependencies
-- **[Issues Setup Guide](ISSUES_SETUP_GUIDE.md)** - Complete guide for using GitHub issues and project boards
+- **[Quick Reference](docs/reference/QUICK_REFERENCE.md)** - ⭐ Start here! Quick guide to creating issues and organizing work
+- **[Task Breakdown](docs/planning/TASK_BREAKDOWN.md)** - Detailed breakdown of all tasks by sprint
+- **[Sprint Planning](docs/planning/SPRINT_PLANNING.md)** - Sprint overview, timelines, and dependencies
+- **[Issues Setup Guide](docs/setup/ISSUES_SETUP_GUIDE.md)** - Complete guide for using GitHub issues and project boards
 
-**New to the project?** Start with the [Quick Reference](QUICK_REFERENCE.md) to set up your issues and project board, then dive into the [Documentation Index](docs/INDEX.md) for technical details!
+**New to the project?** Start with the [Quick Reference](docs/reference/QUICK_REFERENCE.md) to set up your issues and project board, then dive into the [Documentation Index](docs/INDEX.md) for technical details!
 
 ---
 
@@ -277,7 +277,7 @@ The following foundational setup tasks have been completed:
 
 ### 📖 Next Steps
 
-See **[LEARNING_GUIDE.md](./LEARNING_GUIDE.md)** for a comprehensive guide on:
+See **[LEARNING_GUIDE.md](./docs/guides/LEARNING_GUIDE.md)** for a comprehensive guide on:
 - Understanding what was built and why
 - Learning the technologies used
 - Implementing the order system (next major feature)

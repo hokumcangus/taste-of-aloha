@@ -135,7 +135,7 @@ taste-of-aloha/
 
 **Shows**:
 - **Client Layer**: Web browsers, mobile browsers, native app (future), admin dashboard
-- **Application Layer**: Frontend (Next.js/React) and Backend (Node.js/Express) with all components
+- **Application Layer**: Frontend (Vite + React) and Backend (Node.js/Express) with all components
 - **Data Layer**: PostgreSQL database, Redis cache, cloud file storage
 - **External Services**: Stripe (payments), Firebase/Auth0 (authentication), SendGrid/Twilio (notifications), Google Maps (location)
 - **Infrastructure**: Docker, CI/CD pipeline, cloud hosting, CDN, monitoring, security layer

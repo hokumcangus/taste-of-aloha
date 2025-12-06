@@ -110,7 +110,7 @@ Visit: https://github.com/hokumcangus/taste-of-aloha/labels
   - Sprint 6: Tests, CI, Deployment → #___
   - Stretch Goals: Post-Launch Features → #___
   
-  See [TASK_BREAKDOWN.md](./TASK_BREAKDOWN.md) for complete details.
+  See [TASK_BREAKDOWN.md](../planning/TASK_BREAKDOWN.md) for complete details.
   ```
 - [ ] Optionally close Issue #1 (keep as reference or close after linking)
 
