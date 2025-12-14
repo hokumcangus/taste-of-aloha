@@ -4,11 +4,11 @@ This repository powers the **Taste of Aloha Food Delivery Service**, the central
 
 ## Overview
 Taste of Aloha is a community‑driven Hawaiian business built around sharing authentic island flavors and culture.  
-This monorepo is dedicated to developing and maintaining our **delivery infrastructure**, ensuring customers can enjoy Hawaiian meals, baked goods, and snacks wherever they are.  
+This monorepo is dedicated to developing and maintaining our **delivery infrastructure**, ensuring customers can enjoy Hawaiian meals, baked goods, and Menus wherever they are.  
 
 ## Ecosystem
 - **Restaurant** — serving traditional Hawaiian dishes with aloha spirit  
-- **Island Delights Grocery & Bakery** — offering baked goods, snacks, and local favorites  
+- **Island Delights Grocery & Bakery** — offering baked goods, Menus, and local favorites  
 - **Food Delivery Service** — the core of this repo, connecting our offerings with customers through modern delivery workflows  
 
 ## Tech Stack
@@ -32,13 +32,23 @@ We have comprehensive documentation to help you understand and work with this pr
 - **[Developer Quick Reference](docs/reference/QUICK_REFERENCE.md)** - Developer quick reference guide
 - **[How to View Diagrams](docs/HOW_TO_VIEW_DIAGRAMS.md)** - Guide for viewing architecture diagrams
 
+### Learning & Setup Guides
+- **[Learning Guide](docs/guides/LEARNING_GUIDE.md)** - ⭐ Best place to start! Comprehensive overview of all technologies
+- **[Database Setup Guide](docs/guides/DATABASE_SETUP_GUIDE.md)** - Complete PostgreSQL & Prisma setup with all steps and commands
+- **[Backend API Guide](docs/guides/BACKEND_API_GUIDE.md)** - Step-by-step tutorial for building REST API endpoints
+- **[Menu → Menu Refactoring Guide](docs/guides/Menu_TO_MENU_REFACTORING.md)** - Rename Menu references to menu items (checklist & instructions)
+- **[Database Commands Reference](docs/reference/DATABASE_COMMANDS_REFERENCE.md)** - Quick lookup for database commands
+- **[Backend API Checklist](docs/reference/BACKEND_API_CHECKLIST.md)** - Printable checklist for building endpoints
+- **[Docker Setup Guide](docs/setup/DOCKER_SETUP_GUIDE.md)** - Docker configuration and running containers
+- **[Setup Checklist](docs/setup/SETUP_CHECKLIST.md)** - Step-by-step setup verification
+
 ### Project Planning & Tasks
-- **[Quick Reference](docs/reference/QUICK_REFERENCE.md)** - ⭐ Start here! Quick guide to creating issues and organizing work
+- **[Quick Reference](docs/reference/QUICK_REFERENCE.md)** - Quick guide to creating issues and organizing work
 - **[Task Breakdown](docs/planning/TASK_BREAKDOWN.md)** - Detailed breakdown of all tasks by sprint
 - **[Sprint Planning](docs/planning/SPRINT_PLANNING.md)** - Sprint overview, timelines, and dependencies
 - **[Issues Setup Guide](docs/setup/ISSUES_SETUP_GUIDE.md)** - Complete guide for using GitHub issues and project boards
 
-**New to the project?** Start with the [Quick Reference](docs/reference/QUICK_REFERENCE.md) to set up your issues and project board, then dive into the [Documentation Index](docs/INDEX.md) for technical details!
+**New to the project?** Start with [Learning Guide](docs/guides/LEARNING_GUIDE.md) → [Database Setup Guide](docs/guides/DATABASE_SETUP_GUIDE.md) → [Backend API Guide](docs/guides/BACKEND_API_GUIDE.md)
 
 ---
 
@@ -101,7 +111,7 @@ docker-compose up --build
 
 **Access:**
 - Frontend: `http://localhost:5173`
-- Backend API: `http://localhost:3000/api/snacks`
+- Backend API: `http://localhost:3000/api/Menus`
 - Database: `localhost:5432` (credentials in `.env`)
 
 **Stop containers:**
@@ -265,7 +275,7 @@ The following foundational setup tasks have been completed:
 - ✅ **Tech Stack**: Node.js + Express + JavaScript
 - ✅ **Dev Server**: Runs at http://localhost:3000 with nodemon
 - ✅ **Health Check**: GET `/health` returns 200 with status JSON
-- ✅ **API Endpoints**: `/api/snacks` CRUD operations working
+- ✅ **API Endpoints**: `/api/Menus` CRUD operations working
 - **Verification**: `npm run dev` in `apps/backend` starts server, `curl http://localhost:3000/health` returns status
 
 ### 4. Docker Compose

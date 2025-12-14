@@ -6,7 +6,7 @@ This guide walks you through building a complete food ordering system with deliv
 ## Architecture
 
 ### User Flow
-1. **Browse Menu** → Customer views available snacks/meals
+1. **Browse Menu** → Customer views available Menus/meals
 2. **Add to Cart** → Items are added with quantity
 3. **Checkout** → Customer chooses delivery/pickup, enters details
 4. **Order Confirmation** → Order is placed and customer receives confirmation
@@ -50,7 +50,7 @@ export const createOrder = (orderData) => {
   const order = {
     id: nextOrderId++,
     orderNumber: `TA${Date.now()}`,
-    items: orderData.items, // Array of {snackId, name, price, quantity}
+    items: orderData.items, // Array of {MenuId, name, price, quantity}
     subtotal: orderData.subtotal,
     tax: orderData.tax,
     deliveryFee: orderData.deliveryFee || 0,
@@ -207,7 +207,7 @@ Add this import at the top:
 import orderRoutes from './src/routes/orderRoutes.js';
 ```
 
-Add this route registration after the snack routes:
+Add this route registration after the Menu routes:
 ```javascript
 app.use('/api/orders', orderRoutes);
 ```
@@ -222,7 +222,7 @@ Test with curl or Postman:
 ```powershell
 # Create an order
 curl -X POST http://localhost:3000/api/orders -H "Content-Type: application/json" -d '{
-  "items": [{"snackId": 1, "name": "Spam Musubi", "price": 3.99, "quantity": 2}],
+  "items": [{"MenuId": 1, "name": "Spam Musubi", "price": 3.99, "quantity": 2}],
   "subtotal": 7.98,
   "tax": 0.80,
   "deliveryFee": 5.00,
@@ -249,14 +249,14 @@ curl http://localhost:3000/api/orders
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  items: [], // { snack, quantity }
+  items: [], // { Menu, quantity }
   totalItems: 0,
   subtotal: 0
 };
 
 const calculateTotals = (items) => {
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const subtotal = items.reduce((sum, item) => sum + (item.snack.price * item.quantity), 0);
+  const subtotal = items.reduce((sum, item) => sum + (item.Menu.price * item.quantity), 0);
   return { totalItems, subtotal };
 };
 
@@ -265,13 +265,13 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const snack = action.payload;
-      const existingItem = state.items.find(item => item.snack.id === snack.id);
+      const Menu = action.payload;
+      const existingItem = state.items.find(item => item.Menu.id === Menu.id);
       
       if (existingItem) {
         existingItem.quantity += 1;
       } else {
-        state.items.push({ snack, quantity: 1 });
+        state.items.push({ Menu, quantity: 1 });
       }
       
       const totals = calculateTotals(state.items);
@@ -280,8 +280,8 @@ const cartSlice = createSlice({
     },
     
     removeFromCart: (state, action) => {
-      const snackId = action.payload;
-      state.items = state.items.filter(item => item.snack.id !== snackId);
+      const MenuId = action.payload;
+      state.items = state.items.filter(item => item.Menu.id !== MenuId);
       
       const totals = calculateTotals(state.items);
       state.totalItems = totals.totalItems;
@@ -289,12 +289,12 @@ const cartSlice = createSlice({
     },
     
     updateQuantity: (state, action) => {
-      const { snackId, quantity } = action.payload;
-      const item = state.items.find(item => item.snack.id === snackId);
+      const { MenuId, quantity } = action.payload;
+      const item = state.items.find(item => item.Menu.id === MenuId);
       
       if (item) {
         if (quantity <= 0) {
-          state.items = state.items.filter(item => item.snack.id !== snackId);
+          state.items = state.items.filter(item => item.Menu.id !== MenuId);
         } else {
           item.quantity = quantity;
         }
@@ -403,13 +403,13 @@ export default orderSlice.reducer;
 
 ```javascript
 import { configureStore } from '@reduxjs/toolkit';
-import snackReducer from './slices/snackSlice';
+import MenuReducer from './slices/MenuSlice';
 import cartReducer from './slices/cartSlice';
 import orderReducer from './slices/orderSlice';
 
 export const store = configureStore({
   reducer: {
-    snacks: snackReducer,
+    Menus: MenuReducer,
     cart: cartReducer,
     orders: orderReducer
   }
@@ -474,20 +474,20 @@ export default function Cart({ isOpen, onClose }) {
           <>
             <div className="space-y-4">
               {items.map((item) => (
-                <div key={item.snack.id} className="flex gap-4 border-b pb-4">
+                <div key={item.Menu.id} className="flex gap-4 border-b pb-4">
                   <img 
-                    src={item.snack.image || 'https://via.placeholder.com/80'} 
-                    alt={item.snack.name}
+                    src={item.Menu.image || 'https://via.placeholder.com/80'} 
+                    alt={item.Menu.name}
                     className="w-20 h-20 object-cover rounded"
                   />
                   <div className="flex-1">
-                    <h3 className="font-semibold">{item.snack.name}</h3>
-                    <p className="text-sm text-gray-600">${item.snack.price.toFixed(2)}</p>
+                    <h3 className="font-semibold">{item.Menu.name}</h3>
+                    <p className="text-sm text-gray-600">${item.Menu.price.toFixed(2)}</p>
                     
                     <div className="flex items-center gap-2 mt-2">
                       <button
                         onClick={() => dispatch(updateQuantity({ 
-                          snackId: item.snack.id, 
+                          MenuId: item.Menu.id, 
                           quantity: item.quantity - 1 
                         }))}
                         className="px-2 py-1 bg-gray-200 rounded"
@@ -497,7 +497,7 @@ export default function Cart({ isOpen, onClose }) {
                       <span>{item.quantity}</span>
                       <button
                         onClick={() => dispatch(updateQuantity({ 
-                          snackId: item.snack.id, 
+                          MenuId: item.Menu.id, 
                           quantity: item.quantity + 1 
                         }))}
                         className="px-2 py-1 bg-gray-200 rounded"
@@ -505,7 +505,7 @@ export default function Cart({ isOpen, onClose }) {
                         +
                       </button>
                       <button
-                        onClick={() => dispatch(removeFromCart(item.snack.id))}
+                        onClick={() => dispatch(removeFromCart(item.Menu.id))}
                         className="ml-auto text-red-500 text-sm"
                       >
                         Remove
@@ -544,20 +544,20 @@ export default function Cart({ isOpen, onClose }) {
 Add cart dispatch:
 ```jsx
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchSnacks } from '../store/slices/snackSlice';
+import { fetchMenus } from '../store/slices/MenuSlice';
 import { addToCart } from '../store/slices/cartSlice';
 import { useState } from 'react';
 import Cart from '../components/Cart';
 
 export default function Menu() {
   const dispatch = useDispatch();
-  const { snacks, loading, error } = useSelector((state) => state.snacks);
+  const { Menus, loading, error } = useSelector((state) => state.Menus);
   const [cartOpen, setCartOpen] = useState(false);
   
   // ... existing code ...
   
-  const handleAddToCart = (snack) => {
-    dispatch(addToCart(snack));
+  const handleAddToCart = (Menu) => {
+    dispatch(addToCart(Menu));
     setCartOpen(true);
   };
   
@@ -572,16 +572,16 @@ export default function Menu() {
         Cart ({useSelector((state) => state.cart.totalItems)})
       </button>
       
-      {/* Existing loading/error/snacks display code */}
+      {/* Existing loading/error/Menus display code */}
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {snacks.map((snack) => (
-          <div key={snack.id} className="border rounded-lg p-4 shadow">
-            <h2 className="text-xl font-semibold">{snack.name}</h2>
-            <p className="text-gray-600">{snack.description}</p>
-            <p className="text-lg font-bold mt-2">${snack.price.toFixed(2)}</p>
+        {Menus.map((Menu) => (
+          <div key={Menu.id} className="border rounded-lg p-4 shadow">
+            <h2 className="text-xl font-semibold">{Menu.name}</h2>
+            <p className="text-gray-600">{Menu.description}</p>
+            <p className="text-lg font-bold mt-2">${Menu.price.toFixed(2)}</p>
             <button
-              onClick={() => handleAddToCart(snack)}
+              onClick={() => handleAddToCart(Menu)}
               className="mt-4 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
             >
               Add to Cart
@@ -633,9 +633,9 @@ export default function Checkout() {
     
     const orderData = {
       items: items.map(item => ({
-        snackId: item.snack.id,
-        name: item.snack.name,
-        price: item.snack.price,
+        MenuId: item.Menu.id,
+        name: item.Menu.name,
+        price: item.Menu.price,
         quantity: item.quantity
       })),
       subtotal,
@@ -781,9 +781,9 @@ export default function Checkout() {
             
             <div className="space-y-2 mb-4">
               {items.map((item) => (
-                <div key={item.snack.id} className="flex justify-between text-sm">
-                  <span>{item.snack.name} × {item.quantity}</span>
-                  <span>${(item.snack.price * item.quantity).toFixed(2)}</span>
+                <div key={item.Menu.id} className="flex justify-between text-sm">
+                  <span>{item.Menu.name} × {item.quantity}</span>
+                  <span>${(item.Menu.price * item.quantity).toFixed(2)}</span>
                 </div>
               ))}
             </div>
@@ -1009,7 +1009,7 @@ docker-compose up --build
 
 ### 4.2 Test Production Build
 - Frontend: `http://localhost`
-- Backend API: `http://localhost/api/snacks`
+- Backend API: `http://localhost/api/Menus`
 - Place test order: Use the web interface
 
 ---

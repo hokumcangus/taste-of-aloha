@@ -10,7 +10,7 @@ This is the frontend for **Taste of Aloha**, built with **React + Vite**, **Redu
 - Tailwind CSS v4 integrated
 - Redux Toolkit store configured
 
-See [LEARNING_GUIDE.md](../../LEARNING_GUIDE.md) for comprehensive documentation.
+See [LEARNING_GUIDE.md](../../docs/guides/LEARNING_GUIDE.md) for comprehensive documentation.
 
 ---
 
@@ -74,7 +74,7 @@ docker-compose -f docker-compose.prod.yml up web
 
 - **React 19** - UI framework
 - **Vite 7** - Build tool with fast HMR
-- **Redux Toolkit** - State management (cart, orders, snacks)
+- **Redux Toolkit** - State management (cart, orders, Menus)
 - **React Router DOM** - Client-side routing
 - **Tailwind CSS v4** - Utility-first CSS framework
 - **Nginx** - Production web server (Docker only)
@@ -100,14 +100,14 @@ apps/web/
 │   │   └── OrderConfirmation.jsx
 │   ├── services/        # API service layer
 │   │   ├── api.js       # Base API client
-│   │   ├── snackService.js
+│   │   ├── MenuService.js
 │   │   └── orderService.js
 │   ├── store/           # Redux store
 │   │   ├── store.js
 │   │   └── slices/
 │   │       ├── cartSlice.js   # Shopping cart state
 │   │       ├── orderSlice.js  # Order management
-│   │       └── snackSlice.js  # Menu items
+│   │       └── MenuSlice.js  # Menu items
 │   ├── styles/          # Global styles
 │   ├── App.jsx          # Root component with routing
 │   ├── main.jsx         # Entry point
@@ -167,7 +167,7 @@ VITE_API_URL=http://backend:3000
 Nginx proxies API requests, so frontend uses relative paths:
 ```javascript
 // No VITE_API_URL needed - Nginx handles /api routing
-fetch('/api/snacks')  // Nginx routes to backend:3000
+fetch('/api/Menus')  // Nginx routes to backend:3000
 ```
 
 ---
@@ -226,7 +226,7 @@ location /api {
 ### Browser Console
 ```javascript
 // Test API connection
-fetch('/api/snacks')
+fetch('/api/Menus')
   .then(res => res.json())
   .then(data => console.log(data));
 ```
