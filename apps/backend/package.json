@@ -1,6 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "Backend service for Taste of Aloha",
   "main": "index.js",
   "scripts": {
