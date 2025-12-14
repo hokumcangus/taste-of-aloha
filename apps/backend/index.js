@@ -1,26 +1,23 @@
-const express = require('express');
-const cors = require('cors');
-const menuRoutes = require('./src/routes/menuRoutes');
-const logger = require('./src/utils/logger');
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import menuRoutes from './src/routes/menuRoutes.js';
 
 const app = express();
-const PORT = process.env.PORT || 5001;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
-app.use(logger);
 
 // Routes
-app.use('/api/menu', menuRoutes);
+app.use('/api/menu', menuRoutes);  // ← Add this line
 
-app.get('/', (req, res) => {
-  res.send('Taste of Aloha backend is running 🌺');
-});
-
+// Health check endpoint
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.json({ status: 'Backend is running!' });
 });
 
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

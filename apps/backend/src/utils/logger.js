@@ -1,5 +1,5 @@
-// Simple request logger middleware
-module.exports = (req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  next();
+export default {
+  log: (message) => console.log(`[LOG] ${message}`),
+  error: (message, error) => console.error(`[ERROR] ${message}`, error),
+  info: (message) => console.info(`[INFO] ${message}`)
 };

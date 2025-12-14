@@ -8,8 +8,7 @@
   ],
   "scripts": {
     "dev:web": "npm run dev:web",
-    "dev:backend": "npm run dev:backend",
-    "lint": "eslint . --ext .js,.jsx",
+    "dev:backend": "npm --workspace apps/backend run dev",
     "format": "prettier --write ."
   },
   "devDependencies": {
