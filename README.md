@@ -32,13 +32,20 @@ We have comprehensive documentation to help you understand and work with this pr
 - **[Developer Quick Reference](docs/reference/QUICK_REFERENCE.md)** - Developer quick reference guide
 - **[How to View Diagrams](docs/HOW_TO_VIEW_DIAGRAMS.md)** - Guide for viewing architecture diagrams
 
+### Learning & Setup Guides
+- **[Learning Guide](docs/guides/LEARNING_GUIDE.md)** - ⭐ Best place to start! Comprehensive guide to all technologies and setup
+- **[Database Setup Guide](docs/guides/DATABASE_SETUP_GUIDE.md)** - Complete PostgreSQL & Prisma setup with all steps and commands
+- **[Database Commands Reference](docs/reference/DATABASE_COMMANDS_REFERENCE.md)** - Quick lookup for database commands
+- **[Docker Setup Guide](docs/setup/DOCKER_SETUP_GUIDE.md)** - Docker configuration and running containers
+- **[Setup Checklist](docs/setup/SETUP_CHECKLIST.md)** - Step-by-step checklist for getting started
+
 ### Project Planning & Tasks
-- **[Quick Reference](docs/reference/QUICK_REFERENCE.md)** - ⭐ Start here! Quick guide to creating issues and organizing work
+- **[Quick Reference](docs/reference/QUICK_REFERENCE.md)** - Quick guide to creating issues and organizing work
 - **[Task Breakdown](docs/planning/TASK_BREAKDOWN.md)** - Detailed breakdown of all tasks by sprint
 - **[Sprint Planning](docs/planning/SPRINT_PLANNING.md)** - Sprint overview, timelines, and dependencies
 - **[Issues Setup Guide](docs/setup/ISSUES_SETUP_GUIDE.md)** - Complete guide for using GitHub issues and project boards
 
-**New to the project?** Start with the [Quick Reference](docs/reference/QUICK_REFERENCE.md) to set up your issues and project board, then dive into the [Documentation Index](docs/INDEX.md) for technical details!
+**New to the project?** Start with [Learning Guide](docs/guides/LEARNING_GUIDE.md) for full setup and technology explanations!
 
 ---
 

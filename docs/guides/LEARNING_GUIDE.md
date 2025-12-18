@@ -6,13 +6,14 @@ This guide walks you through the development journey of Taste of Aloha, explaini
 
 ## Table of Contents
 1. [Development Environment Setup](#1-development-environment-setup)
-2. [Frontend Foundation](#2-frontend-foundation)
-3. [Backend Foundation](#3-backend-foundation)
-4. [Docker & Containerization](#4-docker--containerization)
-5. [Routing & Navigation](#5-routing--navigation)
-6. [UI/UX Features](#6-uiux-features)
-7. [Next Steps: Order System](#7-next-steps-order-system)
-8. [Learning Resources](#8-learning-resources)
+2. [Database Setup: PostgreSQL & Prisma](#2-database-setup-postgresql--prisma)
+3. [Frontend Foundation](#3-frontend-foundation)
+4. [Backend Foundation](#4-backend-foundation)
+5. [Docker & Containerization](#5-docker--containerization)
+6. [Routing & Navigation](#6-routing--navigation)
+7. [UI/UX Features](#7-uiux-features)
+8. [Next Steps: Order System](#8-next-steps-order-system)
+9. [Learning Resources](#9-learning-resources)
 
 ---
 
@@ -63,7 +64,138 @@ docker exec -it <container> sh  # Enter container shell
 
 ---
 
-## 2. Frontend Foundation
+## 2. Database Setup: PostgreSQL & Prisma
+
+### ✅ What Was Completed
+
+#### PostgreSQL Installation
+- **Status**: ✅ Complete (v18 installed)
+- **Verification**: Run `psql --version`
+- **Why**: PostgreSQL is a robust, reliable SQL database for storing all your application data (menu items, orders, users)
+
+#### Prisma ORM Setup
+- **Status**: ✅ Complete
+- **Location**: `apps/backend/prisma/`
+- **Installation**: `npm install prisma @prisma/client pg`
+- **Database Connection**: Configured in `apps/backend/.env`
+
+#### Menu Model Created
+- **Status**: ✅ Complete
+- **File**: `apps/backend/prisma/schema.prisma`
+- **Migration**: `20251214184223_init` applied successfully
+- **Table**: `Menu` table created in `taste_of_aloha` database
+
+### 🎓 What You Should Learn
+
+**PostgreSQL vs Prisma - Key Difference:**
+- **PostgreSQL**: The actual database engine that STORES your data on disk
+- **Prisma**: A tool (ORM - Object Relational Mapping) that lets your Node.js app talk to PostgreSQL
+
+Think of it like:
+- PostgreSQL = the filing cabinet (stores data)
+- Prisma = the librarian (retrieves/organizes data for you)
+
+**Architecture Flow:**
+```
+Your Backend Code 
+    ↓
+Prisma Client (generates queries)
+    ↓
+PostgreSQL Database (stores/retrieves data)
+```
+
+**How Prisma Works:**
+
+1. **Define Schema** - You write `schema.prisma` describing your database tables
+2. **Generate Migrations** - `npx prisma migrate dev` creates SQL migration files
+3. **Apply Migrations** - SQL commands run against PostgreSQL to create/modify tables
+4. **Generate Client** - `npx prisma generate` creates JavaScript methods you use in your code
+
+**Example Menu Model:**
+```prisma
+model Menu {
+  id          Int     @id @default(autoincrement())    // Auto-incrementing primary key
+  name        String                                    // Menu item name
+  description String                                    // What it is
+  price       Float                                     // Cost in dollars
+  image       String?                                   // Optional image URL
+  category    String                                    // Type: appetizer, main, dessert
+  isAvailable Boolean @default(true)                    // Is it available to order?
+  createdAt   DateTime @default(now())                  // Timestamp when created
+  updatedAt   DateTime @updatedAt                       // Timestamp when last updated
+}
+```
+
+**Using Prisma in Your Code:**
+```javascript
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+
+// Create a menu item
+await prisma.menu.create({
+  data: {
+    name: "Spam Musubi",
+    description: "Spam and egg wrapped in rice",
+    price: 5.99,
+    category: "main",
+    image: "spam-musubi.jpg"
+  }
+});
+
+// Get all menu items
+const allItems = await prisma.menu.findMany();
+
+// Get one item
+const item = await prisma.menu.findUnique({
+  where: { id: 1 }
+});
+
+// Update item
+await prisma.menu.update({
+  where: { id: 1 },
+  data: { price: 6.99 }
+});
+
+// Delete item
+await prisma.menu.delete({
+  where: { id: 1 }
+});
+```
+
+### 📚 Key Commands to Practice
+
+```bash
+# Database commands (run from apps/backend/)
+psql -U postgres                           # Connect to PostgreSQL
+CREATE DATABASE taste_of_aloha;            # Create database (in psql)
+\q                                         # Exit psql
+
+# Prisma commands
+npx prisma migrate dev --name <name>       # Create and apply migration
+npx prisma migrate reset                   # Reset database (delete all data)
+npx prisma generate                        # Regenerate Prisma Client
+npx prisma studio                          # Open visual database browser
+npx prisma db seed                         # Seed database with test data
+```
+
+### ✅ Current Database Status
+
+**Connection String** (in `.env`):
+```
+DATABASE_URL="postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha?schema=public"
+```
+
+**Tables Created:**
+- `Menu` - Stores all menu items (snacks)
+
+**Tables Not Yet Created (for Phase 1):**
+- `User` - Customer information
+- `Order` - Order records
+- `OrderItem` - Individual items in each order
+
+---
+
+## 3. Frontend Foundation
 
 ### ✅ What Was Completed
 
@@ -173,7 +305,7 @@ export default function Button({ children, onClick, variant = 'primary' }) {
 
 ---
 
-## 3. Backend Foundation
+## 4. Backend Foundation
 
 ### ✅ What Was Completed
 
@@ -306,7 +438,7 @@ app.use('/api/orders', orderRoutes);
 
 ---
 
-## 4. Docker & Containerization
+## 5. Docker & Containerization
 
 ### ✅ What Was Completed
 
@@ -452,7 +584,7 @@ backend:
 
 ---
 
-## 5. Routing & Navigation
+## 6. Routing & Navigation
 
 ### ✅ What Was Completed
 
@@ -548,7 +680,7 @@ const search = searchParams.get('search');  // 'spicy'
 
 ---
 
-## 6. UI/UX Features
+## 7. UI/UX Features
 
 ### ✅ What Was Completed
 
@@ -646,7 +778,7 @@ useEffect(() => {
 
 ---
 
-## 7. Next Steps: Order System
+## 8. Next Steps: Order System
 
 This is your **primary learning objective** moving forward. The order system will teach you full-stack development from database to UI.
 
@@ -774,7 +906,7 @@ const handleSubmit = (e) => {
 
 ---
 
-## 8. Learning Resources
+## 9. Learning Resources
 
 ### 📚 Official Documentation (Best Resources)
 
