@@ -17,7 +17,7 @@ pool.on('connect', () => {
 
 pool.on('error', (err) => {
   console.error('❌ Unexpected error on idle PostgreSQL client', err);
-  process.exit(-1);
+  // Log the error but don't exit - let the application handle the error gracefully
 });
 
 /**

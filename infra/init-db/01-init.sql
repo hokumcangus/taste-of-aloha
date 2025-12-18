@@ -4,7 +4,7 @@
 -- Create snacks table
 CREATE TABLE IF NOT EXISTS snacks (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL UNIQUE,
     description TEXT,
     price DECIMAL(10, 2) NOT NULL,
     image_url VARCHAR(500),
@@ -35,4 +35,4 @@ INSERT INTO snacks (name, description, price, category) VALUES
     ('Malasada', 'Portuguese-style fried dough rolled in sugar', 3.50, 'dessert'),
     ('Haupia', 'Traditional coconut milk-based Hawaiian dessert', 5.99, 'dessert'),
     ('Loco Moco', 'Rice, hamburger patty, fried egg, and brown gravy', 11.99, 'meal')
-ON CONFLICT DO NOTHING;
+ON CONFLICT (name) DO NOTHING;

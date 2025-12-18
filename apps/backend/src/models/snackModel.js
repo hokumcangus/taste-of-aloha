@@ -25,12 +25,12 @@ exports.getById = async (id) => {
  * @returns {Promise<Object>} Created snack
  */
 exports.create = async (snack) => {
-  const { name, description, price, image_url, category, available } = snack;
+  const { name, description, price, image_url, category, available = true } = snack;
   const result = await db.query(
     `INSERT INTO snacks (name, description, price, image_url, category, available) 
      VALUES ($1, $2, $3, $4, $5, $6) 
      RETURNING *`,
-    [name, description, price, image_url, category, available !== undefined ? available : true]
+    [name, description, price, image_url, category, available]
   );
   return result.rows[0];
 };
