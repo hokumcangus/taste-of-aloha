@@ -13,6 +13,15 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// Define Client model (user)
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+  posts Post[]
+}
+
 // Define your menu model (menu items table)
 model Menu {
   id          Int     @id @default(autoincrement())
@@ -24,15 +33,6 @@ model Menu {
   isAvailable Boolean @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-}
-
-// Define Client model (user)
-
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
 }
 
 model Post {
