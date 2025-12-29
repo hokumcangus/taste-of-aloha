@@ -1,43 +1,74 @@
 const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
-
-// Map legacy "menuItem" shape onto Prisma Menu table
-export const mapToMenuData = (menuItem) => ({
-  name: menuItem.name,
-  description: menuItem.description || '',
-  price: menuItem.price !== undefined ? Number(menuItem.price) : 0,
-  image: menuItem.image || null,
-  category: menuItem.category || 'General',
-  isAvailable: menuItem.isAvailable !== undefined ? Boolean(menuItem.isAvailable) : true,
+const prisma = new PrismaClient({
+  datasources: { db: { url: process.env.DATABASE_URL } },
 });
 
-exports.getAll = async () => {
-  return prisma.menu.findMany({ orderBy: { createdAt: 'desc' } });
+function mapToMenuData(menuItem) {
+  return {
+    name: menuItem.name,
+    description: menuItem.description || '',
+    price: menuItem.price !== undefined ? Number(menuItem.price) : 0,
+    image: menuItem.image || null,
+    category: menuItem.category || 'General',
+    isAvailable: menuItem.isAvailable !== undefined ? Boolean(menuItem.isAvailable) : true,
+  };
+}
+
+const getAllMenus = async () => {
+  return await prisma.menu.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
 };
 
-exports.getById = async (id) => {
-  return prisma.menu.findUnique({ where: { id } });
+// GET one menu item by ID
+const getMenuById = async (id) => {
+  return await prisma.menu.findUnique({
+    where: { id: parseInt(id) }
+  });
 };
 
-exports.create = async (menuItem) => {
-  return prisma.menu.create({ data: mapToMenuData(menuItem) });
+// CREATE a new menu item
+const createMenu = async (data) => {
+  return await prisma.menu.create({
+    data: {
+      name: data.name,
+      description: data.description,
+      price: parseFloat(data.price),
+      category: data.category,
+      image: data.image || null,
+      isAvailable: data.isAvailable !== false  // Default to true
+    }
+  });
 };
 
-exports.updateById = async (id, updatedmenuItem) => {
-  try {
-    return await prisma.menu.update({ where: { id }, data: mapToMenuData(updatedmenuItem) });
-  } catch (err) {
-    if (err.code === 'P2025') return null; // record not found
-    throw err;
-  }
+
+// UPDATE a menu item
+const updateMenu = async (id, data) => {
+  return await prisma.menu.update({
+    where: { id: parseInt(id) },
+    data: {
+      name: data.name || undefined,
+      description: data.description || undefined,
+      price: data.price ? parseFloat(data.price) : undefined,
+      category: data.category || undefined,
+      image: data.image || undefined,
+      isAvailable: data.isAvailable !== undefined ? data.isAvailable : undefined
+    }
+  });
 };
 
-exports.deleteById = async (id) => {
-  try {
-    await prisma.menu.delete({ where: { id } });
-    return true;
-  } catch (err) {
-    if (err.code === 'P2025') return false;
-    throw err;
-  }
+// DELETE a menu item
+const deleteMenu = async (id) => {
+  return await prisma.menu.delete({
+    where: { id: parseInt(id) }
+  });
+};
+
+module.exports = {
+  mapToMenuData,
+  getAllMenus,
+  getMenuById,
+  createMenu,
+  updateMenu,
+  deleteMenu,
 };

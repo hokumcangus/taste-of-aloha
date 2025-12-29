@@ -4,6 +4,29 @@ Follow these steps in order to set up Docker for your Taste of Aloha application
 
 ---
 
+## Prerequisites: Verify Docker Installation
+
+Before creating Docker files, make sure Docker Desktop and Docker Compose are installed and the Docker engine is running.
+
+### Windows PowerShell checks
+
+```powershell
+# Version checks
+docker --version
+docker compose version
+
+# Is the Docker engine running?
+docker info
+
+# Desktop service status (Windows)
+Get-Service com.docker.service
+
+# Quick sanity test (pulls and runs a test image)
+docker run hello-world
+```
+
+If `docker info` fails, start Docker Desktop from the Start Menu, wait until it shows "Running", then re-run the checks.
+
 ## Step 1: Create Backend Dockerfile
 
 **File:** `apps/backend/Dockerfile`

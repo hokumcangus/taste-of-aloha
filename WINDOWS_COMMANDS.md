@@ -356,6 +356,22 @@ npm --version
 
 ## 🐳 Docker Commands
 
+### Check Docker installation and status
+```powershell
+# Version checks
+docker --version
+docker compose version
+
+# Is the engine running?
+docker info
+
+# Docker Desktop service (Windows)
+Get-Service com.docker.service
+
+# Sanity test image
+docker run hello-world
+```
+
 ### List Running Containers
 ```powershell
 docker ps

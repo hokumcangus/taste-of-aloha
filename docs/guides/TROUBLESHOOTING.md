@@ -2,6 +2,31 @@
 
 ## Common Errors and Solutions
 
+### Docker not installed or Docker daemon not running
+
+**Symptoms:**
+- `docker : The term 'docker' is not recognized`
+- `Cannot connect to the Docker daemon`
+- `docker info` fails or times out
+
+**Checks (Windows PowerShell):**
+```powershell
+docker --version
+docker compose version
+docker info
+Get-Service com.docker.service
+```
+
+**Fixes:**
+1. Install Docker Desktop: https://www.docker.com/products/docker-desktop
+2. Start Docker Desktop and wait until it shows "Running"
+3. Re-run `docker info` to confirm the engine is up
+4. Optional sanity test:
+   ```powershell
+   docker run hello-world
+   ```
+
+
 ### 1. PostCSS Config Error: "Failed to load PostCSS config" or "Invalid or unexpected token"
 
 **Problem:** PostCSS configuration file has incorrect syntax or package.json is missing module type.

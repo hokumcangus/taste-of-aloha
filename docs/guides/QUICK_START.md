@@ -10,6 +10,14 @@ This guide will get you up and running with the Taste of Aloha application in un
 - Docker and Docker Compose installed
 - Git installed
 
+### Verify installation (Windows PowerShell)
+```powershell
+docker --version
+docker compose version
+docker info
+```
+If `docker info` fails, start Docker Desktop, wait until it shows "Running", then re-run the checks.
+
 ---
 
 ## Option 1: Quick Start with Docker (Recommended)
