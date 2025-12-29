@@ -827,7 +827,11 @@ curl -X DELETE http://localhost:5001/api/Menus/1
 1. Open Postman (or download from postman.com)
 2. Create new request
 3. Set method: GET, POST, PUT, DELETE
+<<<<<<< HEAD
 4. Enter URL: `http://localhost:5001/api/Menus`
+=======
+4. Enter URL: `
+>>>>>>> origin/main
 5. For POST/PUT: Go to Body tab → JSON → paste data
 6. Click Send
 

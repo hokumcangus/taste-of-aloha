@@ -2,15 +2,17 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import menuRoutes from './src/routes/menuRoutes.js';
+import logger from './src/utils/logger.js';
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(logger);
 
 // Routes
-app.use('/api/menu', menuRoutes);  // ← Add this line
+app.use('/api/menu', menuRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

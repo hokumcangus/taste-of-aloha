@@ -33,14 +33,12 @@ We have comprehensive documentation to help you understand and work with this pr
 - **[How to View Diagrams](docs/HOW_TO_VIEW_DIAGRAMS.md)** - Guide for viewing architecture diagrams
 
 ### Learning & Setup Guides
-- **[Learning Guide](docs/guides/LEARNING_GUIDE.md)** - ⭐ Best place to start! Comprehensive overview of all technologies
+- **[Learning Guide](docs/guides/LEARNING_GUIDE.md)** - ⭐ Best place to start! Comprehensive guide to all technologies and setup
 - **[Database Setup Guide](docs/guides/DATABASE_SETUP_GUIDE.md)** - Complete PostgreSQL & Prisma setup with all steps and commands
 - **[Backend API Guide](docs/guides/BACKEND_API_GUIDE.md)** - Step-by-step tutorial for building REST API endpoints
-- **[Menu → Menu Refactoring Guide](docs/guides/Menu_TO_MENU_REFACTORING.md)** - Rename Menu references to menu items (checklist & instructions)
 - **[Database Commands Reference](docs/reference/DATABASE_COMMANDS_REFERENCE.md)** - Quick lookup for database commands
-- **[Backend API Checklist](docs/reference/BACKEND_API_CHECKLIST.md)** - Printable checklist for building endpoints
 - **[Docker Setup Guide](docs/setup/DOCKER_SETUP_GUIDE.md)** - Docker configuration and running containers
-- **[Setup Checklist](docs/setup/SETUP_CHECKLIST.md)** - Step-by-step setup verification
+- **[Setup Checklist](docs/setup/SETUP_CHECKLIST.md)** - Step-by-step checklist for getting started
 
 ### Project Planning & Tasks
 - **[Quick Reference](docs/reference/QUICK_REFERENCE.md)** - Quick guide to creating issues and organizing work
