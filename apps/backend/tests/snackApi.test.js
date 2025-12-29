@@ -2,9 +2,24 @@ const request = require('supertest');
 const express = require('express');
 const snackRoutes = require('../src/routes/snackRoutes');
 
-// Mock the database
-jest.mock('../src/config/database');
-const db = require('../src/config/database');
+// Mock Prisma
+jest.mock('@prisma/client', () => {
+  const mockPrisma = {
+    menu: {
+      findMany: jest.fn(),
+      findUnique: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+    },
+  };
+  return {
+    PrismaClient: jest.fn(() => mockPrisma),
+  };
+});
+
+const { PrismaClient } = require('@prisma/client');
+const mockPrisma = new PrismaClient();
 
 // Create an Express app for testing
 const app = express();
@@ -13,7 +28,6 @@ app.use('/api/snacks', snackRoutes);
 
 describe('Snacks API Endpoints', () => {
   beforeEach(() => {
-    // Clear all mocks before each test
     jest.clearAllMocks();
   });
 
@@ -24,17 +38,17 @@ describe('Snacks API Endpoints', () => {
         { id: 2, name: 'Poke Bowl', price: 12.99, description: 'Fresh ahi tuna' },
       ];
 
-      db.query.mockResolvedValue({ rows: mockSnacks });
+      mockPrisma.menu.findMany.mockResolvedValue(mockSnacks);
 
       const response = await request(app).get('/api/snacks');
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockSnacks);
-      expect(db.query).toHaveBeenCalledWith('SELECT * FROM snacks ORDER BY id');
+      expect(mockPrisma.menu.findMany).toHaveBeenCalled();
     });
 
     test('should handle database errors', async () => {
-      db.query.mockRejectedValue(new Error('Database connection failed'));
+      mockPrisma.menu.findMany.mockRejectedValue(new Error('Database connection failed'));
 
       const response = await request(app).get('/api/snacks');
 
@@ -47,7 +61,7 @@ describe('Snacks API Endpoints', () => {
     test('should return a single snack by id', async () => {
       const mockSnack = { id: 1, name: 'Spam Musubi', price: 4.99 };
 
-      db.query.mockResolvedValue({ rows: [mockSnack] });
+      mockPrisma.menu.findUnique.mockResolvedValue(mockSnack);
 
       const response = await request(app).get('/api/snacks/1');
 
@@ -56,7 +70,7 @@ describe('Snacks API Endpoints', () => {
     });
 
     test('should return 404 if snack not found', async () => {
-      db.query.mockResolvedValue({ rows: [] });
+      mockPrisma.menu.findUnique.mockResolvedValue(null);
 
       const response = await request(app).get('/api/snacks/999');
 
@@ -76,7 +90,7 @@ describe('Snacks API Endpoints', () => {
 
       const createdSnack = { id: 3, ...newSnack, created_at: new Date() };
 
-      db.query.mockResolvedValue({ rows: [createdSnack] });
+      mockPrisma.menu.create.mockResolvedValue(createdSnack);
 
       const response = await request(app)
         .post('/api/snacks')
@@ -88,11 +102,11 @@ describe('Snacks API Endpoints', () => {
     });
 
     test('should handle validation errors', async () => {
-      db.query.mockRejectedValue(new Error('Validation failed'));
+      mockPrisma.menu.create.mockRejectedValue(new Error('Validation failed'));
 
       const response = await request(app)
         .post('/api/snacks')
-        .send({ name: 'Invalid' }); // Missing required fields
+        .send({ name: 'Invalid' });
 
       expect(response.status).toBe(500);
     });
@@ -103,7 +117,7 @@ describe('Snacks API Endpoints', () => {
       const updatedData = { name: 'Updated Musubi', price: 5.99 };
       const updatedSnack = { id: 1, ...updatedData };
 
-      db.query.mockResolvedValue({ rows: [updatedSnack] });
+      mockPrisma.menu.update.mockResolvedValue(updatedSnack);
 
       const response = await request(app)
         .put('/api/snacks/1')
@@ -114,7 +128,7 @@ describe('Snacks API Endpoints', () => {
     });
 
     test('should return 404 if snack to update not found', async () => {
-      db.query.mockResolvedValue({ rows: [] });
+      mockPrisma.menu.update.mockResolvedValue(null);
 
       const response = await request(app)
         .put('/api/snacks/999')
@@ -126,7 +140,7 @@ describe('Snacks API Endpoints', () => {
 
   describe('DELETE /api/snacks/:id', () => {
     test('should delete a snack', async () => {
-      db.query.mockResolvedValue({ rows: [{ id: 1 }] });
+      mockPrisma.menu.delete.mockResolvedValue({ id: 1 });
 
       const response = await request(app).delete('/api/snacks/1');
 
@@ -135,7 +149,7 @@ describe('Snacks API Endpoints', () => {
     });
 
     test('should return 404 if snack to delete not found', async () => {
-      db.query.mockResolvedValue({ rows: [] });
+      mockPrisma.menu.delete.mockRejectedValue({ code: 'P2025' });
 
       const response = await request(app).delete('/api/snacks/999');
 
@@ -143,3 +157,4 @@ describe('Snacks API Endpoints', () => {
     });
   });
 });
+
