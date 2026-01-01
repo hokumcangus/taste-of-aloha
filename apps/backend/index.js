@@ -9,7 +9,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(logger);
+app.use(logger.middleware);
 
 // Routes
 app.use('/api/menu', menuRoutes);
