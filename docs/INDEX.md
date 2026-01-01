@@ -269,6 +269,7 @@ taste-of-aloha/
 4. [Services Diagram](architecture/services-diagram.dio) - Service details
 5. [Quick Reference](QUICK_REFERENCE.md) - Daily reference
 6. [IMPLEMENTATION.md](../IMPLEMENTATION.md) - Current implementation
+7. [PRISMA_V7_SETUP.md](guides/PRISMA_V7_SETUP.md) - Database setup guide
 
 #### **Developer (Experienced)**
 1. [Quick Reference](QUICK_REFERENCE.md) - API endpoints and schemas
@@ -305,6 +306,15 @@ taste-of-aloha/
 
 **"What's the database schema?"**
 → [Quick Reference](QUICK_REFERENCE.md) - Database Schema Overview section
+
+**"How do I set up the database with Prisma v7?"**
+→ [PRISMA_V7_SETUP.md](guides/PRISMA_V7_SETUP.md)
+
+**"What changed in Prisma v7?"**
+→ [PRISMA_V7_SETUP.md](guides/PRISMA_V7_SETUP.md) - Key Changes section
+
+**"How do I configure PostgreSQL?"**
+→ [PRISMA_V7_SETUP.md](guides/PRISMA_V7_SETUP.md) - PostgreSQL Adapter Setup section
 
 **"How do I set up my dev environment?"**
 → [README.md](../README.md) - Getting Started section
