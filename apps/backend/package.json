@@ -27,12 +27,14 @@
   },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.1.0",
+    "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.1.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "nginx": "^1.1.0"
+    "nginx": "^1.1.0",
+    "pg": "^8.16.3"
   }
 }
