@@ -444,6 +444,45 @@ docker image prune -a
 
 ---
 
+## 🌐 API Testing (Web Requests)
+
+### Test Health Endpoint
+```powershell
+Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing
+```
+
+### Get All Snacks
+```powershell
+Invoke-WebRequest -Uri "http://localhost:3000/api/snacks" -Method GET -UseBasicParsing
+```
+
+### Get Snack by ID
+```powershell
+Invoke-WebRequest -Uri "http://localhost:3000/api/snacks/1" -Method GET -UseBasicParsing
+```
+
+### Create New Snack (POST)
+```powershell
+$body = @{
+    name = "Spam Musubi"
+    description = "Grilled spam with rice"
+    price = 3.50
+    available = $true
+} | ConvertTo-Json
+
+Invoke-WebRequest -Uri "http://localhost:3000/api/snacks" -Method POST -ContentType "application/json" -Body $body -UseBasicParsing
+```
+
+### View Response Content
+```powershell
+$response = Invoke-WebRequest -Uri "http://localhost:3000/api/snacks" -Method GET -UseBasicParsing
+$response.Content | ConvertFrom-Json
+```
+
+**Note:** Always use `-UseBasicParsing` flag on Windows to avoid Internet Explorer dependency issues.
+
+---
+
 ## 🚀 Project-Specific Shortcuts
 
 ### Start Backend Dev Server
