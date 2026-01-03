@@ -108,7 +108,32 @@ npm run dev
 
 ## Test the API
 
-Once the backend is running, test it with curl:
+### Windows PowerShell Commands
+
+Once the backend is running, test it with these commands:
+
+```powershell
+# Get all snacks
+Invoke-WebRequest -Uri "http://localhost:3000/api/snacks" -UseBasicParsing
+
+# Get and display as JSON
+Invoke-WebRequest -Uri "http://localhost:3000/api/snacks" -Method GET -UseBasicParsing | Select-Object -ExpandProperty Content
+
+# Create a new snack
+$body = @{
+    name = "Coconut Shrimp"
+    description = "Crispy coconut-crusted shrimp"
+    price = 8.99
+    category = "appetizer"
+} | ConvertTo-Json
+
+Invoke-WebRequest -Uri "http://localhost:3000/api/snacks" -Method POST -ContentType "application/json" -Body $body -UseBasicParsing
+
+# Get snack by ID
+Invoke-WebRequest -Uri "http://localhost:3000/api/snacks/1" -UseBasicParsing
+```
+
+### macOS/Linux (curl)
 
 ```bash
 # Health check
