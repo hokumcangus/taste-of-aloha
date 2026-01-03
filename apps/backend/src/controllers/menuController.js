@@ -1,5 +1,4 @@
 const MenuModel = require('../models/menuModel');
-const logger = require('../utils/logger');
 
 // GET all menus
 const getAllMenuItems = async (req, res) => {
@@ -11,7 +10,7 @@ const getAllMenuItems = async (req, res) => {
             data: menus,
         });
     } catch (error) {
-        logger(error);
+        console.error('Error fetching menus:', error);
         res.status(500).json({ success: false, message: 'Failed to fetch menus' });
     }
 };

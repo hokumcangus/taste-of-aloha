@@ -1,7 +1,7 @@
 import apiClient from './api.js';
 
 /**
- * MenuItem API service
+ * Snack API service
  * Handles all API calls related to snacks
  */
 export const snackService = {
@@ -14,36 +14,36 @@ export const snackService = {
   },
 
   /**
-   * Get menuItem by ID
-   * @param {number} id - MenuItem ID
-   * @returns {Promise<Object>} MenuItem object
+   * Get snack by ID
+   * @param {number} id - Snack ID
+   * @returns {Promise<Object>} Snack object
    */
   getSnackById: async (id) => {
     return apiClient.get(`/api/snacks/${id}`);
   },
 
   /**
-   * Create a new menuItem
-   * @param {Object} snackData - MenuItem data (name, price, etc.)
-   * @returns {Promise<Object>} Created menuItem object
+   * Create a new snack
+   * @param {Object} snackData - Snack data (name, price, etc.)
+   * @returns {Promise<Object>} Created snack object
    */
   createSnack: async (snackData) => {
     return apiClient.post('/api/snacks', snackData);
   },
 
   /**
-   * Update a menuItem
-   * @param {number} id - MenuItem ID
-   * @param {Object} snackData - Updated menuItem data
-   * @returns {Promise<Object>} Updated menuItem object
+   * Update a snack
+   * @param {number} id - Snack ID
+   * @param {Object} snackData - Updated snack data
+   * @returns {Promise<Object>} Updated snack object
    */
   updateSnack: async (id, snackData) => {
     return apiClient.put(`/api/snacks/${id}`, snackData);
   },
 
   /**
-   * Delete a menuItem
-   * @param {number} id - MenuItem ID
+   * Delete a snack
+   * @param {number} id - Snack ID
    * @returns {Promise<Object>} Deletion confirmation
    */
   deleteSnack: async (id) => {
