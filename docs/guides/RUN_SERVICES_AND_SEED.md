@@ -23,18 +23,28 @@ npx prisma validate
 ```
 
 ## 3) Run migrations
+Preferred: inside backend container (targets `postgres:5432`).
+```sh
+docker exec -i taste-of-aloha-backend npx prisma migrate dev --name init
+```
+Alternatively, from host (Prisma 7 config present):
 ```sh
 cd apps/backend
+npx prisma validate
 npx prisma migrate dev --name init
 ```
-This uses `DATABASE_URL` from `apps/backend/.env` (currently `postgresql://postgres:postgres@postgres:5432/taste_of_aloha?schema=public`).
+Migrations use `apps/backend/prisma.config.ts` to read `DATABASE_URL`.
 
 ## 4) Add a sample menu item
-From `apps/backend/`:
+From `apps/backend/` or via container:
 ```sh
+# Host
 npm run seed:menu
-# or pass name/price
+# Or pass name/price
 node scripts/addMenuItem.js "Garlic Shrimp" 14.50
+
+# Container
+docker exec -i taste-of-aloha-backend node scripts/addMenuItem.js "Garlic Shrimp" 14.50
 ```
 This creates a row in `Menu` via Prisma.
 
@@ -52,7 +62,7 @@ npx prisma studio --schema prisma/schema.prisma
 
 ## 6) Common fixes
 - **Schema not found**: run from `apps/backend/` or add `--schema prisma/schema.prisma`.
-- **Auth failed**: confirm `DATABASE_URL` in `apps/backend/.env` matches docker-compose credentials (user `postgres`, pass `postgres`, host `postgres`, db `taste_of_aloha`).
+- **Auth failed**: run migrations inside the backend container (connects to `postgres:5432`). If running from host, ensure `apps/backend/.env` `DATABASE_URL` points to `localhost:5432` and matches your container password.
 - **Migrations stale**: rerun `npx prisma migrate dev` after edits to `prisma/schema.prisma`.
 
 ## 7) Stop services

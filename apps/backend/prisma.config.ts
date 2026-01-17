@@ -1,10 +1,10 @@
 import "dotenv/config";
 
+// Prisma 7 CLI configuration
+// Provides schema path and datasource URL for migrate commands
 export default {
   schema: "prisma/schema.prisma",
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL,
-    },
+  datasource: {
+    url: process.env.DATABASE_URL,
   },
 };

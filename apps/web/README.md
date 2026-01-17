@@ -45,7 +45,7 @@ This creates an optimized build in the `dist/` folder.
 #### Development Mode
 ```bash
 # From project root
-docker-compose up frontend
+docker compose up frontend
 ```
 
 **What happens:**
@@ -57,7 +57,7 @@ docker-compose up frontend
 #### Production Mode
 ```bash
 # From project root
-docker-compose -f docker-compose.prod.yml up web
+docker compose -f docker-compose.prod.yml up web
 ```
 
 **What happens:**
@@ -254,7 +254,7 @@ Install [Redux DevTools Extension](https://github.com/reduxjs/redux-devtools) to
 ### Docker Production Build
 ```bash
 # From project root
-docker-compose -f docker-compose.prod.yml up --build web
+docker compose -f docker-compose.prod.yml up --build web
 ```
 
 ### Manual Build

@@ -51,6 +51,7 @@ import "dotenv/config";
 
 export default {
   schema: "prisma/schema.prisma",
+  datasource: { url: process.env.DATABASE_URL },
 };
 ```
 
@@ -87,6 +88,7 @@ const prisma = new PrismaClient({ adapter });
 - [apps/backend/src/models/snackModel.js](apps/backend/src/models/snackModel.js)
 - [apps/backend/src/models/menuModel.js](apps/backend/src/models/menuModel.js)
 - [apps/backend/scripts/addMenuItem.js](apps/backend/scripts/addMenuItem.js)
+ - [apps/backend/prisma.config.ts](apps/backend/prisma.config.ts)
 
 ---
 
@@ -155,6 +157,11 @@ Invoke-WebRequest -Uri "http://localhost:3000/api/snacks" -Method GET -UseBasicP
 ```
 
 Expected output: JSON array (empty `[]` or with menu items)
+
+If you get "table does not exist", run migrations inside the backend container:
+```powershell
+docker exec -i taste-of-aloha-backend npx prisma migrate dev --name init
+```
 
 ### Step 4: Seed Test Data
 ```powershell

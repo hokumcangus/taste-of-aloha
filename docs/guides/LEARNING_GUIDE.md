@@ -182,7 +182,7 @@ npx prisma db seed                         # Seed database with test data
 
 **Connection String** (in `.env`):
 ```
-DATABASE_URL="postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha?schema=public"
+DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/taste_of_aloha?schema=public"
 ```
 
 **Tables Created:**
