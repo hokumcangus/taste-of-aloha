@@ -1,3 +1,7 @@
+import { PrismaClient } from './generated/prisma'
+import "dotenv/config"
+const prisma = new PrismaClient()
+// use `prisma` in your application to read and write data in your DB
 const { Pool } = require('pg');
 require('dotenv').config();
 

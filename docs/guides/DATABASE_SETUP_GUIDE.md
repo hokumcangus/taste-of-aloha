@@ -38,6 +38,8 @@ This guide documents the complete database setup process for Taste of Aloha, inc
 ```powershell
 psql --version
 # Output: psql (PostgreSQL) 18.x.x
+// else
+$env:PATH = "C:\Program Files\PostgreSQL\18\bin;$env:PATH"
 ```
 
 ### Step 2: Install Node.js Prisma Packages
@@ -121,7 +123,7 @@ psql -U postgres -d taste_of_aloha
 **Files Created:**
 - `apps/backend/.env` - Environment variables (database connection string)
 - `apps/backend/prisma/schema.prisma` - Database schema definition
-- `apps/backend/prisma.config.ts` - Prisma configuration
+- `apps/backend/prisma/scheme.prisma` - Prisma configuration
 
 ### Configure Environment Variables
 
@@ -264,27 +266,78 @@ This creates the JavaScript methods you'll use in your code.
 
 ### Database Commands (psql)
 
+**Basic Connection Syntax:**
 ```powershell
-# Connect to PostgreSQL
-psql -U postgres
+psql -h <hostname> -p <port> -U <username> -d <database>
+```
 
+**Parameters:**
+- `-h` or `--host` - PostgreSQL server hostname (default: localhost)
+- `-p` or `--port` - PostgreSQL port (default: 5432)
+- `-U` or `--username` - PostgreSQL username (default: postgres)
+- `-d` or `--dbname` - Database name to connect to
+
+**For Taste of Aloha (local development):**
+```powershell
+# Connect to PostgreSQL server (no specific database)
+psql -h localhost -p 5432 -U postgres
+
+# Connect directly to taste_of_aloha database
+psql -h localhost -p 5432 -U postgres -d taste_of_aloha
+
+# Shorthand (using defaults):
+psql -U postgres -d taste_of_aloha
+
+# Even shorter (localhost and port 5432 are defaults):
+psql -U postgres -d taste_of_aloha
+```
+
+**For Docker (from host machine):**
+```powershell
+# The PostgreSQL container is named 'postgres' in docker-compose
+psql -h localhost -p 5432 -U postgres -d taste_of_aloha
+```
+
+**Common psql Commands:**
+```powershell
 # List all databases
 \l
-
-# Connect to specific database
-\c taste_of_aloha
 
 # List all tables
 \dt
 
+# Connect to a different database
+\c taste_of_aloha
+
 # Show table structure
 \d "Menu"
 
-# Run SQL queries
+# Run SQL query
 SELECT * FROM "Menu";
 
-# Exit
+# Execute query and exit
+psql -U postgres -d taste_of_aloha -c "SELECT * FROM \"Menu\";"
+
+# Execute SQL file
+psql -U postgres -d taste_of_aloha -f script.sql
+
+# Exit psql
 \q
+```
+
+**Troubleshooting psql Connection:**
+```powershell
+# Test basic connection (no database)
+psql -h localhost -p 5432 -U postgres
+
+# If asks for password, your PostgreSQL is password-protected
+# If connection refused, PostgreSQL service isn't running
+
+# Test specific database
+psql -h localhost -p 5432 -U postgres -d taste_of_aloha
+
+# If "database does not exist", create it first:
+psql -h localhost -p 5432 -U postgres -c "CREATE DATABASE taste_of_aloha;"
 ```
 
 ### Prisma Commands (from `apps/backend/`)
@@ -335,9 +388,48 @@ psql -U postgres -d taste_of_aloha -c "SELECT 1;"
 
 **Solution:**
 1. Check your password in `.env`
-2. Verify with: `psql -U postgres` (tests if postgres user works)
-3. Make sure database exists: `psql -U postgres -l`
+2. Verify with: `psql -h localhost -p 5432 -U postgres` (tests if postgres user works)
+3. Make sure database exists: `psql -h localhost -p 5432 -U postgres -c "\l"`
 4. Recreate `.env` with correct credentials
+
+### Error: "could not connect to server: No such file or directory"
+
+**Cause:** PostgreSQL service not running or wrong connection parameters
+
+**Solution:**
+```powershell
+# For Windows - Restart PostgreSQL service
+Restart-Service postgresql-x64-18 -Force
+
+# Test connection with full parameters
+psql -h localhost -p 5432 -U postgres
+
+# If still fails, check PostgreSQL is listening:
+netstat -ano | findstr :5432
+```
+
+### Error: "FATAL: remaining connection slots are reserved"
+
+**Cause:** Too many connections to database
+
+**Solution:**
+```powershell
+# Disconnect all active sessions
+psql -h localhost -p 5432 -U postgres -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='taste_of_aloha' AND pid <> pg_backend_pid();"
+
+# Then retry your connection
+```
+
+### Can't use psql from command line
+
+**Cause:** PostgreSQL tools not in system PATH
+
+**Solution (Windows):**
+1. Find PostgreSQL bin directory: `C:\Program Files\PostgreSQL\18\bin`
+2. Add to PATH: Right-click Computer → Properties → Environment Variables
+3. Edit PATH and add: `C:\Program Files\PostgreSQL\18\bin`
+4. Restart terminal and try again
+5. Verify: `psql --version`
 
 ### Error: "The datasource property 'url' is no longer supported"
 
@@ -362,18 +454,29 @@ datasource db {
 
 The `url` goes in `prisma.config.ts`, not here.
 
-### Error: "database 'taste_of_aloha' does not exist"
+### Error: "No database URL found" (Prisma Studio)
 
-**Cause:** You forgot to create the database
+**Cause:** Prisma 7.x doesn't automatically load `.env` files; `env()` function in schema needs explicit environment setup
 
 **Solution:**
 ```powershell
-# Create it manually
-psql -U postgres -c "CREATE DATABASE taste_of_aloha;"
+# Option 1: Hardcode URL in schema.prisma (development only)
+# In prisma/schema.prisma:
+datasource db {
+  provider = "postgresql"
+  url = "postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha?schema=public"
+}
 
-# Then run migration
-npx prisma migrate dev --name init
+# Option 2: Set DATABASE_URL before running prisma commands
+$env:DATABASE_URL = "postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha?schema=public"
+npx prisma studio --port 5555
+
+# Option 3: Load dotenv in a wrapper script
+cd apps/backend
+npx dotenv -e .env npx prisma studio --port 5555
 ```
+
+**For production:** Use environment variables set by deployment system, not hardcoded URLs
 
 ### PostgreSQL Server Won't Start
 
