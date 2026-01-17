@@ -176,6 +176,12 @@ Invoke-WebRequest -Uri http://localhost:3000/api/snacks -UseBasicParsing | Selec
 
 # Seed sample item
 docker exec -i taste-of-aloha-backend node scripts/addMenuItem.js "Garlic Shrimp" 14.50
+
+# Remove seed sample item
+docker exec -i taste-of-aloha-backend node scripts/removeMenuItem.js "Garlic Shrimp"
+ 
+# Verify DB tables
+docker exec -i taste-of-aloha-db psql -U postgres -d taste_of_aloha -c "\\dt"
 ```
 
 ---

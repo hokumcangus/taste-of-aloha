@@ -78,6 +78,12 @@ npx prisma migrate dev --name init
 
 # Add a sample item (script supports args)
 node scripts/addMenuItem.js "Garlic Shrimp" 14.50
+
+# Remove the sample item (host)
+node scripts/removeMenuItem.js "Garlic Shrimp"
+
+# Remove the sample item (container)
+docker exec -i taste-of-aloha-backend node scripts/removeMenuItem.js "Garlic Shrimp"
 ```
 
 Quick checks:
@@ -121,8 +127,8 @@ npm run dev  # http://localhost:5173
 
 - Database connection fails:
   - Ensure Docker Desktop is running and `postgres` service is healthy.
-  - In Docker mode: `DATABASE_URL=postgresql://postgres:postgres@postgres:5432/taste_of_aloha`
-  - In local mode: `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/taste_of_aloha`
+  - In Docker mode: `DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@postgres:5432/taste_of_aloha`
+  - In local mode: `DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/taste_of_aloha`
 
 - Frontend cannot reach backend (CORS):
   - Backend `CORS_ORIGIN` should be `http://localhost:5173`.

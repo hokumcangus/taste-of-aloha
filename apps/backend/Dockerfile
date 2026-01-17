@@ -17,8 +17,6 @@ RUN npm install
 # Copy application source code
 COPY . .
 
-# Set dummy DATABASE_URL for prisma generate
-ENV DATABASE_URL="postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha?schema=public"
 
 RUN npm install prisma
 RUN npm install @prisma/client
@@ -59,10 +57,7 @@ COPY . .
 # Copy prisma schema explicitly
 COPY prisma ./prisma
 
-# Set dummy DATABASE_URL for prisma generate
-ENV DATABASE_URL="postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha?schema=public"
-# ENV DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-taste_of_aloha}
-
+# DATABASE_URL is provided at runtime via environment (docker compose)
 
 RUN npm install prisma
 RUN npm install @prisma/client

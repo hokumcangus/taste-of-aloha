@@ -87,7 +87,8 @@ await prisma.menu.delete({ where: { id: 1 } });
 
 **File: `apps/backend/.env`**
 ```env
-DATABASE_URL="postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha?schema=public"
+# Use your own password — do not commit real secrets
+DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/taste_of_aloha?schema=public"
 ```
 
 **Important:** Don't commit `.env` to git!

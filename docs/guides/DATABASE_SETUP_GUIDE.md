@@ -31,7 +31,7 @@ This guide documents the complete database setup process for Taste of Aloha, inc
    - ❌ pgBouncer (skip - not needed)
    - ❌ Database Drivers (skip - we use pg npm package)
    - ❌ Stack Builder (skip - optional)
-5. Set **postgres** password to something you remember (e.g., `tasteofalohadb`)
+5. Set **postgres** password to a secure value (e.g., `YOUR_PASSWORD`)
 6. Keep port as `5432` (default)
 
 **Verify Installation:**
@@ -80,7 +80,7 @@ npx prisma --version
 psql -U postgres
 
 # You'll be prompted for the password you set during installation
-# Enter your password (e.g., tasteofalohadb)
+# Enter your password
 
 # Now you're in the psql interactive shell
 # Create the database
@@ -130,13 +130,14 @@ psql -U postgres -d taste_of_aloha
 **File: `apps/backend/.env`**
 
 ```env
-DATABASE_URL="postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha?schema=public"
+# Use your own password — do not commit real secrets
+DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/taste_of_aloha?schema=public"
 ```
 
 **Breakdown:**
 - `postgresql://` - Database type
 - `postgres` - PostgreSQL username
-- `tasteofalohadb` - The password you set during PostgreSQL installation
+- `YOUR_PASSWORD` - The password you set during PostgreSQL installation
 - `localhost:5432` - PostgreSQL server address and port
 - `taste_of_aloha` - Your database name
 - `?schema=public` - PostgreSQL schema (always use "public" for simplicity)
@@ -464,11 +465,11 @@ The `url` goes in `prisma.config.ts`, not here.
 # In prisma/schema.prisma:
 datasource db {
   provider = "postgresql"
-  url = "postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha?schema=public"
+  url = "postgresql://postgres:YOUR_PASSWORD@localhost:5432/taste_of_aloha?schema=public"
 }
 
 # Option 2: Set DATABASE_URL before running prisma commands
-$env:DATABASE_URL = "postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha?schema=public"
+$env:DATABASE_URL = "postgresql://postgres:YOUR_PASSWORD@localhost:5432/taste_of_aloha?schema=public"
 npx prisma studio --port 5555
 
 # Option 3: Load dotenv in a wrapper script
