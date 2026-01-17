@@ -32,7 +32,10 @@ cd taste-of-aloha
 # 2. Start all services
 docker compose up --build
 
-# That's it! Access the app:
+# 3. Apply Prisma migrations (inside backend container)
+docker exec -i taste-of-aloha-backend npx prisma migrate dev --name init
+
+# Access the app:
 # - Frontend: http://localhost:5173
 # - Backend API: http://localhost:3000
 # - Database: localhost:5432
@@ -47,6 +50,7 @@ docker compose down
 ```bash
 docker compose down -v  # Remove volumes
 docker compose up --build
+docker exec -i taste-of-aloha-backend npx prisma migrate dev --name init
 ```
 
 ---
@@ -79,6 +83,10 @@ cp .env.example .env
 
 # Edit .env and ensure DATABASE_URL points to localhost:
 # DATABASE_URL=postgresql://postgres:postgres@localhost:5432/taste_of_aloha
+
+// Optional: apply migrations from host (Prisma 7)
+npx prisma validate
+npx prisma migrate dev --name init
 
 # Start the server
 npm run dev
@@ -208,9 +216,10 @@ SELECT * FROM snacks;
 # Exit psql
 \q
 
-# Reset database (remove all data)
+# Reset database (remove all data) and reapply migrations
 docker compose down -v
 docker compose up postgres -d
+docker exec -i taste-of-aloha-backend npx prisma migrate dev --name init
 ```
 
 ### Docker

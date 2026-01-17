@@ -45,7 +45,7 @@ The backend can run in a Docker container, which includes:
 #### Development Mode
 ```bash
 # From project root
-docker-compose up backend
+docker compose up backend
 ```
 
 **What happens:**
@@ -57,7 +57,7 @@ docker-compose up backend
 #### Production Mode
 ```bash
 # From project root
-docker-compose -f docker-compose.prod.yml up backend
+docker compose -f docker-compose.prod.yml up backend
 ```
 
 **What happens:**
@@ -76,6 +76,32 @@ docker build -t taste-of-aloha-backend --target production .
 ```
 
 ---
+
+## 🔧 Prisma 7 + PG Adapter
+
+This service uses Prisma 7 with the PostgreSQL driver adapter for reliable connections:
+
+```javascript
+const { PrismaClient } = require('@prisma/client');
+const { PrismaPg } = require('@prisma/adapter-pg');
+const { Pool } = require('pg');
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
+```
+
+Apply migrations to create required tables:
+
+```powershell
+# Preferred: inside backend container
+docker exec -i taste-of-aloha-backend npx prisma migrate dev --name init
+
+# Alternative: from host
+cd apps/backend
+npx prisma validate
+npx prisma migrate dev --name init
+```
 
 ## 🔧 CORS Configuration
 

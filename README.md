@@ -33,7 +33,8 @@ We have comprehensive documentation to help you understand and work with this pr
 - **[How to View Diagrams](docs/HOW_TO_VIEW_DIAGRAMS.md)** - Guide for viewing architecture diagrams
 
 ### Learning & Setup Guides
-- **[Learning Guide](docs/guides/LEARNING_GUIDE.md)** - ⭐ Best place to start! Comprehensive guide to all technologies and setup
+- **[Start Here](docs/guides/START_HERE.md)** - ⭐ Simplest path to run, verify, and seed
+- **[Learning Guide](docs/guides/LEARNING_GUIDE.md)** - Comprehensive guide to all technologies and setup
 - **[Database Setup Guide](docs/guides/DATABASE_SETUP_GUIDE.md)** - Complete PostgreSQL & Prisma setup with all steps and commands
 - **[Database Commands Reference](docs/reference/DATABASE_COMMANDS_REFERENCE.md)** - Quick lookup for database commands
 - **[Docker Setup Guide](docs/setup/DOCKER_SETUP_GUIDE.md)** - Docker configuration and running containers
@@ -97,7 +98,7 @@ Docker runs the entire stack (frontend, backend, database) in isolated container
 #### Development Mode (with hot reload)
 ```bash
 # From project root
-docker-compose up --build
+docker compose up --build
 ```
 
 **What this does:**
@@ -113,13 +114,13 @@ docker-compose up --build
 
 **Stop containers:**
 ```bash
-docker-compose down
+docker compose down
 ```
 
 #### Production Mode
 ```bash
 # From project root
-docker-compose -f docker-compose.prod.yml up --build -d
+docker compose -f docker-compose.prod.yml up --build -d
 ```
 
 **What this does:**
@@ -134,8 +135,56 @@ docker-compose -f docker-compose.prod.yml up --build -d
 
 **Stop containers:**
 ```bash
-docker-compose -f docker-compose.prod.yml down
+docker compose -f docker-compose.prod.yml down
 ```
+
+---
+
+### Apply Prisma Migrations
+
+To ensure required tables (e.g., `Menu`, `Cart`) exist, apply migrations. Preferred: run inside the backend container (connects to `postgres:5432`).
+
+```powershell
+# Apply migrations in backend container (Windows/macOS/Linux)
+docker exec -i taste-of-aloha-backend npx prisma migrate dev --name init
+
+# Verify tables exist
+docker exec -i taste-of-aloha-db psql -U postgres -d taste_of_aloha -c "\\dt"
+```
+
+Alternatively, from host using Prisma 7 config:
+
+```powershell
+cd apps/backend
+npx prisma validate
+npx prisma migrate dev --name init
+```
+
+---
+
+### Quick Verification
+
+```powershell
+# Frontend
+Start-Process http://localhost:5173
+
+# API
+Invoke-WebRequest -Uri http://localhost:3000/api/snacks -UseBasicParsing | Select-Object -ExpandProperty Content
+
+# Seed sample item
+docker exec -i taste-of-aloha-backend node scripts/addMenuItem.js "Garlic Shrimp" 14.50
+```
+
+---
+
+### What, Why, How (Scan‑Friendly)
+
+- What: Modern web app with React frontend, Express backend, PostgreSQL DB, all runnable via Docker.
+- Why: Clear separation, easy local/dev/prod parity, and reliable data layer via Prisma 7.
+- How:
+  - Run: `docker compose up --build`
+  - Migrate: `docker exec -i taste-of-aloha-backend npx prisma migrate dev --name init`
+  - Verify: open frontend, hit `/api/snacks`, and check DB tables via `psql`.
 
 ---
 
