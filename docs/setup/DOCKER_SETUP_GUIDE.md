@@ -464,13 +464,13 @@ Add these lines if they're not already there:
 **For Linux/Mac:**
 ```bash
 #!/bin/bash
-docker-compose up --build
+docker compose up --build
 ```
 
 **For Windows (docker-dev.bat):**
 ```batch
 @echo off
-docker-compose up --build
+docker compose up --build
 ```
 
 ### Production Start Script
@@ -479,13 +479,13 @@ docker-compose up --build
 **For Linux/Mac:**
 ```bash
 #!/bin/bash
-docker-compose -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.prod.yml up -d --build
 ```
 
 **For Windows (docker-prod.bat):**
 ```batch
 @echo off
-docker-compose -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.prod.yml up -d --build
 ```
 
 ---
@@ -501,12 +501,12 @@ docker-compose -f docker-compose.prod.yml up -d --build
 
 2. **Start all services:**
    ```bash
-   docker-compose up
+  docker compose up
    ```
    
    Or with rebuild:
    ```bash
-   docker-compose up --build
+  docker compose up --build
    ```
 
 3. **Access your application:**
@@ -516,12 +516,12 @@ docker-compose -f docker-compose.prod.yml up -d --build
 
 4. **Stop services:**
    ```bash
-   docker-compose down
+  docker compose down
    ```
 
 5. **View logs:**
    ```bash
-   docker-compose logs -f
+  docker compose logs -f
    ```
 
 ### Production Mode
@@ -534,7 +534,7 @@ docker-compose -f docker-compose.prod.yml up -d --build
 
 2. **Build and start:**
    ```bash
-   docker-compose -f docker-compose.prod.yml up -d --build
+  docker compose -f docker-compose.prod.yml up -d --build
    ```
 
 3. **Access your application:**
@@ -543,7 +543,7 @@ docker-compose -f docker-compose.prod.yml up -d --build
 
 4. **Stop services:**
    ```bash
-   docker-compose -f docker-compose.prod.yml down
+  docker compose -f docker-compose.prod.yml down
    ```
 
 ---
@@ -556,7 +556,7 @@ If ports 3000, 5173, or 5432 are already in use:
 - Or stop the service using the port
 
 ### Database Connection Issues
-- Ensure PostgreSQL container is healthy: `docker-compose ps`
+- Ensure PostgreSQL container is healthy: `docker compose ps`
 - Check DATABASE_URL in .env file
 - Verify network connectivity: containers must be on same network
 

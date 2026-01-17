@@ -1,5 +1,7 @@
 # 🌺 Taste of Aloha Monorepo 🌺
 
+Start here: [docs/guides/START_HERE.md](docs/guides/START_HERE.md)
+
 This repository powers the **Taste of Aloha Food Delivery Service**, the central platform that unifies our restaurant, grocery, and bakery into one seamless experience.  
 
 ## Overview
@@ -26,6 +28,7 @@ We have comprehensive documentation to help you understand and work with this pr
 
 ### Architecture & Features
 - **[Documentation Index](docs/INDEX.md)** - Central hub for all documentation
+- **[Team Onboarding](docs/guides/TEAM_ONBOARDING.md)** - Scan‑friendly steps to run, migrate, seed, and verify
 - **[MVP Features](docs/planning/MVP_FEATURES.md)** - Complete feature specifications
 - **[System Architecture Diagram](docs/architecture/system-architecture.dio)** - Visual system overview
 - **[Services Diagram](docs/architecture/services-diagram.dio)** - Detailed service interactions

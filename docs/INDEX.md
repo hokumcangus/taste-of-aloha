@@ -11,6 +11,7 @@ This is your central hub for all Taste of Aloha Food Delivery Service documentat
 ### I want to...
 
 **Start here (simplified)** → [Start Here Guide](guides/START_HERE.md)
+**Team onboarding** → [Team Onboarding](guides/TEAM_ONBOARDING.md)
 **Get started quickly** → [Quick Start Guide](guides/QUICK_START.md)
 **Understand the system** → [System Architecture](architecture/README.md)
 **Learn the API** → [Backend API Guide](guides/BACKEND_API_GUIDE.md)
@@ -213,7 +214,7 @@ Docker and Prisma 7 issues
 - Debugging tips
 - Common commands
 
-#### [TROUBLESHOOTING.md](../TROUBLESHOOTING.md) (Root)
+#### [TROUBLESHOOTING.md](guides/TROUBLESHOOTING.md)
 General troubleshooting
 - Build issues
 - Runtime errors
