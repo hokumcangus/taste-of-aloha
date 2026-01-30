@@ -131,7 +131,7 @@ psql -U postgres -d taste_of_aloha
 
 ```env
 # Use your own password — do not commit real secrets
-DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/taste_of_aloha?schema=public"
+DATABASE_URL={DATABASE_UR}
 ```
 
 **Breakdown:**
