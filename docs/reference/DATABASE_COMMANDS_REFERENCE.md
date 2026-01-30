@@ -39,7 +39,8 @@ Quick lookup for the most important database commands you'll use regularly.
 # 1. Add model to schema.prisma
 # 2. Save file
 # 3. Create migration
-npx prisma migrate dev --name add_table_name
+npx prisma migrate dev --name add_table_name 
+// input table name
 
 # 4. Verify in database
 npx prisma studio
@@ -87,7 +88,8 @@ await prisma.menu.delete({ where: { id: 1 } });
 
 **File: `apps/backend/.env`**
 ```env
-DATABASE_URL="postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha?schema=public"
+# Use your own password — do not commit real secrets
+DATABASE_URL={DATABASE_URL}
 ```
 
 **Important:** Don't commit `.env` to git!

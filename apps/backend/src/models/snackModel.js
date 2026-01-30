@@ -14,7 +14,7 @@ async function getAll() {
 }
 
 async function getById(id) {
-  return prisma.menu.findUnique({ where: { id } });
+  return prisma.menu.findUnique({ where: { id: Number(id) } });
 }
 
 async function create(snack) {
@@ -33,7 +33,7 @@ async function create(snack) {
 async function updateById(id, updatedSnack) {
   try {
     return await prisma.menu.update({
-      where: { id },
+      where: { id: Number(id) },
       data: {
         name: updatedSnack.name,
         description: updatedSnack.description,
@@ -51,7 +51,7 @@ async function updateById(id, updatedSnack) {
 
 async function deleteById(id) {
   try {
-    await prisma.menu.delete({ where: { id } });
+    await prisma.menu.delete({ where: { id: Number(id) } });
     return true;
   } catch (err) {
     if (err.code === 'P2025') return false;
