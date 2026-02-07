@@ -2,7 +2,7 @@
 
 This guide teaches you how to build REST API endpoints for your backend. Follow it step-by-step to understand the architecture and create your own endpoints.
 
-**Updated Naming Convention:** All references to "snacks" have been changed to "menu" items for better clarity. API endpoints use `/api/menu` instead of `/api/snacks`.
+**Updated Naming Convention:** All references to "menuitems" have been changed to "menu" items for better clarity. API endpoints use `/api/menu` instead of `/api/menuitems`.
 
 ---
 

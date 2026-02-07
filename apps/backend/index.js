@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(logger);
 
 // Routes
-app.use('/api/snacks', snackRoutes);
+app.use('/api/menuitems', snackRoutes);
 
 app.get('/', (req, res) => {
   res.send('Taste of Aloha backend is running 🌺');

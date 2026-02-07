@@ -186,7 +186,7 @@ DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/taste_of_aloha?
 ```
 
 **Tables Created:**
-- `Menu` - Stores all menu items (snacks)
+- `Menu` - Stores all menu items (menuitems)
 
 **Tables Not Yet Created (for Phase 1):**
 - `User` - Customer information
@@ -258,7 +258,7 @@ apps/web/
 │   ├── index.css          # Global styles, Tailwind import
 │   ├── pages/             # Route components
 │   │   ├── Home.jsx       # Homepage with video background
-│   │   ├── Menu.jsx       # Menu page (displays snacks)
+│   │   ├── Menu.jsx       # Menu page (displays menuitems)
 │   │   └── About.jsx      # About page
 │   ├── components/        # Reusable UI components
 │   ├── services/          # API communication layer
@@ -316,7 +316,7 @@ export default function Button({ children, onClick, variant = 'primary' }) {
 - **Health Check**: GET `/health` returns 200 with status
 
 #### API Structure
-- **Routes**: `/api/snacks` (CRUD operations)
+- **Routes**: `/api/menuitems` (CRUD operations)
 - **Controllers**: Business logic separated from routes
 - **Models**: Data layer with mock/database functions
 - **Middleware**: CORS, JSON parsing, logging
@@ -331,7 +331,7 @@ Express App (index.js)
     ↓
 Middleware (CORS, JSON parser, logger)
     ↓
-Routes (/api/snacks → snackRoutes.js)
+Routes (/api/menuitems → snackRoutes.js)
     ↓
 Controllers (snackController.js - business logic)
     ↓
@@ -357,15 +357,15 @@ app.use((req, res, next) => {
 });
 
 // Runs only for specific routes
-app.use('/api/snacks', snackRoutes);
+app.use('/api/menuitems', snackRoutes);
 ```
 
 **RESTful API Design:**
-- GET `/api/snacks` - List all snacks
-- GET `/api/snacks/:id` - Get one snack
-- POST `/api/snacks` - Create new snack
-- PUT `/api/snacks/:id` - Update snack
-- DELETE `/api/snacks/:id` - Delete snack
+- GET `/api/menuitems` - List all menuitems
+- GET `/api/menuitems/:id` - Get one menuitem
+- POST `/api/menuitems` - Create new menuitem
+- PUT `/api/menuitems/:id` - Update menuitem
+- DELETE `/api/menuitems/:id` - Delete menuitem
 
 ### 📚 File Structure Explained
 
@@ -965,7 +965,7 @@ const handleSubmit = (e) => {
 ### 📝 Practice Projects (After Order System)
 
 1. **User Authentication**: Login/signup with JWT tokens
-2. **Admin Dashboard**: Manage snacks, view orders
+2. **Admin Dashboard**: Manage menuitems, view orders
 3. **Real-time Order Tracking**: WebSocket integration
 4. **Payment Integration**: Stripe/PayPal checkout
 5. **Email Notifications**: SendGrid for order confirmations
@@ -1092,7 +1092,7 @@ Before starting the order system, verify:
 4. **Ask specific questions** - Include error message, what you tried, expected vs actual behavior
 
 **Good Question:**
-> "I'm getting 'Cannot read property 'map' of undefined' on line 15 of Menu.jsx. The snacks array from Redux is undefined. I verified the API returns data. How do I debug Redux state?"
+> "I'm getting 'Cannot read property 'map' of undefined' on line 15 of Menu.jsx. The menuitems array from Redux is undefined. I verified the API returns data. How do I debug Redux state?"
 
 **Vague Question:**
 > "My menu page doesn't work"

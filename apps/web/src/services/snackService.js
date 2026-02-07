@@ -1,53 +1,53 @@
 import apiClient from './api.js';
 
 /**
- * Snack API service
- * Handles all API calls related to snacks
+ * MenuItem API service
+ * Handles all API calls related to menuitems
  */
 export const snackService = {
   /**
-   * Get all snacks
-   * @returns {Promise<Array>} Array of snacks
+   * Get all menuitems
+   * @returns {Promise<Array>} Array of menuitems
    */
   getAllSnacks: async () => {
-    return apiClient.get('/api/snacks');
+    return apiClient.get('/api/menuitems');
   },
 
   /**
-   * Get snack by ID
-   * @param {number} id - Snack ID
-   * @returns {Promise<Object>} Snack object
+   * Get menuitem by ID
+   * @param {number} id - MenuItem ID
+   * @returns {Promise<Object>} MenuItem object
    */
   getSnackById: async (id) => {
-    return apiClient.get(`/api/snacks/${id}`);
+    return apiClient.get(`/api/menuitems/${id}`);
   },
 
   /**
-   * Create a new snack
-   * @param {Object} snackData - Snack data (name, price, etc.)
-   * @returns {Promise<Object>} Created snack object
+   * Create a new menuitem
+   * @param {Object} snackData - MenuItem data (name, price, etc.)
+   * @returns {Promise<Object>} Created menuitem object
    */
   createSnack: async (snackData) => {
-    return apiClient.post('/api/snacks', snackData);
+    return apiClient.post('/api/menuitems', snackData);
   },
 
   /**
-   * Update a snack
-   * @param {number} id - Snack ID
-   * @param {Object} snackData - Updated snack data
-   * @returns {Promise<Object>} Updated snack object
+   * Update a menuitem
+   * @param {number} id - MenuItem ID
+   * @param {Object} snackData - Updated menuitem data
+   * @returns {Promise<Object>} Updated menuitem object
    */
   updateSnack: async (id, snackData) => {
-    return apiClient.put(`/api/snacks/${id}`, snackData);
+    return apiClient.put(`/api/menuitems/${id}`, snackData);
   },
 
   /**
-   * Delete a snack
-   * @param {number} id - Snack ID
+   * Delete a menuitem
+   * @param {number} id - MenuItem ID
    * @returns {Promise<Object>} Deletion confirmation
    */
   deleteSnack: async (id) => {
-    return apiClient.delete(`/api/snacks/${id}`);
+    return apiClient.delete(`/api/menuitems/${id}`);
   },
 };
 

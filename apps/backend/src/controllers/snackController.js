@@ -1,8 +1,8 @@
-const Snack = require('../models/snackModel');
+const MenuModel = require('../models/menuModel');
 
 exports.getAllSnacks = async (req, res) => {
   try {
-    const snacks = await Snack.getAll();
+    const snacks = await MenuModel.getAllSnacks();
     res.json(snacks);
   } catch (error) {
     console.error('Error fetching snacks:', error);
@@ -13,7 +13,7 @@ exports.getAllSnacks = async (req, res) => {
 exports.getSnackById = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const snack = await Snack.getById(id);
+    const snack = await MenuModel.getSnackById(id);
     if (!snack) return res.status(404).json({ message: 'Snack not found' });
     res.json(snack);
   } catch (error) {
@@ -24,7 +24,7 @@ exports.getSnackById = async (req, res) => {
 
 exports.createSnack = async (req, res) => {
   try {
-    const newSnack = await Snack.create(req.body);
+    const newSnack = await MenuModel.createSnack(req.body);
     res.status(201).json(newSnack);
   } catch (error) {
     console.error('Error creating snack:', error);
@@ -35,7 +35,7 @@ exports.createSnack = async (req, res) => {
 exports.updateSnack = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const updatedSnack = await Snack.updateById(id, req.body);
+    const updatedSnack = await MenuModel.updateSnack(id, req.body);
     if (!updatedSnack) return res.status(404).json({ message: 'Snack not found' });
     res.json(updatedSnack);
   } catch (error) {
@@ -47,7 +47,7 @@ exports.updateSnack = async (req, res) => {
 exports.deleteSnack = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const deleted = await Snack.deleteById(id);
+    const deleted = await MenuModel.deleteSnack(id);
     if (!deleted) return res.status(404).json({ message: 'Snack not found' });
     res.json({ message: 'Snack deleted' });
   } catch (error) {

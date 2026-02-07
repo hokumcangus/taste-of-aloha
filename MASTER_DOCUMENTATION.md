@@ -165,11 +165,11 @@ taste-of-aloha/
 
 #### Menu Endpoints
 ```
-GET    /api/snacks           - Get all menu items
-GET    /api/snacks/:id       - Get single menu item
-POST   /api/snacks           - Create new item (admin)
-PUT    /api/snacks/:id       - Update item (admin)
-DELETE /api/snacks/:id       - Delete item (admin)
+GET    /api/menuitems           - Get all menu items
+GET    /api/menuitems/:id       - Get single menu item
+POST   /api/menuitems           - Create new item (admin)
+PUT    /api/menuitems/:id       - Update item (admin)
+DELETE /api/menuitems/:id       - Delete item (admin)
 ```
 
 #### Cart Endpoints (In Progress)
@@ -196,9 +196,9 @@ POST   /api/auth/refresh     - Refresh JWT token
 
 #### Current Models
 
-**Snack (Menu Item)**
+**MenuItem (Menu Item)**
 ```prisma
-model Snack {
+model MenuItem {
   id          String   @id @default(cuid())
   name        String
   description String?
@@ -311,7 +311,7 @@ enum OrderStatus {
 #### Current Slices
 ```javascript
 {
-  snacks: {
+  menuitems: {
     items: [],           // Menu items array
     loading: false,
     error: null,
@@ -364,7 +364,7 @@ dispatch(fetchSnacks())
 
 // 2. Thunk in snackSlice.js calls service
 export const fetchSnacks = createAsyncThunk(
-  'snacks/fetchAll',
+  'menuitems/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
       return await snackService.getAllSnacks()
@@ -377,7 +377,7 @@ export const fetchSnacks = createAsyncThunk(
 // 3. Service calls API
 // services/snackService.js
 export const getAllSnacks = async () => {
-  return await api.get('/api/snacks')
+  return await api.get('/api/menuitems')
 }
 
 // 4. API makes HTTP request
@@ -389,13 +389,13 @@ export const get = async (endpoint) => {
 
 // 5. Backend handles request
 // apps/backend/src/routes/snackRoutes.js
-router.get('/api/snacks', snackController.getAllSnacks)
+router.get('/api/menuitems', snackController.getAllSnacks)
 
 // 6. Controller returns data
 // apps/backend/src/controllers/snackController.js
 export const getAllSnacks = async (req, res) => {
-  const snacks = await snackModel.getAllSnacks()
-  res.json(snacks)
+  const menuitems = await snackModel.getAllSnacks()
+  res.json(menuitems)
 }
 ```
 
@@ -405,7 +405,7 @@ export const getAllSnacks = async (req, res) => {
 
 - CORS middleware enabled in Express
 - Vite proxy configured for `/api` requests
-- Development: `fetch('/api/snacks')` proxied to backend
+- Development: `fetch('/api/menuitems')` proxied to backend
 - Production: Nginx reverse proxy handles routing
 
 ### Docker Architecture

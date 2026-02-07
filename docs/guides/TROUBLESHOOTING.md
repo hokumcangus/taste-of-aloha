@@ -140,7 +140,7 @@ Then use `tailwindcss: {}` in your PostCSS config (as shown in error #1).
 
 ---
 
-### 2. CORS Error: "Access to fetch at 'http://localhost:3000/api/snacks' from origin 'http://localhost:5173' has been blocked by CORS policy"
+### 2. CORS Error: "Access to fetch at 'http://localhost:3000/api/menuitems' from origin 'http://localhost:5173' has been blocked by CORS policy"
 
 **Problem:** The backend is not allowing requests from the frontend.
 
@@ -185,13 +185,13 @@ curl http://localhost:3000/
 # Should return: Taste of Aloha backend is running 🌺
 
 # Test API endpoint
-curl http://localhost:3000/api/snacks
-# Should return: [] (empty array if no snacks)
+curl http://localhost:3000/api/menuitems
+# Should return: [] (empty array if no menuitems)
 ```
 
 ---
 
-### 4. Error: "Cannot read property 'snacks' of undefined" or Redux State Issues
+### 4. Error: "Cannot read property 'menuitems' of undefined" or Redux State Issues
 
 **Problem:** Redux store is not properly configured or Provider is missing.
 
@@ -257,27 +257,27 @@ curl http://localhost:3000/api/snacks
 
 ---
 
-### 7. Error: "Loading snacks..." but no data appears
+### 7. Error: "Loading menuitems..." but no data appears
 
 **Problem:** Backend returns empty array or API call fails silently.
 
 **Solution:**
 1. Check browser Network tab (F12 → Network) for API requests
-2. Verify the request URL is correct: `http://localhost:3000/api/snacks`
-3. Check if backend has any snacks:
+2. Verify the request URL is correct: `http://localhost:3000/api/menuitems`
+3. Check if backend has any menuitems:
    ```bash
-   curl http://localhost:3000/api/snacks
+   curl http://localhost:3000/api/menuitems
    ```
-4. Create a test snack via API:
+4. Create a test menuitem via API:
    ```bash
-   curl -X POST http://localhost:3000/api/snacks \
+   curl -X POST http://localhost:3000/api/menuitems \
      -H "Content-Type: application/json" \
-     -d '{"name":"Test Snack","price":5.99}'
+     -d '{"name":"Test MenuItem","price":5.99}'
    ```
 
 ---
 
-### 8. Error: "Proxy error: Could not proxy request /api/snacks to http://localhost:3000"
+### 8. Error: "Proxy error: Could not proxy request /api/menuitems to http://localhost:3000"
 
 **Problem:** Vite proxy configuration issue or backend not running.
 
@@ -397,7 +397,7 @@ If you're still experiencing issues:
 | Module not found | Check file paths and restart dev server |
 | Redux errors | Verify Provider wraps App in main.jsx |
 | Proxy error | Check vite.config.js and restart frontend |
-| Empty snacks | Backend returns `[]` - create snacks via API |
+| Empty menuitems | Backend returns `[]` - create menuitems via API |
 
 ---
 
@@ -409,7 +409,7 @@ If you're still experiencing issues:
 curl http://localhost:3000/
 
 # Should return: [] (empty array)
-curl http://localhost:3000/api/snacks
+curl http://localhost:3000/api/menuitems
 ```
 
 ### Test Frontend:
@@ -417,7 +417,7 @@ curl http://localhost:3000/api/snacks
 2. Open browser DevTools (F12)
 3. Check Console tab for errors
 4. Check Network tab for API requests
-5. Navigate to Menu page - should show "No snacks available" or list of snacks
+5. Navigate to Menu page - should show "No menuitems available" or list of menuitems
 
 ---
 
