@@ -89,10 +89,17 @@ src/
 
 ## 🧪 Testing
 
-Run the API test suite:
+Run the snack/menu category API test suite:
 
 ```bash
-npm run test:api
+# Use --runInBand to run tests serially in one process, which avoids flaky parallel-worker issues with shared mocks/state.
+npx jest tests/snackApi.test.js --runInBand
+```
+
+Or use the npm shortcut:
+
+```bash
+npm run test:snack
 ```
 
 ### Writing API Tests
