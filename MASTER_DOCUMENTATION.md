@@ -39,12 +39,23 @@ cd apps/backend
 npx prisma migrate dev
 cd ../..
 
-# 4. Start development servers
+# 4. Start Database
+cd apps
+ psql -U postgres -d taste_of_aloha
+
+
+# 5. Start development server
+cd apps/backend
 npm run dev
 
-# 5. Open browser
+# 6. Start Frontend 
+cd apps/web
+npm run dev
+
+
+# 7. Open browser
 Frontend: http://localhost:5173
-Backend: http://localhost:5001
+Backend: http://localhost:3000/health
 ```
 
 ### Docker Setup (3 minutes)
@@ -165,11 +176,11 @@ taste-of-aloha/
 
 #### Menu Endpoints
 ```
-GET    /api/snacks           - Get all menu items
-GET    /api/snacks/:id       - Get single menu item
-POST   /api/snacks           - Create new item (admin)
-PUT    /api/snacks/:id       - Update item (admin)
-DELETE /api/snacks/:id       - Delete item (admin)
+GET    /api/menu             - Get all menu items
+GET    /api/menu/:id         - Get single menu item
+POST   /api/menu             - Create new item (admin)
+PUT    /api/menu/:id         - Update item (admin)
+DELETE /api/menu/:id         - Delete item (admin)
 ```
 
 #### Cart Endpoints (In Progress)
@@ -377,7 +388,7 @@ export const fetchSnacks = createAsyncThunk(
 // 3. Service calls API
 // services/snackService.js
 export const getAllSnacks = async () => {
-  return await api.get('/api/snacks')
+  return await api.get('/api/menu?category=Snack')
 }
 
 // 4. API makes HTTP request
@@ -388,13 +399,13 @@ export const get = async (endpoint) => {
 }
 
 // 5. Backend handles request
-// apps/backend/src/routes/snackRoutes.js
-router.get('/api/snacks', snackController.getAllSnacks)
+// apps/backend/src/routes/menuRoutes.js
+router.get('/api/menu', menuController.getAllMenus)
 
 // 6. Controller returns data
-// apps/backend/src/controllers/snackController.js
+// apps/backend/src/controllers/menuController.js
 export const getAllSnacks = async (req, res) => {
-  const snacks = await snackModel.getAllSnacks()
+  const snacks = await menuModel.getAllMenus()
   res.json(snacks)
 }
 ```
@@ -405,7 +416,7 @@ export const getAllSnacks = async (req, res) => {
 
 - CORS middleware enabled in Express
 - Vite proxy configured for `/api` requests
-- Development: `fetch('/api/snacks')` proxied to backend
+- Development: `fetch('/api/menu?category=Snack')` proxied to backend
 - Production: Nginx reverse proxy handles routing
 
 ### Docker Architecture

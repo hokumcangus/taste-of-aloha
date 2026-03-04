@@ -316,7 +316,7 @@ export default function Button({ children, onClick, variant = 'primary' }) {
 - **Health Check**: GET `/health` returns 200 with status
 
 #### API Structure
-- **Routes**: `/api/snacks` (CRUD operations)
+- **Routes**: `/api/menu` (CRUD operations, supports category filtering)
 - **Controllers**: Business logic separated from routes
 - **Models**: Data layer with mock/database functions
 - **Middleware**: CORS, JSON parsing, logging
@@ -331,11 +331,11 @@ Express App (index.js)
     ↓
 Middleware (CORS, JSON parser, logger)
     ↓
-Routes (/api/snacks → snackRoutes.js)
+Routes (/api/menu → menuRoutes.js)
     ↓
-Controllers (snackController.js - business logic)
+Controllers (menuController.js - business logic)
     ↓
-Models (snackModel.js - database/data access)
+Models (menuModel.js - database/data access)
     ↓
 Response sent back to client
 ```
@@ -357,15 +357,16 @@ app.use((req, res, next) => {
 });
 
 // Runs only for specific routes
-app.use('/api/snacks', snackRoutes);
+app.use('/api/menu', menuRoutes);
 ```
 
 **RESTful API Design:**
-- GET `/api/snacks` - List all snacks
-- GET `/api/snacks/:id` - Get one snack
-- POST `/api/snacks` - Create new snack
-- PUT `/api/snacks/:id` - Update snack
-- DELETE `/api/snacks/:id` - Delete snack
+- GET `/api/menu` - List all menu items
+- GET `/api/menu?category=Snack` - List snack-category items
+- GET `/api/menu/:id` - Get one menu item
+- POST `/api/menu` - Create new menu item
+- PUT `/api/menu/:id` - Update menu item
+- DELETE `/api/menu/:id` - Delete menu item
 
 ### 📚 File Structure Explained
 
@@ -374,11 +375,11 @@ apps/backend/
 ├── index.js               # Entry point, Express app setup
 ├── src/
 │   ├── routes/            # URL routing definitions
-│   │   └── snackRoutes.js
+│   │   └── menuRoutes.js
 │   ├── controllers/       # Business logic
-│   │   └── snackController.js
+│   │   └── menuController.js
 │   ├── models/            # Data access layer
-│   │   └── snackModel.js
+│   │   └── menuModel.js
 │   └── utils/             # Helper functions
 │       └── logger.js
 ├── package.json           # Dependencies and scripts

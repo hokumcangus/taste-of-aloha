@@ -140,7 +140,7 @@ Then use `tailwindcss: {}` in your PostCSS config (as shown in error #1).
 
 ---
 
-### 2. CORS Error: "Access to fetch at 'http://localhost:3000/api/snacks' from origin 'http://localhost:5173' has been blocked by CORS policy"
+### 2. CORS Error: "Access to fetch at 'http://localhost:3000/api/menu?category=Snack' from origin 'http://localhost:5173' has been blocked by CORS policy"
 
 **Problem:** The backend is not allowing requests from the frontend.
 
@@ -185,8 +185,8 @@ curl http://localhost:3000/
 # Should return: Taste of Aloha backend is running 🌺
 
 # Test API endpoint
-curl http://localhost:3000/api/snacks
-# Should return: [] (empty array if no snacks)
+curl "http://localhost:3000/api/menu?category=Snack"
+# Should return: [] (empty array if no snack-category items)
 ```
 
 ---
@@ -263,21 +263,21 @@ curl http://localhost:3000/api/snacks
 
 **Solution:**
 1. Check browser Network tab (F12 → Network) for API requests
-2. Verify the request URL is correct: `http://localhost:3000/api/snacks`
+2. Verify the request URL is correct: `http://localhost:3000/api/menu?category=Snack`
 3. Check if backend has any snacks:
    ```bash
-   curl http://localhost:3000/api/snacks
+   curl "http://localhost:3000/api/menu?category=Snack"
    ```
 4. Create a test snack via API:
    ```bash
-   curl -X POST http://localhost:3000/api/snacks \
+   curl -X POST http://localhost:3000/api/menu \
      -H "Content-Type: application/json" \
-     -d '{"name":"Test Snack","price":5.99}'
+     -d '{"name":"Test Snack","price":5.99,"category":"Snack"}'
    ```
 
 ---
 
-### 8. Error: "Proxy error: Could not proxy request /api/snacks to http://localhost:3000"
+### 8. Error: "Proxy error: Could not proxy request /api/menu to http://localhost:3000"
 
 **Problem:** Vite proxy configuration issue or backend not running.
 
@@ -397,7 +397,7 @@ If you're still experiencing issues:
 | Module not found | Check file paths and restart dev server |
 | Redux errors | Verify Provider wraps App in main.jsx |
 | Proxy error | Check vite.config.js and restart frontend |
-| Empty snacks | Backend returns `[]` - create snacks via API |
+| Empty snacks | Backend returns `[]` - create menu items with category `Snack` via API |
 
 ---
 
@@ -409,7 +409,7 @@ If you're still experiencing issues:
 curl http://localhost:3000/
 
 # Should return: [] (empty array)
-curl http://localhost:3000/api/snacks
+curl "http://localhost:3000/api/menu?category=Snack"
 ```
 
 ### Test Frontend:
