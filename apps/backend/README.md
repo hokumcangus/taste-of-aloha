@@ -118,7 +118,7 @@ Run the menu/menu.snack category API test suite:
 >>>>>>> Stashed changes
 
 ```bash
-npm run test:api
+npm run test:snack
 ```
 
 ### Writing API Tests

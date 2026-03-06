@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const snackRoutes = require('./src/routes/snackRoutes');
+const menuRoutes = require('./src/routes/menuRoutes');
 const logger = require('./src/utils/logger');
 
 const app = express();
@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(logger);
 
 // Routes
-app.use('/api/menuitems', snackRoutes);
+app.use('/api/menu', menuRoutes);
 
 app.get('/', (req, res) => {
   res.send('Taste of Aloha backend is running 🌺');

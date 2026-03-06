@@ -1,63 +1,101 @@
 const MenuModel = require('../models/menuModel');
 
+const SNACK_CATEGORY = 'Snack';
+
+const isSnackCategory = (category) =>
+  typeof category === 'string' && category.toLowerCase() === SNACK_CATEGORY.toLowerCase();
+
+// GET all menus (optional category filter)
 const getAllMenus = async (req, res) => {
   try {
+    const { category } = req.query;
     const menus = await MenuModel.getAllMenus();
-    res.json({
-      success: true,
-      count: menus.length,
-      data: menus,
-    });
+    const filteredMenus = category
+      ? menus.filter((item) => item.category?.toLowerCase() === String(category).toLowerCase())
+      : menus;
+
+    res.json(filteredMenus);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: 'Failed to fetch menus' });
+    res.status(500).json({ message: 'Failed to fetch menus' });
   }
 };
 
-exports.getAllMenus = getAllMenus;
-
-exports.getMenuById = async (req, res) => {
+// GET one menu item by id
+const getMenuById = async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    const menuitem = await MenuModel.getMenuById(id);
-    if (!menuitem) return res.status(404).json({ message: 'MenuItem not found' });
-    res.json(menuitem);
+    const menu = await MenuModel.getMenuById(req.params.id);
+
+    if (!menu) {
+      return res.status(404).json({ message: 'Menu item not found' });
+    }
+
+    res.json(menu);
   } catch (error) {
-    console.error('Error fetching menuitem:', error);
-    res.status(500).json({ message: 'Error fetching menuitem', error: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Failed to fetch menu item' });
   }
 };
 
-exports.createMenu = async (req, res) => {
+// CREATE menu item
+const createMenu = async (req, res) => {
   try {
-    const newMenuItem = await MenuModel.createMenu(req.body);
-    res.status(201).json(newMenuItem);
+    const payload = { ...req.body };
+    if (isSnackCategory(payload.category)) {
+      payload.category = SNACK_CATEGORY;
+    }
+
+    const created = await MenuModel.createMenu(payload);
+    res.status(201).json(created);
   } catch (error) {
-    console.error('Error creating menuitem:', error);
-    res.status(500).json({ message: 'Error creating menuitem', error: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Failed to create menu item', error: error.message });
   }
 };
 
-exports.updateMenu = async (req, res) => {
+// UPDATE menu item
+const updateMenu = async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    const updatedMenuItem = await MenuModel.updateMenu(id, req.body);
-    if (!updatedMenuItem) return res.status(404).json({ message: 'MenuItem not found' });
-    res.json(updatedMenuItem);
+    const existing = await MenuModel.getMenuById(req.params.id);
+
+    if (!existing) {
+      return res.status(404).json({ message: 'Menu item not found' });
+    }
+
+    const payload = { ...req.body };
+    if (isSnackCategory(payload.category)) {
+      payload.category = SNACK_CATEGORY;
+    }
+
+    const updated = await MenuModel.updateMenu(req.params.id, payload);
+    res.json(updated);
   } catch (error) {
-    console.error('Error updating menuitem:', error);
-    res.status(500).json({ message: 'Error updating menuitem', error: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Failed to update menu item', error: error.message });
   }
 };
 
-exports.deleteMenu = async (req, res) => {
+// DELETE menu item
+const deleteMenu = async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    const deleted = await MenuModel.deleteMenu(id);
-    if (!deleted) return res.status(404).json({ message: 'MenuItem not found' });
-    res.json({ message: 'MenuItem deleted' });
+    const existing = await MenuModel.getMenuById(req.params.id);
+
+    if (!existing) {
+      return res.status(404).json({ message: 'Menu item not found' });
+    }
+
+    await MenuModel.deleteMenu(req.params.id);
+    res.json({ message: 'Menu item deleted' });
   } catch (error) {
-    console.error('Error deleting menuitem:', error);
-    res.status(500).json({ message: 'Error deleting menuitem', error: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Failed to delete menu item', error: error.message });
   }
+};
+
+module.exports = {
+  getAllMenus,
+  getMenuById,
+  createMenu,
+  updateMenu,
+  deleteMenu,
 };

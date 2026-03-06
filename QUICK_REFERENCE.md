@@ -47,7 +47,7 @@ Invoke-WebRequest -Uri http://localhost:3000/health -UseBasicParsing
 | **View database GUI** | `npx prisma studio` | Opens at `:5555` |
 | **Run migrations** | `npx prisma migrate dev --name [name]` | ~10 sec |
 | **Run frontend tests** | `npm run test` (in `apps/web/`) | ~5 sec |
-| **Run backend tests** | `npm run test:api` (in `apps/backend/`) | ~10 sec |
+| **Run backend tests** | `npm run test:snack` (in `apps/backend/`) | ~10 sec |
 
 ---
 
@@ -104,7 +104,7 @@ dispatch(removeItem(productId));
 npm run dev
 
 # Run API tests
-npm run test:api
+npm run test:snack
 
 # Database management
 npx prisma studio         # GUI viewer

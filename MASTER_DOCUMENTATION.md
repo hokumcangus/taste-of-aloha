@@ -44,17 +44,23 @@ npx prisma migrate dev
 npx prisma generate
 cd ../..
 
-<<<<<<< Updated upstream
-# 4. Start development servers
-=======
+# 4. Start Database
+cd apps
+ psql -U postgres -d taste_of_aloha
+
+
 # 5. Start development server
 cd apps/backend
->>>>>>> Stashed changes
 npm run dev
 
-# 5. Open browser
+# 6. Start Frontend 
+cd apps/web
+npm run dev
+
+
+# 7. Open browser
 Frontend: http://localhost:5173
-Backend: http://localhost:5001
+Backend: http://localhost:3000/health
 ```
 
 ### Docker Setup (3 minutes)
@@ -398,14 +404,14 @@ export const get = async (endpoint) => {
 }
 
 // 5. Backend handles request
-// apps/backend/src/routes/snackRoutes.js
-router.get('/api/menuitems', snackController.getAllSnacks)
+// apps/backend/src/routes/menuRoutes.js
+router.get('/api/menu', menuController.getAllMenus)
 
 // 6. Controller returns data
-// apps/backend/src/controllers/snackController.js
+// apps/backend/src/controllers/menuController.js
 export const getAllSnacks = async (req, res) => {
-  const menuitems = await snackModel.getAllSnacks()
-  res.json(menuitems)
+  const snacks = await menuModel.getAllMenus()
+  res.json(snacks)
 }
 ```
 

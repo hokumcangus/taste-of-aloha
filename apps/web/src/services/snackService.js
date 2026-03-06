@@ -10,7 +10,7 @@ export const snackService = {
    * @returns {Promise<Array>} Array of menuitems
    */
   getAllSnacks: async () => {
-    return apiClient.get('/api/menuitems');
+    return apiClient.get('/api/menu?category=Snack');
   },
 
   /**
@@ -19,7 +19,7 @@ export const snackService = {
    * @returns {Promise<Object>} MenuItem object
    */
   getSnackById: async (id) => {
-    return apiClient.get(`/api/menuitems/${id}`);
+    return apiClient.get(`/api/menu/${id}`);
   },
 
   /**
@@ -28,7 +28,7 @@ export const snackService = {
    * @returns {Promise<Object>} Created menuitem object
    */
   createSnack: async (snackData) => {
-    return apiClient.post('/api/menuitems', snackData);
+    return apiClient.post('/api/menu', { ...snackData, category: 'Snack' });
   },
 
   /**
@@ -38,7 +38,7 @@ export const snackService = {
    * @returns {Promise<Object>} Updated menuitem object
    */
   updateSnack: async (id, snackData) => {
-    return apiClient.put(`/api/menuitems/${id}`, snackData);
+    return apiClient.put(`/api/menu/${id}`, { ...snackData, category: 'Snack' });
   },
 
   /**
@@ -47,7 +47,7 @@ export const snackService = {
    * @returns {Promise<Object>} Deletion confirmation
    */
   deleteSnack: async (id) => {
-    return apiClient.delete(`/api/menuitems/${id}`);
+    return apiClient.delete(`/api/menu/${id}`);
   },
 };
 
