@@ -3,7 +3,7 @@ import { snackService } from '../../services/snackService';
 
 // Initial state
 const initialState = {
-  snacks: [],
+  menuitems: [],
   selectedSnack: null,
   loading: false,
   error: null,
@@ -11,68 +11,68 @@ const initialState = {
 
 // Async thunks for API calls
 export const fetchSnacks = createAsyncThunk(
-  'snacks/fetchSnacks',
+  'menuitems/fetchSnacks',
   async (_, { rejectWithValue }) => {
     try {
       const data = await snackService.getAllSnacks();
       return data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to fetch snacks');
+      return rejectWithValue(error.message || 'Failed to fetch menuitems');
     }
   }
 );
 
 export const fetchSnackById = createAsyncThunk(
-  'snacks/fetchSnackById',
+  'menuitems/fetchSnackById',
   async (id, { rejectWithValue }) => {
     try {
       const data = await snackService.getSnackById(id);
       return data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to fetch snack');
+      return rejectWithValue(error.message || 'Failed to fetch menuitem');
     }
   }
 );
 
 export const createSnack = createAsyncThunk(
-  'snacks/createSnack',
+  'menuitems/createSnack',
   async (snackData, { rejectWithValue }) => {
     try {
       const data = await snackService.createSnack(snackData);
       return data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to create snack');
+      return rejectWithValue(error.message || 'Failed to create menuitem');
     }
   }
 );
 
 export const updateSnack = createAsyncThunk(
-  'snacks/updateSnack',
+  'menuitems/updateSnack',
   async ({ id, snackData }, { rejectWithValue }) => {
     try {
       const data = await snackService.updateSnack(id, snackData);
       return data;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to update snack');
+      return rejectWithValue(error.message || 'Failed to update menuitem');
     }
   }
 );
 
 export const deleteSnack = createAsyncThunk(
-  'snacks/deleteSnack',
+  'menuitems/deleteSnack',
   async (id, { rejectWithValue }) => {
     try {
       await snackService.deleteSnack(id);
       return id;
     } catch (error) {
-      return rejectWithValue(error.message || 'Failed to delete snack');
+      return rejectWithValue(error.message || 'Failed to delete menuitem');
     }
   }
 );
 
 // Slice
 const snackSlice = createSlice({
-  name: 'snacks',
+  name: 'menuitems',
   initialState,
   reducers: {
     clearError: (state) => {
@@ -83,7 +83,7 @@ const snackSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Fetch all snacks
+    // Fetch all menuitems
     builder
       .addCase(fetchSnacks.pending, (state) => {
         state.loading = true;
@@ -91,7 +91,7 @@ const snackSlice = createSlice({
       })
       .addCase(fetchSnacks.fulfilled, (state, action) => {
         state.loading = false;
-        state.snacks = action.payload;
+        state.menuitems = action.payload;
         state.error = null;
       })
       .addCase(fetchSnacks.rejected, (state, action) => {
@@ -99,7 +99,7 @@ const snackSlice = createSlice({
         state.error = action.payload;
       });
 
-    // Fetch snack by ID
+    // Fetch menuitem by ID
     builder
       .addCase(fetchSnackById.pending, (state) => {
         state.loading = true;
@@ -115,7 +115,7 @@ const snackSlice = createSlice({
         state.error = action.payload;
       });
 
-    // Create snack
+    // Create menuitem
     builder
       .addCase(createSnack.pending, (state) => {
         state.loading = true;
@@ -123,7 +123,7 @@ const snackSlice = createSlice({
       })
       .addCase(createSnack.fulfilled, (state, action) => {
         state.loading = false;
-        state.snacks.push(action.payload);
+        state.menuitems.push(action.payload);
         state.error = null;
       })
       .addCase(createSnack.rejected, (state, action) => {
@@ -131,7 +131,7 @@ const snackSlice = createSlice({
         state.error = action.payload;
       });
 
-    // Update snack
+    // Update menuitem
     builder
       .addCase(updateSnack.pending, (state) => {
         state.loading = true;
@@ -139,9 +139,9 @@ const snackSlice = createSlice({
       })
       .addCase(updateSnack.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.snacks.findIndex((snack) => snack.id === action.payload.id);
+        const index = state.menuitems.findIndex((menuitem) => menuitem.id === action.payload.id);
         if (index !== -1) {
-          state.snacks[index] = action.payload;
+          state.menuitems[index] = action.payload;
         }
         if (state.selectedSnack?.id === action.payload.id) {
           state.selectedSnack = action.payload;
@@ -153,7 +153,7 @@ const snackSlice = createSlice({
         state.error = action.payload;
       });
 
-    // Delete snack
+    // Delete menuitem
     builder
       .addCase(deleteSnack.pending, (state) => {
         state.loading = true;
@@ -161,7 +161,7 @@ const snackSlice = createSlice({
       })
       .addCase(deleteSnack.fulfilled, (state, action) => {
         state.loading = false;
-        state.snacks = state.snacks.filter((snack) => snack.id !== action.payload);
+        state.menuitems = state.menuitems.filter((menuitem) => menuitem.id !== action.payload);
         if (state.selectedSnack?.id === action.payload) {
           state.selectedSnack = null;
         }

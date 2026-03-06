@@ -3,7 +3,7 @@ import snackReducer from './slices/snackSlice';
 
 export const store = configureStore({
   reducer: {
-    snacks: snackReducer,
+    menuitems: snackReducer,
   },
 });
 

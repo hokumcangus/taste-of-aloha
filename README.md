@@ -42,6 +42,25 @@ npm run dev:backend    # Start the API
 npm run db:studio      # Open Prisma Studio to view data
 ```
 
+## 🧪 PowerShell Copy/Paste DB Check
+
+```powershell
+cd C:\Users\mcang\projects\taste-of-aloha
+Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
+docker-compose down -v
+docker-compose up -d postgres
+cd apps\backend
+npx prisma migrate dev
+npx prisma generate
+node index.js
+```
+
+In another terminal:
+
+```powershell
+Invoke-WebRequest -Uri http://localhost:3000/health -UseBasicParsing
+```
+
 ## 📚 Documentation & Resources
 
 - **[Frontend Guide](apps/web/README.md)** — React, Redux, and UI components

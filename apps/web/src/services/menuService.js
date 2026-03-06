@@ -2,12 +2,12 @@ import apiClient from './api.js';
 
 /**
  * MenuItem API service
- * Handles all API calls related to snacks
+ * Handles all API calls related to menuitems
  */
 export const snackService = {
   /**
-   * Get all snacks
-   * @returns {Promise<Array>} Array of snacks
+   * Get all menuitems
+   * @returns {Promise<Array>} Array of menuitems
    */
   getAllSnacks: async () => {
     return apiClient.get('/api/menu');

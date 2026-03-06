@@ -182,11 +182,11 @@ npx prisma db seed                         # Seed database with test data
 
 **Connection String** (in `.env`):
 ```
-DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/taste_of_aloha?schema=public"
+DATABASE_URL="postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha"
 ```
 
 **Tables Created:**
-- `Menu` - Stores all menu items (snacks)
+- `Menu` - Stores all menu items (menuitems)
 
 **Tables Not Yet Created (for Phase 1):**
 - `User` - Customer information
@@ -258,7 +258,7 @@ apps/web/
 │   ├── index.css          # Global styles, Tailwind import
 │   ├── pages/             # Route components
 │   │   ├── Home.jsx       # Homepage with video background
-│   │   ├── Menu.jsx       # Menu page (displays snacks)
+│   │   ├── Menu.jsx       # Menu page (displays menuitems)
 │   │   └── About.jsx      # About page
 │   ├── components/        # Reusable UI components
 │   ├── services/          # API communication layer
@@ -966,7 +966,7 @@ const handleSubmit = (e) => {
 ### 📝 Practice Projects (After Order System)
 
 1. **User Authentication**: Login/signup with JWT tokens
-2. **Admin Dashboard**: Manage snacks, view orders
+2. **Admin Dashboard**: Manage menuitems, view orders
 3. **Real-time Order Tracking**: WebSocket integration
 4. **Payment Integration**: Stripe/PayPal checkout
 5. **Email Notifications**: SendGrid for order confirmations
@@ -1093,7 +1093,7 @@ Before starting the order system, verify:
 4. **Ask specific questions** - Include error message, what you tried, expected vs actual behavior
 
 **Good Question:**
-> "I'm getting 'Cannot read property 'map' of undefined' on line 15 of Menu.jsx. The snacks array from Redux is undefined. I verified the API returns data. How do I debug Redux state?"
+> "I'm getting 'Cannot read property 'map' of undefined' on line 15 of Menu.jsx. The menuitems array from Redux is undefined. I verified the API returns data. How do I debug Redux state?"
 
 **Vague Question:**
 > "My menu page doesn't work"

@@ -34,9 +34,14 @@ cd taste-of-aloha
 # 2. Install dependencies
 npm install
 
-# 3. Setup database
+# 3. Start PostgreSQL
+docker-compose up -d postgres
+
+# 4. Setup database
 cd apps/backend
+Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
 npx prisma migrate dev
+npx prisma generate
 cd ../..
 
 # 4. Start Database
@@ -62,7 +67,7 @@ Backend: http://localhost:3000/health
 
 ```bash
 # Start all services
-docker compose up -d
+docker-compose up -d
 
 # Services available at:
 # Frontend: http://localhost
@@ -176,11 +181,11 @@ taste-of-aloha/
 
 #### Menu Endpoints
 ```
-GET    /api/menu             - Get all menu items
-GET    /api/menu/:id         - Get single menu item
-POST   /api/menu             - Create new item (admin)
-PUT    /api/menu/:id         - Update item (admin)
-DELETE /api/menu/:id         - Delete item (admin)
+GET    /api/menuitems           - Get all menu items
+GET    /api/menuitems/:id       - Get single menu item
+POST   /api/menuitems           - Create new item (admin)
+PUT    /api/menuitems/:id       - Update item (admin)
+DELETE /api/menuitems/:id       - Delete item (admin)
 ```
 
 #### Cart Endpoints (In Progress)
@@ -207,9 +212,9 @@ POST   /api/auth/refresh     - Refresh JWT token
 
 #### Current Models
 
-**Snack (Menu Item)**
+**MenuItem (Menu Item)**
 ```prisma
-model Snack {
+model MenuItem {
   id          String   @id @default(cuid())
   name        String
   description String?
@@ -322,7 +327,7 @@ enum OrderStatus {
 #### Current Slices
 ```javascript
 {
-  snacks: {
+  menuitems: {
     items: [],           // Menu items array
     loading: false,
     error: null,
@@ -375,7 +380,7 @@ dispatch(fetchSnacks())
 
 // 2. Thunk in snackSlice.js calls service
 export const fetchSnacks = createAsyncThunk(
-  'snacks/fetchAll',
+  'menuitems/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
       return await snackService.getAllSnacks()
@@ -388,7 +393,7 @@ export const fetchSnacks = createAsyncThunk(
 // 3. Service calls API
 // services/snackService.js
 export const getAllSnacks = async () => {
-  return await api.get('/api/menu?category=Snack')
+  return await api.get('/api/menuitems')
 }
 
 // 4. API makes HTTP request
@@ -416,7 +421,7 @@ export const getAllSnacks = async (req, res) => {
 
 - CORS middleware enabled in Express
 - Vite proxy configured for `/api` requests
-- Development: `fetch('/api/menu?category=Snack')` proxied to backend
+- Development: `fetch('/api/menuitems')` proxied to backend
 - Production: Nginx reverse proxy handles routing
 
 ### Docker Architecture
@@ -447,12 +452,12 @@ npm run dev              # Start both apps locally
 
 **Docker Development:**
 ```bash
-docker compose up       # Run all services in containers
+docker-compose up       # Run all services in containers
 ```
 
 **Production:**
 ```bash
-docker compose -f docker-compose.prod.yml up -d
+docker-compose -f docker-compose.prod.yml up -d
 # Multi-stage builds optimized for production
 # Nginx serves with gzip compression
 # All services behind Nginx reverse proxy
@@ -699,22 +704,22 @@ npx prisma db push
 
 ```bash
 # Start development environment
-docker compose up -d
+docker-compose up -d
 
 # Stop containers
-docker compose down
+docker-compose down
 
 # View logs
-docker compose logs -f
+docker-compose logs -f
 
 # Rebuild containers after changes
-docker compose up -d --build
+docker-compose up -d --build
 
 # Start production environment
-docker compose -f docker-compose.prod.yml up -d
+docker-compose -f docker-compose.prod.yml up -d
 
 # Stop production
-docker compose -f docker-compose.prod.yml down
+docker-compose -f docker-compose.prod.yml down
 
 # Remove all Docker images
 docker system prune -a
@@ -775,7 +780,7 @@ cd apps/backend
 npm run build          # If using TypeScript/bundler
 
 # Docker build
-docker compose -f docker-compose.prod.yml build
+docker-compose -f docker-compose.prod.yml build
 ```
 
 ---
@@ -827,10 +832,10 @@ kill -9 <PID>
 **Problem:** Container won't start
 ```
 Solution:
-1. Check logs: docker compose logs backend
-2. Rebuild: docker compose up -d --build
+1. Check logs: docker-compose logs backend
+2. Rebuild: docker-compose up -d --build
 3. Clean slate: docker system prune -a
-4. Then: docker compose up -d
+4. Then: docker-compose up -d
 ```
 
 ### Frontend Issues
@@ -1026,7 +1031,7 @@ Add relevant images
 **For Issues:**
 1. Check this master documentation first
 2. Search existing GitHub issues
-3. Check error logs: `docker compose logs` or browser console
+3. Check error logs: `docker-compose logs` or browser console
 4. Create new GitHub issue with:
    - Clear description of problem
    - Steps to reproduce
