@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.status(200).json({ status: 'Good Vibes 🌺', timestamp: new Date().toISOString() });
 });
 
 app.listen(PORT, () => {

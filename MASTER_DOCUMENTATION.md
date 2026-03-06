@@ -34,12 +34,22 @@ cd taste-of-aloha
 # 2. Install dependencies
 npm install
 
-# 3. Setup database
+# 3. Start PostgreSQL
+docker-compose up -d postgres
+
+# 4. Setup database
 cd apps/backend
+Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
 npx prisma migrate dev
+npx prisma generate
 cd ../..
 
+<<<<<<< Updated upstream
 # 4. Start development servers
+=======
+# 5. Start development server
+cd apps/backend
+>>>>>>> Stashed changes
 npm run dev
 
 # 5. Open browser
@@ -51,7 +61,7 @@ Backend: http://localhost:5001
 
 ```bash
 # Start all services
-docker compose up -d
+docker-compose up -d
 
 # Services available at:
 # Frontend: http://localhost
@@ -436,12 +446,12 @@ npm run dev              # Start both apps locally
 
 **Docker Development:**
 ```bash
-docker compose up       # Run all services in containers
+docker-compose up       # Run all services in containers
 ```
 
 **Production:**
 ```bash
-docker compose -f docker-compose.prod.yml up -d
+docker-compose -f docker-compose.prod.yml up -d
 # Multi-stage builds optimized for production
 # Nginx serves with gzip compression
 # All services behind Nginx reverse proxy
@@ -688,22 +698,22 @@ npx prisma db push
 
 ```bash
 # Start development environment
-docker compose up -d
+docker-compose up -d
 
 # Stop containers
-docker compose down
+docker-compose down
 
 # View logs
-docker compose logs -f
+docker-compose logs -f
 
 # Rebuild containers after changes
-docker compose up -d --build
+docker-compose up -d --build
 
 # Start production environment
-docker compose -f docker-compose.prod.yml up -d
+docker-compose -f docker-compose.prod.yml up -d
 
 # Stop production
-docker compose -f docker-compose.prod.yml down
+docker-compose -f docker-compose.prod.yml down
 
 # Remove all Docker images
 docker system prune -a
@@ -764,7 +774,7 @@ cd apps/backend
 npm run build          # If using TypeScript/bundler
 
 # Docker build
-docker compose -f docker-compose.prod.yml build
+docker-compose -f docker-compose.prod.yml build
 ```
 
 ---
@@ -816,10 +826,10 @@ kill -9 <PID>
 **Problem:** Container won't start
 ```
 Solution:
-1. Check logs: docker compose logs backend
-2. Rebuild: docker compose up -d --build
+1. Check logs: docker-compose logs backend
+2. Rebuild: docker-compose up -d --build
 3. Clean slate: docker system prune -a
-4. Then: docker compose up -d
+4. Then: docker-compose up -d
 ```
 
 ### Frontend Issues
@@ -1015,7 +1025,7 @@ Add relevant images
 **For Issues:**
 1. Check this master documentation first
 2. Search existing GitHub issues
-3. Check error logs: `docker compose logs` or browser console
+3. Check error logs: `docker-compose logs` or browser console
 4. Create new GitHub issue with:
    - Clear description of problem
    - Steps to reproduce

@@ -16,6 +16,25 @@ docker-compose up --build
 # Database: Use Prisma Studio (see below)
 ```
 
+### PowerShell: DB + Prisma Reset (Copy/Paste)
+
+```powershell
+cd C:\Users\mcang\projects\taste-of-aloha
+Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
+docker-compose down -v
+docker-compose up -d postgres
+cd apps\backend
+npx prisma migrate dev
+npx prisma generate
+node index.js
+```
+
+In a second terminal:
+
+```powershell
+Invoke-WebRequest -Uri http://localhost:3000/health -UseBasicParsing
+```
+
 ---
 
 ## 🔥 Most-Used Commands
@@ -203,7 +222,7 @@ VITE_API_URL=http://localhost:3000
 
 ### `apps/backend/.env`
 ```env
-DATABASE_URL=postgresql://postgres:password@localhost:5432/taste_of_aloha?schema=public
+DATABASE_URL=postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha
 PORT=3000
 CORS_ORIGIN=http://localhost:5173
 ```

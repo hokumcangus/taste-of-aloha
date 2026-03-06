@@ -2,6 +2,27 @@
 
 ## Common Errors and Solutions
 
+### Quick Recovery (PowerShell Copy/Paste)
+
+Use this first when Prisma/database auth or connection errors appear:
+
+```powershell
+cd C:\Users\mcang\projects\taste-of-aloha
+Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
+docker-compose down -v
+docker-compose up -d postgres
+cd apps\backend
+npx prisma migrate dev
+npx prisma generate
+node index.js
+```
+
+In a second terminal:
+
+```powershell
+Invoke-WebRequest -Uri http://localhost:3000/health -UseBasicParsing
+```
+
 ### Docker not installed or Docker daemon not running
 
 **Symptoms:**
@@ -12,7 +33,7 @@
 **Checks (Windows PowerShell):**
 ```powershell
 docker --version
-docker compose version
+docker-compose version
 docker info
 Get-Service com.docker.service
 ```
