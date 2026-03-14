@@ -10,7 +10,7 @@ export const snackService = {
    * @returns {Promise<Array>} Array of menuitems
    */
   getAllSnacks: async () => {
-    return apiClient.get('/api/menu?category=Snack');
+    return apiClient.get('/api/menu?category=Snacks');
   },
 
   /**

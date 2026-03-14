@@ -1,18 +1,31 @@
 const MenuModel = require('../models/menuModel');
 
-const SNACK_CATEGORY = 'Snack';
+const SNACK_CATEGORY = 'Snacks';
+const LEGACY_SNACK_CATEGORY = 'Snack';
 
 const isSnackCategory = (category) =>
-  typeof category === 'string' && category.toLowerCase() === SNACK_CATEGORY.toLowerCase();
+  typeof category === 'string' &&
+  [SNACK_CATEGORY.toLowerCase(), LEGACY_SNACK_CATEGORY.toLowerCase()].includes(category.toLowerCase());
+
+const normalizeSnackCategory = (category) =>
+  isSnackCategory(category) ? SNACK_CATEGORY : category;
 
 // GET all menus (optional category filter)
 const getAllMenus = async (req, res) => {
   try {
     const { category } = req.query;
     const menus = await MenuModel.getAllMenus();
-    const filteredMenus = category
-      ? menus.filter((item) => item.category?.toLowerCase() === String(category).toLowerCase())
-      : menus;
+    let filteredMenus = menus;
+
+    if (category) {
+      if (isSnackCategory(category)) {
+        filteredMenus = menus.filter((item) => isSnackCategory(item.category));
+      } else {
+        filteredMenus = menus.filter(
+          (item) => item.category?.toLowerCase() === String(category).toLowerCase()
+        );
+      }
+    }
 
     res.json(filteredMenus);
   } catch (error) {
@@ -41,9 +54,7 @@ const getMenuById = async (req, res) => {
 const createMenu = async (req, res) => {
   try {
     const payload = { ...req.body };
-    if (isSnackCategory(payload.category)) {
-      payload.category = SNACK_CATEGORY;
-    }
+    payload.category = normalizeSnackCategory(payload.category);
 
     const created = await MenuModel.createMenu(payload);
     res.status(201).json(created);
@@ -63,9 +74,7 @@ const updateMenu = async (req, res) => {
     }
 
     const payload = { ...req.body };
-    if (isSnackCategory(payload.category)) {
-      payload.category = SNACK_CATEGORY;
-    }
+    payload.category = normalizeSnackCategory(payload.category);
 
     const updated = await MenuModel.updateMenu(req.params.id, payload);
     res.json(updated);

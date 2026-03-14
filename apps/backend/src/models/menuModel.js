@@ -20,7 +20,9 @@ function mapToMenuData(menuItem) {
   };
 }
 
-const SNACK_CATEGORY = 'Snack';
+const SNACK_CATEGORY = 'Snacks';
+const LEGACY_SNACK_CATEGORY = 'Snack';
+const SNACK_CATEGORIES = [SNACK_CATEGORY, LEGACY_SNACK_CATEGORY];
 
 const getAllMenus = async () => {
   return await prisma.menu.findMany({
@@ -30,7 +32,7 @@ const getAllMenus = async () => {
 
 const getAllSnacks = async () => {
   return await prisma.menu.findMany({
-    where: { category: SNACK_CATEGORY },
+    where: { category: { in: SNACK_CATEGORIES } },
     orderBy: { createdAt: 'desc' },
   });
 };
@@ -45,7 +47,7 @@ const getMenuById = async (id) => {
 // GET one snack item by ID
 const getSnackById = async (id) => {
   return await prisma.menu.findFirst({
-    where: { id: parseInt(id), category: SNACK_CATEGORY }
+    where: { id: parseInt(id), category: { in: SNACK_CATEGORIES } }
   });
 };
 
