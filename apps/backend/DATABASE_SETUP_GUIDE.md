@@ -123,7 +123,7 @@ psql -U postgres -d taste_of_aloha
 **Files Created:**
 - `apps/backend/.env` - Environment variables (database connection string)
 - `apps/backend/prisma/schema.prisma` - Database schema definition
-- `apps/backend/prisma/scheme.prisma` - Prisma configuration
+- `apps/backend/prisma.config.ts` - Prisma CLI configuration
 
 ### Configure Environment Variables
 
@@ -294,7 +294,7 @@ psql -U postgres -d taste_of_aloha
 
 **For Docker (from host machine):**
 ```powershell
-# The PostgreSQL container is named 'postgres' in docker-compose
+# The PostgreSQL container is named 'postgres' in docker compose
 psql -h localhost -p 5432 -U postgres -d taste_of_aloha
 ```
 
@@ -472,9 +472,9 @@ Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
 $env:DATABASE_URL = "postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha"
 npx prisma studio --port 5555
 
-# Option 3: Load dotenv in a wrapper script
+# Option 3: Start Prisma Studio normally from apps/backend
 cd apps/backend
-npx dotenv -e .env npx prisma studio --port 5555
+npx prisma studio --port 5555
 ```
 
 **For production:** Use environment variables set by deployment system, not hardcoded URLs
@@ -550,4 +550,4 @@ console.log(menu); // { id: 1, name: "Spam Musubi", price: 5.99, ... }
 5. 🔄 **Then**: Add User and Order models
 6. 🔄 **Then**: Connect frontend to API endpoints
 
-**See:** [ORDER_SYSTEM_GUIDE.md](ORDER_SYSTEM_GUIDE.md) for building the order system API.
+**See:** [BACKEND_API_GUIDE.md](../../docs/guides/BACKEND_API_GUIDE.md) for building API endpoints.

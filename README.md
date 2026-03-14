@@ -13,7 +13,7 @@ Welcome to the Taste of Aloha full-stack monorepo. This project uses a workspace
 The easiest way to run the entire system:
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 This starts:
@@ -23,23 +23,28 @@ This starts:
 
 To stop:
 ```bash
-docker-compose down
+docker compose down
 ```
 
 To reset the database (wipe volumes):
 ```bash
-docker-compose down -v
-docker-compose up --build
+docker compose down -v
+docker compose up --build
 ```
 
 ## 🛠 Manual Development Scripts
 
-Run these from the root directory:
+Run these from app directories:
 
 ```bash
-npm run dev:web        # Start the frontend
-npm run dev:backend    # Start the API
-npm run db:studio      # Open Prisma Studio to view data
+cd apps/backend
+npm run dev            # Start API (port 3000)
+
+cd ../web
+npm run dev            # Start frontend (port 5173)
+
+cd ../backend
+npx prisma studio      # Optional DB GUI
 ```
 
 ## 🧪 PowerShell Copy/Paste DB Check
@@ -47,8 +52,8 @@ npm run db:studio      # Open Prisma Studio to view data
 ```powershell
 cd C:\Users\mcang\projects\taste-of-aloha
 Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
-docker-compose down -v
-docker-compose up -d postgres
+docker compose down -v
+docker compose up -d postgres
 cd apps\backend
 npx prisma migrate dev
 npx prisma generate
@@ -65,18 +70,16 @@ Invoke-WebRequest -Uri http://localhost:3000/health -UseBasicParsing
 
 - **[Frontend Guide](apps/web/README.md)** — React, Redux, and UI components
 - **[Backend Guide](apps/backend/README.md)** — API routes and database models
-- **[Architecture Overview](docs/architecture/README.md)** — System design and diagrams
+- **[Architecture Diagrams](docs/architecture/system-architecture.dio)** — System design diagrams
 - **[Database Setup](apps/backend/DATABASE_SETUP_GUIDE.md)** — PostgreSQL and Prisma configuration
 
 ## 🐛 Troubleshooting
 
 For common issues and solutions:
-- **Docker Issues**: [DOCKER_PRISMA_TROUBLESHOOTING.md](docs/DOCKER_PRISMA_TROUBLESHOOTING.md)
 - **Setup Issues**: [TROUBLESHOOTING.md](docs/guides/TROUBLESHOOTING.md)
 - **Database Issues**: [DATABASE_SETUP_GUIDE.md](apps/backend/DATABASE_SETUP_GUIDE.md)
 
 ## 📖 Team Resources
 
 - **Learning Guide**: [LEARNING_GUIDE.md](docs/guides/LEARNING_GUIDE.md)
-- **Team Onboarding**: [TEAM_ONBOARDING.md](docs/guides/TEAM_ONBOARDING.md)
 - **Testing Guide**: [TESTING_GUIDE.md](docs/guides/TESTING_GUIDE.md)

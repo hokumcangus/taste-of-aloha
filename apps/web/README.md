@@ -38,7 +38,7 @@ Open http://localhost:5173 to view the app.
 ### Docker
 
 ```bash
-docker-compose up frontend
+docker compose up frontend
 ```
 
 ## 🏗 Project Structure
@@ -78,7 +78,6 @@ test('renders component', () => {
 ## 📚 Documentation
 
 - **[Redux Guide](../../docs/guides/LEARNING_GUIDE.md)** — State management patterns
-- **[Component Library](./src/components/README.md)** — Available components
 - **[API Integration](../../docs/guides/BACKEND_API_GUIDE.md)** — Connecting to backend
 
 ## 🔗 Related

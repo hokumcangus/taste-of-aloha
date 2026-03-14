@@ -16,9 +16,14 @@ All tests are fully integrated and ready to run!
 
 ## Running Tests
 
-### All Tests (Root)
+### All Tests (From app folders)
 ```bash
-# From project root (runs all tests)
+# Backend tests
+cd apps/backend
+npm test
+
+# Frontend tests
+cd ../web
 npm test
 ```
 
@@ -70,11 +75,11 @@ npm test -- --coverage
 ```
 
 **What's Tested:**
-- ✅ GET all menuitems
-- ✅ GET menuitem by ID
-- ✅ POST create new menuitem
-- ✅ PUT update menuitem
-- ✅ DELETE menuitem
+- ✅ GET all menu items
+- ✅ GET menu item by ID
+- ✅ POST create new menu item
+- ✅ PUT update menu item
+- ✅ DELETE menu item
 - ✅ 404 error handling
 - ✅ 500 error handling
 - ✅ Database error scenarios
@@ -92,11 +97,11 @@ npm run test:coverage
 
 **What's Tested:**
 - ✅ Component renders loading state
-- ✅ Component displays menuitems from API
+- ✅ Component displays menu items from API
 - ✅ Component handles empty state
 - ✅ Component handles error state
 - ✅ Redux state management (pending/fulfilled)
-- ✅ Create menuitem action
+- ✅ Create menu item action
 - ✅ Update Redux store correctly
 
 **Test File:** `apps/web/src/test/Menu.test.jsx`
@@ -273,7 +278,7 @@ jobs:
 npm test -- --verbose
 
 # Run single test
-npm test -- --testNamePattern="should return all menuitems"
+npm test -- --testNamePattern="should return all menu items"
 
 # Debug with Node debugger
 node --inspect-brk node_modules/.bin/jest --runInBand
@@ -288,7 +293,7 @@ npm run test:ui
 # Tests will open in browser with interactive interface
 
 # Run single test
-npm test -- --grep="should display menuitems"
+npm test -- --grep="should display menu items"
 ```
 
 ---

@@ -16,7 +16,7 @@ We use Prisma to interface with PostgreSQL. The schema defines all data models (
 
 **Key Files:**
 - `prisma/schema.prisma` — Data models
-= `prisma.config.ts` - Database configuration and env variables
+- `prisma.config.ts` - Prisma CLI configuration and env loading
 - `prisma/migrations/` — Version-controlled database changes
 - `.env` — Database connection string (DATABASE_URL)
 
@@ -75,8 +75,8 @@ npm run dev
 cd C:\Users\mcang\projects\taste-of-aloha
 Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
 
-docker-compose down -v
-docker-compose up -d postgres
+docker compose down -v
+docker compose up -d postgres
 
 cd apps\backend
 npx prisma migrate dev
@@ -95,7 +95,7 @@ Server runs at **http://localhost:3000**
 ### Docker
 
 ```bash
-docker-compose up backend
+docker compose up backend
 ```
 
 ## 🏗 Project Structure
@@ -111,11 +111,7 @@ src/
 
 ## 🧪 Testing
 
-<<<<<<< Updated upstream
 Run the API test suite:
-=======
-Run the menu/menu.snack category API test suite:
->>>>>>> Stashed changes
 
 ```bash
 npm run test:snack
