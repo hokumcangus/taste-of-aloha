@@ -30,7 +30,7 @@ CREATE TRIGGER update_menu_updated_at
 
 -- Insert sample data
 INSERT INTO "Menu" (name, description, price, category) VALUES
-    ('Spam Musubi', 'Hawaiian classic with grilled spam on rice wrapped in nori', 4.99, 'menuitem'),
+    ('Spam Musubi', 'Hawaiian classic with grilled spam on rice wrapped in nori', 4.99, 'Snacks'),
     ('Poke Bowl', 'Fresh ahi tuna with rice, seaweed, and vegetables', 12.99, 'meal'),
     ('Malasada', 'Portuguese-style fried dough rolled in sugar', 3.50, 'dessert'),
     ('Haupia', 'Traditional coconut milk-based Hawaiian dessert', 5.99, 'dessert'),
