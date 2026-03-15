@@ -2,12 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
   
   useEffect(() => {
-    // Check if mobile on mount
-    setIsMobile(window.innerWidth < 768);
-    
     // Update on resize
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);

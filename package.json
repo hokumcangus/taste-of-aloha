@@ -8,13 +8,18 @@
   "scripts": {
     "dev:web": "npm run dev:web",
     "dev:backend": "npm run dev:backend",
+    "dev:test": "npm run test:web && npm run test:backend",
     "lint": "eslint . --ext .js,.jsx",
     "format": "prettier --write ."
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.4",
     "@types/node": "^25.0.2",
     "@types/pg": "^8.16.0",
     "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
     "prettier": "^3.0.0",
     "prisma": "^7.1.0"
   },

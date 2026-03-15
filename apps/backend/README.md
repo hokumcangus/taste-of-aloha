@@ -15,7 +15,8 @@ The Express server and Prisma ORM layer for Taste of Aloha.
 We use Prisma to interface with PostgreSQL. The schema defines all data models (Menu, User, Order, etc.).
 
 **Key Files:**
-- `prisma/schema.prisma` — Data models and database configuration
+- `prisma/schema.prisma` — Data models
+- `prisma.config.ts` - Prisma CLI configuration and env loading
 - `prisma/migrations/` — Version-controlled database changes
 - `.env` — Database connection string (DATABASE_URL)
 
@@ -68,12 +69,54 @@ npm install
 npm run dev
 ```
 
+### PowerShell Copy/Paste Setup Check
+
+```powershell
+cd C:\Users\mcang\projects\taste-of-aloha
+Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
+
+docker compose down -v
+docker compose up -d postgres
+
+cd apps\backend
+npx prisma migrate dev
+npx prisma generate
+node index.js
+```
+
+In a second PowerShell terminal:
+
+```powershell
+Invoke-WebRequest -Uri http://localhost:3000/health -UseBasicParsing
+```
+
+### PowerShell curl verification commands
+
+```powershell
+# IMPORTANT: In PowerShell, use curl.exe (not curl alias)
+curl.exe http://localhost:3000/health
+curl.exe http://localhost:3000/api/menu
+curl.exe "http://localhost:3000/api/menu?category=Snacks"
+
+# Create
+curl.exe -X POST http://localhost:3000/api/menu -H "Content-Type: application/json" -d "{\"name\":\"Curl Test Item\",\"description\":\"created by curl\",\"price\":7.25,\"category\":\"Snacks\",\"isAvailable\":true}"
+
+# Update
+curl.exe -X PUT http://localhost:3000/api/menu/1 -H "Content-Type: application/json" -d "{\"price\":8.10,\"category\":\"Snack\"}"
+
+# Delete
+curl.exe -X DELETE http://localhost:3000/api/menu/1
+
+# Pretty JSON alternative
+Invoke-RestMethod http://localhost:3000/api/menu | ConvertTo-Json -Depth 6
+```
+
 Server runs at **http://localhost:3000**
 
 ### Docker
 
 ```bash
-docker-compose up backend
+docker compose up backend
 ```
 
 ## 🏗 Project Structure
@@ -89,14 +132,7 @@ src/
 
 ## 🧪 Testing
 
-Run the snack/menu category API test suite:
-
-```bash
-# Use --runInBand to run tests serially in one process, which avoids flaky parallel-worker issues with shared mocks/state.
-npx jest tests/snackApi.test.js --runInBand
-```
-
-Or use the npm shortcut:
+Run the API test suite:
 
 ```bash
 npm run test:snack
@@ -134,7 +170,7 @@ test('GET /api/menu', async () => {
 Create `.env` in `apps/backend/`:
 
 ```env
-DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/taste_of_aloha?schema=public
+DATABASE_URL=postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha
 PORT=3000
 ```
 

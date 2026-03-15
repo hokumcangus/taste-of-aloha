@@ -182,11 +182,11 @@ npx prisma db seed                         # Seed database with test data
 
 **Connection String** (in `.env`):
 ```
-DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/taste_of_aloha?schema=public"
+DATABASE_URL="postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha"
 ```
 
 **Tables Created:**
-- `Menu` - Stores all menu items (snacks)
+- `Menu` - Stores all menu items
 
 **Tables Not Yet Created (for Phase 1):**
 - `User` - Customer information
@@ -258,11 +258,11 @@ apps/web/
 │   ├── index.css          # Global styles, Tailwind import
 │   ├── pages/             # Route components
 │   │   ├── Home.jsx       # Homepage with video background
-│   │   ├── Menu.jsx       # Menu page (displays snacks)
+│   │   ├── Menu.jsx       # Menu page (displays menu items)
 │   │   └── About.jsx      # About page
 │   ├── components/        # Reusable UI components
 │   ├── services/          # API communication layer
-│   │   └── snackService.js
+│   │   └── menuService.js
 │   ├── store/             # Redux state management
 │   │   └── slices/
 │   └── config/
@@ -458,7 +458,7 @@ app.use('/api/orders', orderRoutes);
 **Why Docker for Development:**
 - **Consistency**: "Works on my machine" problem solved
 - **Isolation**: Each service in its own container
-- **Easy setup**: New team members just run `docker-compose up`
+- **Easy setup**: New team members just run `docker compose up`
 - **Production parity**: Dev environment matches production
 
 **Multi-Stage Build Benefits:**
@@ -526,14 +526,14 @@ environment:
 
 ```bash
 # Development workflow
-docker-compose up -d          # Start all services (detached)
-docker-compose logs -f backend  # Follow backend logs
-docker-compose restart backend  # Restart one service
-docker-compose down             # Stop all services
+docker compose up -d          # Start all services (detached)
+docker compose logs -f backend  # Follow backend logs
+docker compose restart backend  # Restart one service
+docker compose down             # Stop all services
 
 # Production workflow
-docker-compose -f docker-compose.prod.yml up --build -d
-docker-compose -f docker-compose.prod.yml ps
+docker compose -f docker-compose.prod.yml up --build -d
+docker compose -f docker-compose.prod.yml ps
 
 # Debugging
 docker exec -it taste-of-aloha-backend sh  # Enter backend container
@@ -541,7 +541,7 @@ docker logs taste-of-aloha-backend         # View logs
 docker inspect taste-of-aloha-backend      # Detailed info
 
 # Cleanup
-docker-compose down -v         # Stop and remove volumes
+docker compose down -v         # Stop and remove volumes
 docker system prune -a         # Remove unused images/containers
 ```
 
@@ -549,7 +549,7 @@ docker system prune -a         # Remove unused images/containers
 
 **Problem**: Port 3000 conflict when running both local dev server and Docker simultaneously
 
-**Why**: You started `npm run dev` locally (uses port 3000), then tried `docker-compose up` which also wants port 3000
+**Why**: You started `npm run dev` locally (uses port 3000), then tried `docker compose up` which also wants port 3000
 
 **Solution Options:**
 
@@ -559,7 +559,7 @@ docker system prune -a         # Remove unused images/containers
 # Ctrl+C in terminals running npm run dev
 
 # Start Docker services
-docker-compose up -d
+docker compose up -d
 
 # Access:
 # Frontend: http://localhost:5173
@@ -569,7 +569,7 @@ docker-compose up -d
 2. **Use only local development:**
 ```bash
 # Stop Docker services
-docker-compose down
+docker compose down
 
 # Run local servers
 cd apps/backend && npm run dev
@@ -785,7 +785,7 @@ This is your **primary learning objective** moving forward. The order system wil
 
 ### 🎯 Implementation Roadmap
 
-Refer to `ORDER_SYSTEM_GUIDE.md` for detailed step-by-step instructions. Here's the high-level overview:
+Refer to `BACKEND_API_GUIDE.md` for API patterns, then follow this high-level order-system roadmap:
 
 #### Phase 1: Backend Order API (Learn: Express routing, data modeling)
 ```
@@ -966,7 +966,7 @@ const handleSubmit = (e) => {
 ### 📝 Practice Projects (After Order System)
 
 1. **User Authentication**: Login/signup with JWT tokens
-2. **Admin Dashboard**: Manage snacks, view orders
+2. **Admin Dashboard**: Manage menu items, view orders
 3. **Real-time Order Tracking**: WebSocket integration
 4. **Payment Integration**: Stripe/PayPal checkout
 5. **Email Notifications**: SendGrid for order confirmations
@@ -1029,11 +1029,11 @@ git commit -m "refactor: extract order form into component"
 2. ✅ **Test Docker setup:**
    ```bash
    # Stop local servers first (Ctrl+C)
-   docker-compose down
-   docker-compose up --build
+  docker compose down
+  docker compose up --build
    ```
 
-3. 📖 **Read ORDER_SYSTEM_GUIDE.md thoroughly**
+3. 📖 **Read BACKEND_API_GUIDE.md thoroughly**
    - Understand the order flow
    - Note the data structures
    - Review example code
@@ -1041,19 +1041,19 @@ git commit -m "refactor: extract order form into component"
 ### This Week:
 
 4. 🔨 **Implement Phase 1: Backend Order API**
-   - Follow ORDER_SYSTEM_GUIDE.md step by step
+  - Follow BACKEND_API_GUIDE.md patterns step by step
    - Test each endpoint with curl or Postman
    - Commit after each working feature
 
 5. 📚 **Study Redux Basics**
    - Watch Redux Toolkit tutorial
    - Understand actions, reducers, store
-   - Review existing `snackSlice.js` as example
+  - Review existing `menuSlice.js` as example
 
 ### This Month:
 
 6. 🛒 **Complete Full Order System**
-   - Phases 1-4 from ORDER_SYSTEM_GUIDE.md
+  - Phases 1-4 from the roadmap in this guide
    - Working cart, checkout, confirmation
    - All features tested and documented
 
@@ -1074,7 +1074,7 @@ Before starting the order system, verify:
 - [ ] You can navigate between Home, Menu, About pages
 - [ ] You understand the difference between `apps/backend` and `apps/web`
 - [ ] You've read through this entire learning guide
-- [ ] You've scanned ORDER_SYSTEM_GUIDE.md
+- [ ] You've scanned BACKEND_API_GUIDE.md
 - [ ] Docker is running: `docker ps` shows no errors
 
 **All checked?** You're ready to build the order system! 🎉
@@ -1093,7 +1093,7 @@ Before starting the order system, verify:
 4. **Ask specific questions** - Include error message, what you tried, expected vs actual behavior
 
 **Good Question:**
-> "I'm getting 'Cannot read property 'map' of undefined' on line 15 of Menu.jsx. The snacks array from Redux is undefined. I verified the API returns data. How do I debug Redux state?"
+> "I'm getting 'Cannot read property 'map' of undefined' on line 15 of Menu.jsx. The menu items array from Redux is undefined. I verified the API returns data. How do I debug Redux state?"
 
 **Vague Question:**
 > "My menu page doesn't work"

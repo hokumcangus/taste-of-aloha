@@ -31,7 +31,7 @@ This guide documents the complete database setup process for Taste of Aloha, inc
    - ❌ pgBouncer (skip - not needed)
    - ❌ Database Drivers (skip - we use pg npm package)
    - ❌ Stack Builder (skip - optional)
-5. Set **postgres** password to a secure value (e.g., `YOUR_PASSWORD`)
+5. Set **postgres** password to your local project value (currently `tasteofalohadb`)
 6. Keep port as `5432` (default)
 
 **Verify Installation:**
@@ -123,7 +123,7 @@ psql -U postgres -d taste_of_aloha
 **Files Created:**
 - `apps/backend/.env` - Environment variables (database connection string)
 - `apps/backend/prisma/schema.prisma` - Database schema definition
-- `apps/backend/prisma/scheme.prisma` - Prisma configuration
+- `apps/backend/prisma.config.ts` - Prisma CLI configuration
 
 ### Configure Environment Variables
 
@@ -131,16 +131,15 @@ psql -U postgres -d taste_of_aloha
 
 ```env
 # Use your own password — do not commit real secrets
-DATABASE_URL={DATABASE_UR}
+DATABASE_URL=postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha
 ```
 
 **Breakdown:**
 - `postgresql://` - Database type
 - `postgres` - PostgreSQL username
-- `YOUR_PASSWORD` - The password you set during PostgreSQL installation
+- `tasteofalohadb` - Current local PostgreSQL password used by this project
 - `localhost:5432` - PostgreSQL server address and port
 - `taste_of_aloha` - Your database name
-- `?schema=public` - PostgreSQL schema (always use "public" for simplicity)
 
 **⚠️ Important:** Do NOT commit `.env` to git! It contains passwords.
 
@@ -295,7 +294,7 @@ psql -U postgres -d taste_of_aloha
 
 **For Docker (from host machine):**
 ```powershell
-# The PostgreSQL container is named 'postgres' in docker-compose
+# The PostgreSQL container is named 'postgres' in docker compose
 psql -h localhost -p 5432 -U postgres -d taste_of_aloha
 ```
 
@@ -465,16 +464,17 @@ The `url` goes in `prisma.config.ts`, not here.
 # In prisma/schema.prisma:
 datasource db {
   provider = "postgresql"
-  url = "postgresql://postgres:YOUR_PASSWORD@localhost:5432/taste_of_aloha?schema=public"
+  url = "postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha"
 }
 
 # Option 2: Set DATABASE_URL before running prisma commands
-$env:DATABASE_URL = "postgresql://postgres:YOUR_PASSWORD@localhost:5432/taste_of_aloha?schema=public"
+Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
+$env:DATABASE_URL = "postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha"
 npx prisma studio --port 5555
 
-# Option 3: Load dotenv in a wrapper script
+# Option 3: Start Prisma Studio normally from apps/backend
 cd apps/backend
-npx dotenv -e .env npx prisma studio --port 5555
+npx prisma studio --port 5555
 ```
 
 **For production:** Use environment variables set by deployment system, not hardcoded URLs
@@ -550,4 +550,4 @@ console.log(menu); // { id: 1, name: "Spam Musubi", price: 5.99, ... }
 5. 🔄 **Then**: Add User and Order models
 6. 🔄 **Then**: Connect frontend to API endpoints
 
-**See:** [ORDER_SYSTEM_GUIDE.md](ORDER_SYSTEM_GUIDE.md) for building the order system API.
+**See:** [BACKEND_API_GUIDE.md](../../docs/guides/BACKEND_API_GUIDE.md) for building API endpoints.

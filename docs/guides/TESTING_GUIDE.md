@@ -16,9 +16,14 @@ All tests are fully integrated and ready to run!
 
 ## Running Tests
 
-### All Tests (Root)
+### All Tests (From app folders)
 ```bash
-# From project root (runs all tests)
+# Backend tests
+cd apps/backend
+npm test
+
+# Frontend tests
+cd ../web
 npm test
 ```
 
@@ -70,11 +75,11 @@ npm test -- --coverage
 ```
 
 **What's Tested:**
-- ✅ GET all snacks
-- ✅ GET snack by ID
-- ✅ POST create new snack
-- ✅ PUT update snack
-- ✅ DELETE snack
+- ✅ GET all menu items
+- ✅ GET menu item by ID
+- ✅ POST create new menu item
+- ✅ PUT update menu item
+- ✅ DELETE menu item
 - ✅ 404 error handling
 - ✅ 500 error handling
 - ✅ Database error scenarios
@@ -92,11 +97,11 @@ npm run test:coverage
 
 **What's Tested:**
 - ✅ Component renders loading state
-- ✅ Component displays snacks from API
+- ✅ Component displays menu items from API
 - ✅ Component handles empty state
 - ✅ Component handles error state
 - ✅ Redux state management (pending/fulfilled)
-- ✅ Create snack action
+- ✅ Create menu item action
 - ✅ Update Redux store correctly
 
 **Test File:** `apps/web/src/test/Menu.test.jsx`
@@ -215,7 +220,7 @@ apps/
 ### Backend Tests
 1. **Mock the database** - Never hit the real database in tests
 2. **Test happy paths AND error cases** - Both success and failure scenarios
-3. **Use descriptive test names** - "should return 404 when snack not found"
+3. **Use descriptive test names** - "should return 404 when menuitem not found"
 4. **Clear mocks between tests** - Use `beforeEach(() => jest.clearAllMocks())`
 5. **Test status codes AND response bodies** - Verify complete response
 
@@ -273,7 +278,7 @@ jobs:
 npm test -- --verbose
 
 # Run single test
-npm test -- --testNamePattern="should return all snacks"
+npm test -- --testNamePattern="should return all menu items"
 
 # Debug with Node debugger
 node --inspect-brk node_modules/.bin/jest --runInBand
@@ -288,7 +293,7 @@ npm run test:ui
 # Tests will open in browser with interactive interface
 
 # Run single test
-npm test -- --grep="should display snacks"
+npm test -- --grep="should display menu items"
 ```
 
 ---

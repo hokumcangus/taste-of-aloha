@@ -1,19 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-datasource db {
-  provider = "postgresql"
-}
-
-// This generates the Prisma Client for querying
 generator client {
   provider = "prisma-client-js"
 }
 
-// Define Client model (user)
+datasource db {
+  provider = "postgresql"
+}
 
 model User {
   id    Int     @id @default(autoincrement())
@@ -22,18 +13,17 @@ model User {
   posts Post[]
 }
 
-// Define your menu model (menu items table)
 model Menu {
-  id          Int     @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   name        String
   description String
   price       Float
   image       String?
-  category    String
-  isAvailable Boolean @default(true)
+  category    String?
+  isAvailable Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   cartItems   CartItem[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
 
 model Post {
@@ -41,32 +31,31 @@ model Post {
   title     String
   content   String?
   published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
   authorId  Int
+  author    User    @relation(fields: [authorId], references: [id])
 }
 
-// Shopping cart models
 model Cart {
-  id         Int        @id @default(autoincrement())
-  userId     Int?       // Null if guest/temporary cart
-  items      CartItem[]
-  total      Float      @default(0)
-  itemCount  Int        @default(0)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id        Int        @id @default(autoincrement())
+  userId    Int?
+  total     Float      @default(0)
+  itemCount Int        @default(0)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  items     CartItem[]
 }
 
 model CartItem {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   cartId    Int
-  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
   menuId    Int
-  menu      Menu    @relation(fields: [menuId], references: [id])
-  quantity  Int     @default(1)
-  price     Float   // Price at time of adding to cart
-  subtotal  Float   // quantity * price
+  quantity  Int      @default(1)
+  price     Float
+  subtotal  Float
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  menu      Menu     @relation(fields: [menuId], references: [id])
 
-  @@unique([cartId, menuId]) // One item type per cart
+  @@unique([cartId, menuId])
 }
