@@ -70,6 +70,47 @@ curl.exe -X DELETE http://localhost:3000/api/menu/1
 Invoke-RestMethod http://localhost:3000/api/menu | ConvertTo-Json -Depth 6
 ```
 
+## Verification Commands (PowerShell)
+
+Use these to confirm API behavior after startup:
+
+```powershell
+# Health
+(Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
+
+# Menu API status + record count
+$response = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing
+$items = $response.Content | ConvertFrom-Json
+"status=$($response.StatusCode) count=$($items.Count)"
+
+# Preview sample rows
+$items | Select-Object -First 3 id,name,price,category | Format-Table -AutoSize
+```
+
+Expected:
+- Health: `200`
+- Menu API: `status=200` and `count > 0`
+
+## Known Docker Error + Fix
+
+If `GET /api/menu` returns 500 and logs show Prisma `P2021` (`public.Menu` does not exist), database schema is out of sync.
+
+Fix in Docker:
+
+```bash
+# From repo root
+docker exec taste-of-aloha-backend npx prisma db push --accept-data-loss
+docker exec taste-of-aloha-backend node prisma/menu.seed.js
+```
+
+Re-check with:
+
+```powershell
+$response = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing
+$items = $response.Content | ConvertFrom-Json
+"status=$($response.StatusCode) count=$($items.Count)"
+```
+
 ## Local Run
 
 ```bash
