@@ -7,7 +7,6 @@
     "start": "node index.js",
     "dev": "nodemon --legacy-watch index.js",
     "test": "jest --coverage",
-    "test:snack": "jest tests/snackApi.test.js --runInBand",
     "test:watch": "jest --watch",
     "seed:menu": "node scripts/addMenuItem.js"
   },

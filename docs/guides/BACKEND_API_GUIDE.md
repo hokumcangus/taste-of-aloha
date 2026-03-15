@@ -47,6 +47,29 @@ curl -X PUT http://localhost:3000/api/menu/1 \
 curl -X DELETE http://localhost:3000/api/menu/1
 ```
 
+## Windows PowerShell Requests
+
+Use `curl.exe` in PowerShell to avoid alias issues with `curl`:
+
+```powershell
+# Health + reads
+curl.exe http://localhost:3000/health
+curl.exe http://localhost:3000/api/menu
+curl.exe "http://localhost:3000/api/menu?category=Snacks"
+
+# Create
+curl.exe -X POST http://localhost:3000/api/menu -H "Content-Type: application/json" -d "{\"name\":\"Curl Test Item\",\"description\":\"created by curl\",\"price\":7.25,\"category\":\"Snacks\",\"isAvailable\":true}"
+
+# Update
+curl.exe -X PUT http://localhost:3000/api/menu/1 -H "Content-Type: application/json" -d "{\"price\":8.10,\"category\":\"Snack\"}"
+
+# Delete
+curl.exe -X DELETE http://localhost:3000/api/menu/1
+
+# Pretty JSON output
+Invoke-RestMethod http://localhost:3000/api/menu | ConvertTo-Json -Depth 6
+```
+
 ## Local Run
 
 ```bash

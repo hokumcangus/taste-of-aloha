@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchSnacks } from '../store/slices/snackSlice';
+import { fetchMenuItems } from '../store/slices/menuSlice';
 
 const Menu = () => {
     const dispatch = useDispatch();
-    const { menuitems, loading, error } = useSelector((state) => state.menuitems);
+    const { menuItems, loading, error } = useSelector((state) => state.menu);
     useEffect(() => {
-        dispatch(fetchSnacks());
+        dispatch(fetchMenuItems());
     }, [dispatch]);
 
     if (loading) {
@@ -16,7 +16,7 @@ const Menu = () => {
                 textAlign: 'center' 
             }}>
                 <h1>Menu</h1>
-                <p>Loading menuitems...</p>
+                <p>Loading menu items...</p>
             </div>
         );
     }
@@ -29,7 +29,7 @@ const Menu = () => {
             }}>
                 <h1>Menu</h1>
                 <p style={{ color: 'red' }}>Error: {error}</p>
-                <button onClick={() => dispatch(fetchSnacks())}>
+                <button onClick={() => dispatch(fetchMenuItems())}>
                     Retry
                 </button>
             </div>
@@ -51,13 +51,13 @@ const Menu = () => {
                 Menu
             </h1>
             
-            {menuitems.length === 0 ? (
+            {menuItems.length === 0 ? (
                 <p style={{ 
                     fontSize: '1.2rem', 
                     color: '#666',
                     marginTop: '2rem'
                 }}>
-                    No menuitems available. Check back later!
+                    No menu items available. Check back later!
                 </p>
             ) : (
                 <div style={{
@@ -66,7 +66,7 @@ const Menu = () => {
                     gap: '1.5rem',
                     marginTop: '2rem'
                 }}>
-                    {menuitems.map((menuitem) => (
+                    {menuItems.map((menuitem) => (
                         <div 
                             key={menuitem.id}
                             style={{

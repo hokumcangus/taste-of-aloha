@@ -78,6 +78,7 @@ Current Prisma table model for menu is `Menu` in `apps/backend/prisma/schema.pri
 - Frontend usage: `apps/web/README.md`
 - Database setup: `apps/backend/DATABASE_SETUP_GUIDE.md`
 - API guide: `docs/guides/BACKEND_API_GUIDE.md`
+- Frontend/backend flow: `docs/guides/FRONTEND_BACKEND_FLOW_GUIDE.md`
 - Troubleshooting: `docs/guides/TROUBLESHOOTING.md`
 - Testing: `docs/guides/TESTING_GUIDE.md`
 - Learning/reference: `docs/guides/LEARNING_GUIDE.md`

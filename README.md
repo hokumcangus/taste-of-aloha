@@ -66,6 +66,31 @@ In another terminal:
 Invoke-WebRequest -Uri http://localhost:3000/health -UseBasicParsing
 ```
 
+### PowerShell API Smoke Test (curl-safe)
+
+Use `curl.exe` in PowerShell (not `curl`, which is an alias for `Invoke-WebRequest`):
+
+```powershell
+# Health
+curl.exe http://localhost:3000/health
+
+# Read menu
+curl.exe http://localhost:3000/api/menu
+curl.exe "http://localhost:3000/api/menu?category=Snacks"
+
+# Create test item
+curl.exe -X POST http://localhost:3000/api/menu -H "Content-Type: application/json" -d "{\"name\":\"Curl Test Item\",\"description\":\"created by curl\",\"price\":7.25,\"category\":\"Snacks\",\"isAvailable\":true}"
+
+# Update item 1
+curl.exe -X PUT http://localhost:3000/api/menu/1 -H "Content-Type: application/json" -d "{\"price\":8.10,\"category\":\"Snack\"}"
+
+# Delete item 1
+curl.exe -X DELETE http://localhost:3000/api/menu/1
+
+# Pretty JSON alternative
+Invoke-RestMethod http://localhost:3000/api/menu | ConvertTo-Json -Depth 6
+```
+
 ## 📚 Documentation & Resources
 
 - **[Frontend Guide](apps/web/README.md)** — React, Redux, and UI components

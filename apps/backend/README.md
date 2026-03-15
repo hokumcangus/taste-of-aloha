@@ -90,6 +90,27 @@ In a second PowerShell terminal:
 Invoke-WebRequest -Uri http://localhost:3000/health -UseBasicParsing
 ```
 
+### PowerShell curl verification commands
+
+```powershell
+# IMPORTANT: In PowerShell, use curl.exe (not curl alias)
+curl.exe http://localhost:3000/health
+curl.exe http://localhost:3000/api/menu
+curl.exe "http://localhost:3000/api/menu?category=Snacks"
+
+# Create
+curl.exe -X POST http://localhost:3000/api/menu -H "Content-Type: application/json" -d "{\"name\":\"Curl Test Item\",\"description\":\"created by curl\",\"price\":7.25,\"category\":\"Snacks\",\"isAvailable\":true}"
+
+# Update
+curl.exe -X PUT http://localhost:3000/api/menu/1 -H "Content-Type: application/json" -d "{\"price\":8.10,\"category\":\"Snack\"}"
+
+# Delete
+curl.exe -X DELETE http://localhost:3000/api/menu/1
+
+# Pretty JSON alternative
+Invoke-RestMethod http://localhost:3000/api/menu | ConvertTo-Json -Depth 6
+```
+
 Server runs at **http://localhost:3000**
 
 ### Docker

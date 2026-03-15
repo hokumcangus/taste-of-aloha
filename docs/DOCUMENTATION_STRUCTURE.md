@@ -22,6 +22,7 @@ taste-of-aloha/
     │   └── system-architecture.dio
     └── guides/
         ├── BACKEND_API_GUIDE.md
+        ├── FRONTEND_BACKEND_FLOW_GUIDE.md
         ├── LEARNING_GUIDE.md
         ├── TESTING_GUIDE.md
         └── TROUBLESHOOTING.md
@@ -34,6 +35,7 @@ taste-of-aloha/
 - Backend work: `apps/backend/README.md`
 - Database work: `apps/backend/DATABASE_SETUP_GUIDE.md`
 - Frontend work: `apps/web/README.md`
+- Frontend/backend call flow: `docs/guides/FRONTEND_BACKEND_FLOW_GUIDE.md`
 - API details: `docs/guides/BACKEND_API_GUIDE.md`
 - Troubleshooting: `docs/guides/TROUBLESHOOTING.md`
 

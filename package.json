@@ -8,6 +8,7 @@
   "scripts": {
     "dev:web": "npm run dev:web",
     "dev:backend": "npm run dev:backend",
+    "dev:test": "npm run test:web && npm run test:backend",
     "lint": "eslint . --ext .js,.jsx",
     "format": "prettier --write ."
   },
