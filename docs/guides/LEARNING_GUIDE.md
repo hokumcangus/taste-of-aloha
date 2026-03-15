@@ -186,7 +186,7 @@ DATABASE_URL="postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha
 ```
 
 **Tables Created:**
-- `Menu` - Stores all menu items (menuitems)
+- `Menu` - Stores all menu items
 
 **Tables Not Yet Created (for Phase 1):**
 - `User` - Customer information
@@ -258,11 +258,11 @@ apps/web/
 │   ├── index.css          # Global styles, Tailwind import
 │   ├── pages/             # Route components
 │   │   ├── Home.jsx       # Homepage with video background
-│   │   ├── Menu.jsx       # Menu page (displays menuitems)
+│   │   ├── Menu.jsx       # Menu page (displays menu items)
 │   │   └── About.jsx      # About page
 │   ├── components/        # Reusable UI components
 │   ├── services/          # API communication layer
-│   │   └── snackService.js
+│   │   └── menuService.js
 │   ├── store/             # Redux state management
 │   │   └── slices/
 │   └── config/
@@ -966,7 +966,7 @@ const handleSubmit = (e) => {
 ### 📝 Practice Projects (After Order System)
 
 1. **User Authentication**: Login/signup with JWT tokens
-2. **Admin Dashboard**: Manage menuitems, view orders
+2. **Admin Dashboard**: Manage menu items, view orders
 3. **Real-time Order Tracking**: WebSocket integration
 4. **Payment Integration**: Stripe/PayPal checkout
 5. **Email Notifications**: SendGrid for order confirmations
@@ -1048,7 +1048,7 @@ git commit -m "refactor: extract order form into component"
 5. 📚 **Study Redux Basics**
    - Watch Redux Toolkit tutorial
    - Understand actions, reducers, store
-   - Review existing `snackSlice.js` as example
+  - Review existing `menuSlice.js` as example
 
 ### This Month:
 
@@ -1093,7 +1093,7 @@ Before starting the order system, verify:
 4. **Ask specific questions** - Include error message, what you tried, expected vs actual behavior
 
 **Good Question:**
-> "I'm getting 'Cannot read property 'map' of undefined' on line 15 of Menu.jsx. The menuitems array from Redux is undefined. I verified the API returns data. How do I debug Redux state?"
+> "I'm getting 'Cannot read property 'map' of undefined' on line 15 of Menu.jsx. The menu items array from Redux is undefined. I verified the API returns data. How do I debug Redux state?"
 
 **Vague Question:**
 > "My menu page doesn't work"
