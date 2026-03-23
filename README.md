@@ -108,3 +108,35 @@ For common issues and solutions:
 
 - **Learning Guide**: [LEARNING_GUIDE.md](docs/guides/LEARNING_GUIDE.md)
 - **Testing Guide**: [TESTING_GUIDE.md](docs/guides/TESTING_GUIDE.md)
+
+## 🔌 Connectivity Verification (PowerShell)
+
+```powershell
+# From repo root
+docker compose up -d postgres
+
+# Terminal 1
+npm --workspace apps/backend run dev
+
+# Terminal 2
+npm --workspace apps/web run dev
+
+# Terminal 3: verify backend + frontend connectivity
+(Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
+
+$menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing
+$menuItems = $menuResponse.Content | ConvertFrom-Json
+"menu-status=$($menuResponse.StatusCode) menu-count=$($menuItems.Count)"
+
+$cartResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/cart" -UseBasicParsing
+$cartItems = $cartResponse.Content | ConvertFrom-Json
+"cart-status=$($cartResponse.StatusCode) cart-count=$($cartItems.Count)"
+
+(Invoke-WebRequest -Uri "http://localhost:5173" -UseBasicParsing).StatusCode
+```
+
+Expected:
+- Health: `200`
+- Menu API: `menu-status=200`
+- Cart API: `cart-status=200`
+- Frontend: `200`

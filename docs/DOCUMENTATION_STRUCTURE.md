@@ -44,3 +44,24 @@ taste-of-aloha/
 - Removed or archived docs are intentionally not linked here.
 - All commands in these docs are aligned to the current repo setup.
 - Docker commands use `docker compose` (plugin syntax).
+
+## Connectivity Verification Commands
+
+```powershell
+# From repo root
+docker compose up -d postgres
+npm --workspace apps/backend run dev
+npm --workspace apps/web run dev
+
+(Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
+
+$menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing
+$menuItems = $menuResponse.Content | ConvertFrom-Json
+"menu-status=$($menuResponse.StatusCode) menu-count=$($menuItems.Count)"
+
+$cartResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/cart" -UseBasicParsing
+$cartItems = $cartResponse.Content | ConvertFrom-Json
+"cart-status=$($cartResponse.StatusCode) cart-count=$($cartItems.Count)"
+
+(Invoke-WebRequest -Uri "http://localhost:5173" -UseBasicParsing).StatusCode
+```

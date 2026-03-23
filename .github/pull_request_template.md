@@ -43,3 +43,24 @@ Place all screenshots in `docs/screenshots/` and reference them here. -->
 
 ## 🧾 Notes for Reviewers
 <!-- Add any context reviewers should know (e.g., breaking changes, migration steps) -->
+
+## 🔌 Connectivity Verification Commands (PowerShell)
+
+```powershell
+# From repo root
+docker compose up -d postgres
+npm --workspace apps/backend run dev
+npm --workspace apps/web run dev
+
+(Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
+
+$menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing
+$menuItems = $menuResponse.Content | ConvertFrom-Json
+"menu-status=$($menuResponse.StatusCode) menu-count=$($menuItems.Count)"
+
+$cartResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/cart" -UseBasicParsing
+$cartItems = $cartResponse.Content | ConvertFrom-Json
+"cart-status=$($cartResponse.StatusCode) cart-count=$($cartItems.Count)"
+
+(Invoke-WebRequest -Uri "http://localhost:5173" -UseBasicParsing).StatusCode
+```

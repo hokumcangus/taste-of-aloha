@@ -131,3 +131,29 @@ $items = $response.Content | ConvertFrom-Json
 - Database: `apps/backend/DATABASE_SETUP_GUIDE.md`
 - API guide: `docs/guides/BACKEND_API_GUIDE.md`
 - Troubleshooting: `docs/guides/TROUBLESHOOTING.md`
+
+## Connectivity Verification (PowerShell)
+
+```powershell
+# From repo root
+docker compose up -d postgres
+
+# Terminal 1
+npm --workspace apps/backend run dev
+
+# Terminal 2
+npm --workspace apps/web run dev
+
+# Terminal 3
+(Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
+
+$menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing
+$menuItems = $menuResponse.Content | ConvertFrom-Json
+"menu-status=$($menuResponse.StatusCode) menu-count=$($menuItems.Count)"
+
+$cartResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/cart" -UseBasicParsing
+$cartItems = $cartResponse.Content | ConvertFrom-Json
+"cart-status=$($cartResponse.StatusCode) cart-count=$($cartItems.Count)"
+
+(Invoke-WebRequest -Uri "http://localhost:5173" -UseBasicParsing).StatusCode
+```

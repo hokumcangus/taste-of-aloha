@@ -551,3 +551,23 @@ console.log(menu); // { id: 1, name: "Spam Musubi", price: 5.99, ... }
 6. 🔄 **Then**: Connect frontend to API endpoints
 
 **See:** [BACKEND_API_GUIDE.md](../../docs/guides/BACKEND_API_GUIDE.md) for building API endpoints.
+
+## Connectivity Verification Commands (PowerShell)
+
+```powershell
+# From repo root
+docker compose up -d postgres
+npm --workspace apps/backend run dev
+npm --workspace apps/web run dev
+
+(Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
+
+$menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing
+$menuItems = $menuResponse.Content | ConvertFrom-Json
+"menu-status=$($menuResponse.StatusCode) menu-count=$($menuItems.Count)"
+
+$cartResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/cart" -UseBasicParsing
+$cartItems = $cartResponse.Content | ConvertFrom-Json
+"cart-status=$($cartResponse.StatusCode) cart-count=$($cartItems.Count)"
+```
+
