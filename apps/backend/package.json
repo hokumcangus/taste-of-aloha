@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon --legacy-watch index.js",
+    "lint": "eslint .",
     "test": "jest --coverage",
-    "test:snack": "jest tests/snackApi.test.js --runInBand",
     "test:watch": "jest --watch",
     "db:migrate": "npx prisma migrate dev",
     "db:migrate:deploy": "npx prisma migrate deploy",

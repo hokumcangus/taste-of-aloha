@@ -277,6 +277,51 @@ curl "http://localhost:3000/api/menu?category=Snack"
 
 ---
 
+### 7a. Error: `GET /api/menu` returns 500 with Prisma `P2021` (`public.Menu` does not exist)
+
+**Problem:**
+- Backend is running against a database that does not match the current Prisma model.
+- Common case: Docker DB still has old `menuitems` table, while app now queries Prisma model `Menu`.
+
+**Typical log/error:**
+- `PrismaClientKnownRequestError`
+- `code: 'P2021'`
+- `The table public.Menu does not exist in the current database`
+
+**How to verify quickly (PowerShell):**
+```powershell
+$response = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing
+$items = $response.Content | ConvertFrom-Json
+"status=$($response.StatusCode) count=$($items.Count)"
+```
+
+If it throws `(500) Internal Server Error`, check backend container logs:
+
+```powershell
+docker logs --tail 200 taste-of-aloha-backend
+```
+
+**Fix (Docker setup):**
+```bash
+# From repo root
+docker exec taste-of-aloha-backend npx prisma db push --accept-data-loss
+docker exec taste-of-aloha-backend node prisma/menu.seed.js
+```
+
+**Why `--accept-data-loss` may be required:**
+- Prisma may need to replace legacy table(s) (for example `menuitems`) to match current schema (`Menu`).
+
+**Re-verify after fix:**
+```powershell
+$response = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing
+$items = $response.Content | ConvertFrom-Json
+"status=$($response.StatusCode) count=$($items.Count)"
+```
+
+Expected: `status=200` and `count > 0`.
+
+---
+
 ### 8. Error: "Proxy error: Could not proxy request /api/menu to http://localhost:3000"
 
 **Problem:** Vite proxy configuration issue or backend not running.

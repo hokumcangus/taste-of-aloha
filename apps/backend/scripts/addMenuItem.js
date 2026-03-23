@@ -20,7 +20,7 @@ async function main() {
       description: 'Sample menu item created via script',
       price,
       image: null,
-      category: 'Specials',
+      category: 'Snacks',
     },
   });
 
