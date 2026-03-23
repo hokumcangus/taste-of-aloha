@@ -24,13 +24,13 @@ const SNACK_CATEGORY = 'Snacks';
 const LEGACY_SNACK_CATEGORY = 'Snack';
 const SNACK_CATEGORIES = [SNACK_CATEGORY, LEGACY_SNACK_CATEGORY];
 
-const getAllMenus = async () => {
+const getAllMenuItems = async () => {
   return await prisma.menu.findMany({
     orderBy: { createdAt: 'desc' },
   });
 };
 
-const getMenusByCategory = async (category) => {
+const getMenuItemsByCategory = async (category) => {
   return await prisma.menu.findMany({
     where: { category: { equals: category, mode: 'insensitive' } },
     orderBy: { createdAt: 'desc' },
@@ -46,7 +46,7 @@ const getAllSnacks = async () => {
 };
 
 // GET one menu item by ID
-const getMenuById = async (id) => {
+const getMenuItemById = async (id) => {
   return await prisma.menu.findUnique({
     where: { id: parseInt(id) }
   });
@@ -60,7 +60,7 @@ const getSnackById = async (id) => {
 };
 
 // CREATE a new menu item
-const createMenu = async (data) => {
+const createMenuItem = async (data) => {
   return await prisma.menu.create({
     data: {
       name: data.name,
@@ -88,7 +88,7 @@ const createSnack = async (data) => {
 };
 
 // UPDATE a menu item
-const updateMenu = async (id, data) => {
+const updateMenuItem = async (id, data) => {
   try {
     return await prisma.menu.update({
       where: { id: parseInt(id) },
@@ -128,7 +128,7 @@ const updateSnack = async (id, data) => {
 };
 
 // DELETE a menu item
-const deleteMenu = async (id) => {
+const deleteMenuItem = async (id) => {
   try {
     await prisma.menu.delete({
       where: { id: parseInt(id) }
@@ -153,17 +153,30 @@ const deleteSnack = async (id) => {
   }
 };
 
+const getAllMenus = getAllMenuItems;
+const getMenusByCategory = getMenuItemsByCategory;
+const getMenuById = getMenuItemById;
+const createMenu = createMenuItem;
+const updateMenu = updateMenuItem;
+const deleteMenu = deleteMenuItem;
+
 module.exports = {
   mapToMenuData,
+  getAllMenuItems,
+  getMenuItemsByCategory,
   getAllMenus,
+  getMenuItemById,
   getMenusByCategory,
   getAllSnacks,
   getMenuById,
   getSnackById,
+  createMenuItem,
   createMenu,
   createSnack,
+  updateMenuItem,
   updateMenu,
   updateSnack,
+  deleteMenuItem,
   deleteMenu,
   deleteSnack,
 };
