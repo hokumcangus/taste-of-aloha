@@ -6,8 +6,11 @@
     "apps/*"
   ],
   "scripts": {
-    "dev:web": "npm run dev:web",
-    "dev:backend": "npm run dev:backend",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "dev:backend": "npm run dev --workspace=apps/backend",
+    "db:migrate": "npm run db:migrate --workspace=apps/backend",
+    "db:seed": "npm run db:seed --workspace=apps/backend",
+    "db:studio": "npm run db:studio --workspace=apps/backend",
     "lint": "eslint . --ext .js,.jsx",
     "format": "prettier --write ."
   },

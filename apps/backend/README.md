@@ -26,7 +26,8 @@ We use Prisma to interface with PostgreSQL. The schema defines all data models (
 ### Apply Schema Changes
 
 ```bash
-npx prisma migrate dev --name <description>
+npm run db:migrate
+# or: npx prisma migrate dev --name <description>
 ```
 
 Example:
@@ -36,16 +37,41 @@ npx prisma migrate dev --name add_orders_table
 
 This creates a migration file and applies it to the database.
 
+### Deploy Migrations (production / CI)
+
+```bash
+npm run db:migrate:deploy
+# or: npx prisma migrate deploy
+```
+
 ### Generate/Update Prisma Client
 
 ```bash
-npx prisma generate
+npm run db:generate
+# or: npx prisma generate
+```
+
+### Seed the Database
+
+```bash
+npm run db:seed
+# or: npx prisma db seed
+```
+
+Populates the Menu table with sample Hawaiian menu items defined in `prisma/seed.js`.
+
+### Add a Single Menu Item (CLI)
+
+```bash
+npm run seed:menu              # adds default "Spam Musubi"
+npm run seed:menu "Poke Bowl" 12.99
 ```
 
 ### View Data in Prisma Studio
 
 ```bash
-npx prisma studio
+npm run db:studio
+# or: npx prisma studio
 ```
 
 Opens an interactive GUI at http://localhost:5555 to view and edit database records.
@@ -53,7 +79,8 @@ Opens an interactive GUI at http://localhost:5555 to view and edit database reco
 ### Reset Database (⚠️ Deletes all data)
 
 ```bash
-npx prisma migrate reset
+npm run db:reset
+# or: npx prisma migrate reset
 ```
 
 ## 🚀 Getting Started
