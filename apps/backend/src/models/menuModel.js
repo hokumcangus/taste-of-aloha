@@ -30,6 +30,13 @@ const getAllMenus = async () => {
   });
 };
 
+const getMenusByCategory = async (category) => {
+  return await prisma.menu.findMany({
+    where: { category: { equals: category, mode: 'insensitive' } },
+    orderBy: { createdAt: 'desc' },
+  });
+};
+
 const getAllSnacks = async () => {
   return await prisma.menu.findMany({
     where: { category: { in: SNACK_CATEGORIES } },
@@ -108,7 +115,7 @@ const updateSnack = async (id, data) => {
         name: data.name || undefined,
         description: data.description || undefined,
         price: data.price ? parseFloat(data.price) : undefined,
-        category: SNACK_CATEGORY,  // Ensure category stays as 'Snack'
+        category: SNACK_CATEGORY,  // Ensure category stays as 'Snacks'
         image: data.image || undefined,
         isAvailable: data.isAvailable !== undefined ? data.isAvailable : undefined
       }
@@ -148,6 +155,7 @@ const deleteSnack = async (id) => {
 module.exports = {
   mapToMenuData,
   getAllMenus,
+  getMenusByCategory,
   getAllSnacks,
   getMenuById,
   getSnackById,

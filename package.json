@@ -6,9 +6,9 @@
     "apps/*"
   ],
   "scripts": {
-    "dev:web": "npm run dev:web",
-    "dev:backend": "npm run dev:backend",
-    "dev:test": "npm run test:web && npm run test:backend",
+    "dev:web": "npm --workspace apps/web run dev",
+    "dev:backend": "npm --workspace apps/backend run dev",
+    "dev:test": "npm --workspace apps/web run test && npm --workspace apps/backend run test",
     "lint": "eslint . --ext .js,.jsx",
     "format": "prettier --write ."
   },
