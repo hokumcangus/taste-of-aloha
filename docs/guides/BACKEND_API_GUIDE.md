@@ -122,10 +122,8 @@ npm run dev
 
 ```bash
 cd apps/backend
-npm run test:snack
+npm test
 ```
-
-## Notes
 
 - Category values normalize `Snack`/`Snacks` handling in controller/model.
 - DB table backing menu is Prisma model `Menu`.

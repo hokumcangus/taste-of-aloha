@@ -42,7 +42,7 @@ npx prisma studio
 npx prisma migrate dev --name <change_name>
 npx prisma migrate status
 npx prisma validate
-npm run test:snack
+npm run test
 ```
 
 ## Useful Frontend Commands
