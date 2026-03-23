@@ -72,7 +72,7 @@ npm run dev
 ### PowerShell Copy/Paste Setup Check
 
 ```powershell
-cd C:\Users\mcang\projects\taste-of-aloha
+cd /path/to/taste-of-aloha
 Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
 
 docker compose down -v

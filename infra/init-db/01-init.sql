@@ -1,14 +1,16 @@
 -- Database initialization script for Taste of Aloha
 -- This script creates the initial schema and tables
+-- Note: Prisma migrations are the authoritative source of truth for the schema.
+-- This file is only used for initial container setup.
 
 -- Create Menu table (matches Prisma model)
 CREATE TABLE IF NOT EXISTS "Menu" (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE,
+    name VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     price DOUBLE PRECISION NOT NULL,
     image VARCHAR(500),
-    category VARCHAR(100) NOT NULL,
+    category VARCHAR(100),
     "isAvailable" BOOLEAN DEFAULT true,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP

@@ -14,20 +14,13 @@ const normalizeSnackCategory = (category) =>
 const getAllMenus = async (req, res) => {
   try {
     const { category } = req.query;
-    const menus = await MenuModel.getAllMenus();
-    let filteredMenus = menus;
+    // normalizeSnackCategory canonicalizes legacy 'Snack' → 'Snacks' before querying,
+    // ensuring both spellings always resolve to the same DB category.
+    const menus = category
+      ? await MenuModel.getMenusByCategory(normalizeSnackCategory(String(category)))
+      : await MenuModel.getAllMenus();
 
-    if (category) {
-      if (isSnackCategory(category)) {
-        filteredMenus = menus.filter((item) => isSnackCategory(item.category));
-      } else {
-        filteredMenus = menus.filter(
-          (item) => item.category?.toLowerCase() === String(category).toLowerCase()
-        );
-      }
-    }
-
-    res.json(filteredMenus);
+    res.json(menus);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Failed to fetch menus' });
