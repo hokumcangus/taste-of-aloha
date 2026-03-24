@@ -58,7 +58,9 @@ src/
 Run the test suite:
 
 ```bash
-npm run test
+npm test
+npm run test:coverage
+npm run test:watch
 ```
 
 ### Writing Tests
@@ -89,15 +91,9 @@ test('renders component', () => {
 
 ```powershell
 # From repo root
-docker compose up -d postgres
+npm run dev
 
-# Terminal 1
-npm --workspace apps/backend run dev
-
-# Terminal 2
-npm --workspace apps/web run dev
-
-# Terminal 3
+# In a separate terminal
 (Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
 
 $menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing

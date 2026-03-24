@@ -556,10 +556,9 @@ console.log(menu); // { id: 1, name: "Spam Musubi", price: 5.99, ... }
 
 ```powershell
 # From repo root
-docker compose up -d postgres
-npm --workspace apps/backend run dev
-npm --workspace apps/web run dev
+npm run dev
 
+# In a separate terminal
 (Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
 
 $menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing

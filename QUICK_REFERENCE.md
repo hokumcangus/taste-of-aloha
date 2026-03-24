@@ -1,6 +1,6 @@
 # Quick Reference
 
-Last updated: March 14, 2026
+Last updated: March 24, 2026
 
 ## Start / Stop
 
@@ -25,6 +25,19 @@ npx prisma generate
 ## Run Apps Locally (without Docker app containers)
 
 ```bash
+# From repo root — starts Docker, postgres, backend, and frontend in one command
+npm run dev
+```
+
+```bash
+# Individual scripts (from repo root)
+npm run dev:backend    # API only
+npm run dev:web        # Frontend only
+npm run dev:db         # Postgres container only
+```
+
+```bash
+# Manual (from app directories)
 # Terminal 1
 cd apps/backend
 npm run dev
@@ -136,15 +149,9 @@ $items = $response.Content | ConvertFrom-Json
 
 ```powershell
 # From repo root
-docker compose up -d postgres
+npm run dev
 
-# Terminal 1
-npm --workspace apps/backend run dev
-
-# Terminal 2
-npm --workspace apps/web run dev
-
-# Terminal 3
+# In a separate terminal
 (Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
 
 $menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing

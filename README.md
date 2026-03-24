@@ -32,9 +32,29 @@ docker compose down -v
 docker compose up --build
 ```
 
-## 🛠 Manual Development Scripts
+## 🛠 Development Scripts
 
-Run these from app directories:
+### One Command (from repo root)
+
+```bash
+npm run dev
+```
+
+This automatically:
+1. Starts Docker Desktop if not already running
+2. Brings up the postgres container
+3. Starts backend (port 3000) and frontend (port 5173) in parallel
+
+### Individual Scripts (from repo root)
+
+```bash
+npm run dev:backend    # Start API only (port 3000)
+npm run dev:web        # Start frontend only (port 5173)
+npm run dev:db         # Start postgres container only
+npm run test:coverage  # Run coverage for both apps
+```
+
+### Manual (from app directories)
 
 ```bash
 cd apps/backend
@@ -112,16 +132,10 @@ For common issues and solutions:
 ## 🔌 Connectivity Verification (PowerShell)
 
 ```powershell
-# From repo root
-docker compose up -d postgres
+# From repo root — starts everything in one command
+npm run dev
 
-# Terminal 1
-npm --workspace apps/backend run dev
-
-# Terminal 2
-npm --workspace apps/web run dev
-
-# Terminal 3: verify backend + frontend connectivity
+# In a separate terminal: verify backend + frontend connectivity
 (Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
 
 $menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing
@@ -132,6 +146,7 @@ $cartResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/cart" -UseBasi
 $cartItems = $cartResponse.Content | ConvertFrom-Json
 "cart-status=$($cartResponse.StatusCode) cart-count=$($cartItems.Count)"
 
+# Frontend should usually be on 5173 unless that port was already in use
 (Invoke-WebRequest -Uri "http://localhost:5173" -UseBasicParsing).StatusCode
 ```
 

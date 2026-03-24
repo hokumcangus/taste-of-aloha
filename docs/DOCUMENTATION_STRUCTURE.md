@@ -1,6 +1,6 @@
 # Documentation Structure
 
-Last updated: March 14, 2026
+Last updated: March 24, 2026
 
 ## Current Documentation Map
 
@@ -45,14 +45,33 @@ taste-of-aloha/
 - All commands in these docs are aligned to the current repo setup.
 - Docker commands use `docker compose` (plugin syntax).
 
+## Keep In Repo
+
+- `README.md`
+- `QUICK_REFERENCE.md`
+- `apps/backend/README.md`
+- `apps/web/README.md`
+- `apps/backend/DATABASE_SETUP_GUIDE.md`
+- `docs/guides/BACKEND_API_GUIDE.md`
+- `docs/guides/TESTING_GUIDE.md`
+- `docs/guides/TROUBLESHOOTING.md`
+
+## Candidate Docs To Move To Team Docs
+
+These are useful, but they are onboarding or process material rather than repo-critical reference.
+
+- `MASTER_DOCUMENTATION.md`
+- `docs/guides/LEARNING_GUIDE.md`
+- `docs/guides/FRONTEND_BACKEND_FLOW_GUIDE.md`
+- `docs/guides/MENU_POPULATION_GUIDE.md`
+
 ## Connectivity Verification Commands
 
 ```powershell
 # From repo root
-docker compose up -d postgres
-npm --workspace apps/backend run dev
-npm --workspace apps/web run dev
+npm run dev
 
+# In a separate terminal
 (Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
 
 $menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing

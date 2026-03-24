@@ -1,6 +1,6 @@
 # Taste of Aloha — Master Documentation
 
-Last updated: March 14, 2026
+Last updated: March 24, 2026
 
 This file is the single consolidated overview for local setup, day-to-day commands, and current API/database behavior.
 
@@ -29,7 +29,16 @@ Stop:
 docker compose down
 ```
 
-## 3) Local dev (split terminals)
+## 3) Local dev
+
+Preferred:
+
+```bash
+# From repo root
+npm run dev
+```
+
+Manual fallback:
 
 ```bash
 # Terminal 1
@@ -87,10 +96,9 @@ Current Prisma table model for menu is `Menu` in `apps/backend/prisma/schema.pri
 
 ```powershell
 # From repo root
-docker compose up -d postgres
-npm --workspace apps/backend run dev
-npm --workspace apps/web run dev
+npm run dev
 
+# In a separate terminal
 (Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
 
 $menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing

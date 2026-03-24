@@ -16,15 +16,16 @@ All tests are fully integrated and ready to run!
 
 ## Running Tests
 
-### All Tests (From app folders)
+### From Repo Root
 ```bash
-# Backend tests
-cd apps/backend
-npm test
+# Run backend tests once
+npm --workspace apps/backend run test
 
-# Frontend tests
-cd ../web
-npm test
+# Run frontend tests once
+npm --workspace apps/web run test
+
+# Run both coverage suites
+npm run test:coverage
 ```
 
 ### Backend Tests Only
@@ -35,13 +36,10 @@ cd apps/backend
 npm test
 
 # Run with coverage report
-npm test -- --coverage
+npm run test:coverage
 
 # Run in watch mode (re-run on file changes)
 npm run test:watch
-
-# Run specific test file
-npm test -- snackApi.test.js
 ```
 
 ### Frontend Tests Only
@@ -54,11 +52,11 @@ npm test
 # Run with coverage report
 npm run test:coverage
 
+# Run in watch mode
+npm run test:watch
+
 # Run with UI (interactive)
 npm run test:ui
-
-# Run in watch mode
-npm test -- --watch
 ```
 
 ---
@@ -67,11 +65,11 @@ npm test -- --watch
 
 ### Backend Test Coverage
 
-**Current Coverage**: 83%+ overall
+**Latest verified run:** 10 passing tests
 
 ```bash
 cd apps/backend
-npm test -- --coverage
+npm run test:coverage
 ```
 
 **What's Tested:**
@@ -84,11 +82,11 @@ npm test -- --coverage
 - ✅ 500 error handling
 - ✅ Database error scenarios
 
-**Test File:** `apps/backend/tests/snackApi.test.js`
+**Test File:** `apps/backend/tests/menuApi.test.js`
 
 ### Frontend Test Coverage
 
-**Current Tests**: 7 passing tests
+**Latest verified run:** 7 passing tests
 
 ```bash
 cd apps/web
@@ -198,7 +196,7 @@ describe('MyComponent', () => {
 apps/
 ├── backend/
 │   ├── tests/
-│   │   ├── snackApi.test.js      # API endpoint tests
+│   │   ├── menuApi.test.js      # API endpoint tests
 │   │   └── ...                    # Add more test files here
 │   ├── jest.config.js             # Jest configuration
 │   └── package.json               # Test scripts defined here
@@ -251,9 +249,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
-      - run: npm install
-      - run: cd apps/backend && npm test
-      - run: cd apps/web && npm test
+      - run: npm ci
+      - run: npm --workspace apps/backend run test
+      - run: npm --workspace apps/web run test
 ```
 
 ---
@@ -262,11 +260,11 @@ jobs:
 
 | Command | Description |
 |---------|-------------|
-| `npm test` | Run all tests |
-| `npm test -- --coverage` | Run with coverage report |
-| `npm test -- --watch` | Run in watch mode |
-| `npm test -- myfile.test.js` | Run specific test file |
-| `npm run test:ui` | Run with interactive UI (frontend only) |
+| `npm --workspace apps/backend run test` | Run backend tests once |
+| `npm --workspace apps/web run test` | Run frontend tests once |
+| `npm run test:coverage` | Run coverage for both apps |
+| `npm run test:watch` | Run watch mode inside the current app |
+| `npm run test:ui` | Run Vitest UI in `apps/web` |
 
 ---
 
@@ -293,7 +291,7 @@ npm run test:ui
 # Tests will open in browser with interactive interface
 
 # Run single test
-npm test -- --grep="should display menu items"
+npm run test:watch -- --grep="should display menu items"
 ```
 
 ---
@@ -354,10 +352,9 @@ beforeEach(() => {
 
 ```powershell
 # From repo root
-docker compose up -d postgres
-npm --workspace apps/backend run dev
-npm --workspace apps/web run dev
+npm run dev
 
+# In a separate terminal
 (Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
 
 $menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing

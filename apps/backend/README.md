@@ -7,7 +7,7 @@ The Express server and Prisma ORM layer for Taste of Aloha.
 - **Runtime**: Node.js 20+
 - **Framework**: Express.js
 - **ORM**: Prisma 7 with PostgreSQL adapter
-- **Database**: PostgreSQL 18
+- **Database**: PostgreSQL 16+ (Docker default is 16-alpine)
 - **Testing**: Jest + Supertest
 
 ## 🗄 Database (Prisma 7)
@@ -163,6 +163,7 @@ Run the API test suite:
 
 ```bash
 npm test
+npm run test:coverage
 ```
 
 ### Writing API Tests
@@ -216,15 +217,9 @@ PORT=3000
 
 ```powershell
 # From repo root
-docker compose up -d postgres
+npm run dev
 
-# Terminal 1
-npm --workspace apps/backend run dev
-
-# Terminal 2
-npm --workspace apps/web run dev
-
-# Terminal 3
+# In a separate terminal
 (Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
 
 $menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing
