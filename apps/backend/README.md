@@ -121,15 +121,15 @@ Invoke-WebRequest -Uri http://localhost:3000/health -UseBasicParsing
 
 ```powershell
 # IMPORTANT: In PowerShell, use curl.exe (not curl alias)
-curl.exe http://localhost:3000/health
-curl.exe http://localhost:3000/api/menu
-curl.exe "http://localhost:3000/api/menu?category=Snacks"
+curl.exe http://localhost:3000/health | jq
+curl.exe http://localhost:3000/api/menu | jq
+curl.exe "http://localhost:3000/api/menu?category=Snacks" | jq
 
 # Create
-curl.exe -X POST http://localhost:3000/api/menu -H "Content-Type: application/json" -d "{\"name\":\"Curl Test Item\",\"description\":\"created by curl\",\"price\":7.25,\"category\":\"Snacks\",\"isAvailable\":true}"
+curl.exe -X POST http://localhost:3000/api/menu -H "Content-Type: application/json" -d "{\"name\":\"Curl Test Item\",\"description\":\"created by curl\",\"price\":7.25,\"category\":\"Snacks\",\"isAvailable\":true}" | jq
 
 # Update
-curl.exe -X PUT http://localhost:3000/api/menu/1 -H "Content-Type: application/json" -d "{\"price\":8.10,\"category\":\"Snack\"}"
+curl.exe -X PUT http://localhost:3000/api/menu/1 -H "Content-Type: application/json" -d "{\"price\":8.10,\"category\":\"Snack\"}" | jq
 
 # Delete
 curl.exe -X DELETE http://localhost:3000/api/menu/1

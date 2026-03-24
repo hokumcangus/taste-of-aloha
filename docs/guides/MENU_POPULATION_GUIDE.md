@@ -21,7 +21,7 @@ Prisma Studio provides a visual editor for managing data in your database.
 ### Verification:
 To verify that the items have been added:
 ```powershell
-curl.exe http://localhost:3000/api/menu
+curl.exe http://localhost:3000/api/menu | jq
 ```
 
 ### When to Use:
@@ -45,7 +45,7 @@ For bulk importing data, you can use NDJSON format to send multiple entries.
 ### Verification:
 Check the menu items:
 ```powershell
-curl.exe "http://localhost:3000/api/menu?category=Category%201"
+curl.exe "http://localhost:3000/api/menu?category=Category%201" | jq
 ```
 
 ### When to Use:
@@ -70,7 +70,7 @@ Using a script allows for more complex data handling and validation.
 ### Verification:
 To ensure that the items were added correctly:
 ```powershell
-curl.exe http://localhost:3000/api/menu
+curl.exe http://localhost:3000/api/menu | jq
 ```
 
 ### When to Use:

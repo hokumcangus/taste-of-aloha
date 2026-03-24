@@ -1070,7 +1070,7 @@ Before starting the order system, verify:
 
 - [ ] You can run `npm run dev` in both backend and frontend
 - [ ] Frontend shows at http://localhost:5173
-- [ ] Backend health check returns 200: `curl http://localhost:3000/health`
+- [ ] Backend health check returns 200: `curl http://localhost:3000/health | jq`
 - [ ] You can navigate between Home, Menu, About pages
 - [ ] You understand the difference between `apps/backend` and `apps/web`
 - [ ] You've read through this entire learning guide

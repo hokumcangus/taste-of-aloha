@@ -81,16 +81,16 @@ npm run test:coverage
 
 ```powershell
 # Use curl.exe in PowerShell to avoid alias issues
-curl.exe http://localhost:3000/health
-curl.exe http://localhost:3000/api/menu
-curl.exe "http://localhost:3000/api/menu?category=Snacks"
+curl.exe http://localhost:3000/health | jq
+curl.exe http://localhost:3000/api/menu | jq
+curl.exe "http://localhost:3000/api/menu?category=Snacks" | jq
 
-curl.exe -X POST http://localhost:3000/api/menu -H "Content-Type: application/json" -d "{\"name\":\"Curl Test Item\",\"description\":\"created by curl\",\"price\":7.25,\"category\":\"Snacks\",\"isAvailable\":true}"
-curl.exe -X PUT http://localhost:3000/api/menu/1 -H "Content-Type: application/json" -d "{\"price\":8.10,\"category\":\"Snack\"}"
+curl.exe -X POST http://localhost:3000/api/menu -H "Content-Type: application/json" -d "{\"name\":\"Curl Test Item\",\"description\":\"created by curl\",\"price\":7.25,\"category\":\"Snacks\",\"isAvailable\":true}" | jq
+curl.exe -X PUT http://localhost:3000/api/menu/1 -H "Content-Type: application/json" -d "{\"price\":8.10,\"category\":\"Snack\"}" | jq
 curl.exe -X DELETE http://localhost:3000/api/menu/1
 
 # Pretty JSON output
-Invoke-RestMethod http://localhost:3000/api/menu | ConvertTo-Json -Depth 6
+Invoke-RestMethod http://localhost:3000/api/menu | ConvertTo-Json -Depth 6 | jq
 ```
 
 ## Verification Checks (PowerShell)

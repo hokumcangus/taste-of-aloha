@@ -185,7 +185,7 @@ curl http://localhost:3000/
 # Should return: Taste of Aloha backend is running 🌺
 
 # Test API endpoint
-curl "http://localhost:3000/api/menu?category=Snack"
+curl "http://localhost:3000/api/menu?category=Snack" | jq
 # Should return: [] (empty array if no snack-category items)
 ```
 
@@ -266,13 +266,13 @@ curl "http://localhost:3000/api/menu?category=Snack"
 2. Verify the request URL is correct: `http://localhost:3000/api/menu?category=Snack`
 3. Check if backend has any snacks:
    ```bash
-   curl "http://localhost:3000/api/menu?category=Snack"
+   curl "http://localhost:3000/api/menu?category=Snack" | jq
    ```
 4. Create a test snack via API:
    ```bash
    curl -X POST http://localhost:3000/api/menu \
      -H "Content-Type: application/json" \
-     -d '{"name":"Test Snack","price":5.99,"category":"Snack"}'
+     -d '{"name":"Test Snack","price":5.99,"category":"Snack"}' | jq
    ```
 
 ---
@@ -454,7 +454,7 @@ If you're still experiencing issues:
 curl http://localhost:3000/
 
 # Should return: [] (empty array)
-curl "http://localhost:3000/api/menu?category=Snack"
+curl "http://localhost:3000/api/menu?category=Snack" | jq
 ```
 
 ### Test Frontend:

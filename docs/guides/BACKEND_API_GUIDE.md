@@ -28,20 +28,20 @@ Primary resource path: `/api/menu`
 
 ```bash
 # List menu
-curl http://localhost:3000/api/menu
+curl http://localhost:3000/api/menu | jq
 
 # Get by ID
-curl http://localhost:3000/api/menu/1
+curl http://localhost:3000/api/menu/1 | jq
 
 # Create
 curl -X POST http://localhost:3000/api/menu \
   -H "Content-Type: application/json" \
-  -d '{"name":"Spam Musubi","description":"Hawaiian classic","price":4.99,"category":"Snacks"}'
+  -d '{"name":"Spam Musubi","description":"Hawaiian classic","price":4.99,"category":"Snacks"}' | jq
 
 # Update
 curl -X PUT http://localhost:3000/api/menu/1 \
   -H "Content-Type: application/json" \
-  -d '{"price":5.49}'
+  -d '{"price":5.49}' | jq
 
 # Delete
 curl -X DELETE http://localhost:3000/api/menu/1
@@ -53,15 +53,15 @@ Use `curl.exe` in PowerShell to avoid alias issues with `curl`:
 
 ```powershell
 # Health + reads
-curl.exe http://localhost:3000/health
-curl.exe http://localhost:3000/api/menu
-curl.exe "http://localhost:3000/api/menu?category=Snacks"
+curl.exe http://localhost:3000/health | jq
+curl.exe http://localhost:3000/api/menu | jq
+curl.exe "http://localhost:3000/api/menu?category=Snacks" | jq
 
 # Create
-curl.exe -X POST http://localhost:3000/api/menu -H "Content-Type: application/json" -d "{\"name\":\"Curl Test Item\",\"description\":\"created by curl\",\"price\":7.25,\"category\":\"Snacks\",\"isAvailable\":true}"
+curl.exe -X POST http://localhost:3000/api/menu -H "Content-Type: application/json" -d "{\"name\":\"Curl Test Item\",\"description\":\"created by curl\",\"price\":7.25,\"category\":\"Snacks\",\"isAvailable\":true}" | jq
 
 # Update
-curl.exe -X PUT http://localhost:3000/api/menu/1 -H "Content-Type: application/json" -d "{\"price\":8.10,\"category\":\"Snack\"}"
+curl.exe -X PUT http://localhost:3000/api/menu/1 -H "Content-Type: application/json" -d "{\"price\":8.10,\"category\":\"Snack\"}" | jq
 
 # Delete
 curl.exe -X DELETE http://localhost:3000/api/menu/1
