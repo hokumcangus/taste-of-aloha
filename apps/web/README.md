@@ -58,7 +58,9 @@ src/
 Run the test suite:
 
 ```bash
-npm run test
+npm test
+npm run test:coverage
+npm run test:watch
 ```
 
 ### Writing Tests
@@ -84,3 +86,7 @@ test('renders component', () => {
 
 - [Backend Guide](../backend/README.md) — API endpoints
 - [Root README](../../README.md) — Full monorepo overview
+
+## 🔌 Connectivity Verification
+
+Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md#connectivity-verification-powershell).

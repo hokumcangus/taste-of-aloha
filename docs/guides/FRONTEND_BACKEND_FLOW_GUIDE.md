@@ -265,3 +265,8 @@ Keep it consistent:
 ## 7) One-sentence summary
 
 The page asks, the slice manages, the service sends, the backend handles, the model queries, and the database answers.
+
+## Connectivity Verification Commands
+
+Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md#connectivity-verification-powershell).
+

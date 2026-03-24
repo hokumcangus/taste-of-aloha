@@ -1,6 +1,6 @@
 # Taste of Aloha — Master Documentation
 
-Last updated: March 14, 2026
+Last updated: March 24, 2026
 
 This file is the single consolidated overview for local setup, day-to-day commands, and current API/database behavior.
 
@@ -29,7 +29,16 @@ Stop:
 docker compose down
 ```
 
-## 3) Local dev (split terminals)
+## 3) Local dev
+
+Preferred:
+
+```bash
+# From repo root
+npm run dev
+```
+
+Manual fallback:
 
 ```bash
 # Terminal 1
@@ -82,3 +91,7 @@ Current Prisma table model for menu is `Menu` in `apps/backend/prisma/schema.pri
 - Troubleshooting: `docs/guides/TROUBLESHOOTING.md`
 - Testing: `docs/guides/TESTING_GUIDE.md`
 - Learning/reference: `docs/guides/LEARNING_GUIDE.md`
+
+## Connectivity Verification Commands
+
+Use the canonical connectivity checks in [QUICK_REFERENCE.md](QUICK_REFERENCE.md#connectivity-verification-powershell).

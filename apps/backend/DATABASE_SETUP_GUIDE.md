@@ -551,3 +551,8 @@ console.log(menu); // { id: 1, name: "Spam Musubi", price: 5.99, ... }
 6. 🔄 **Then**: Connect frontend to API endpoints
 
 **See:** [BACKEND_API_GUIDE.md](../../docs/guides/BACKEND_API_GUIDE.md) for building API endpoints.
+
+## Connectivity Verification Commands
+
+Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md#connectivity-verification-powershell).
+

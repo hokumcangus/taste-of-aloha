@@ -32,9 +32,29 @@ docker compose down -v
 docker compose up --build
 ```
 
-## 🛠 Manual Development Scripts
+## 🛠 Development Scripts
 
-Run these from app directories:
+### One Command (from repo root)
+
+```bash
+npm run dev
+```
+
+This automatically:
+1. Starts Docker Desktop if not already running
+2. Brings up the postgres container
+3. Starts backend (port 3000) and frontend (port 5173) in parallel
+
+### Individual Scripts (from repo root)
+
+```bash
+npm run dev:backend    # Start API only (port 3000)
+npm run dev:web        # Start frontend only (port 5173)
+npm run dev:db         # Start postgres container only
+npm run test:coverage  # Run coverage for both apps
+```
+
+### Manual (from app directories)
 
 ```bash
 cd apps/backend
@@ -72,17 +92,17 @@ Use `curl.exe` in PowerShell (not `curl`, which is an alias for `Invoke-WebReque
 
 ```powershell
 # Health
-curl.exe http://localhost:3000/health
+curl.exe http://localhost:3000/health | jq
 
 # Read menu
-curl.exe http://localhost:3000/api/menu
-curl.exe "http://localhost:3000/api/menu?category=Snacks"
+curl.exe http://localhost:3000/api/menu | jq
+curl.exe "http://localhost:3000/api/menu?category=Snacks" | jq
 
 # Create test item
-curl.exe -X POST http://localhost:3000/api/menu -H "Content-Type: application/json" -d "{\"name\":\"Curl Test Item\",\"description\":\"created by curl\",\"price\":7.25,\"category\":\"Snacks\",\"isAvailable\":true}"
+curl.exe -X POST http://localhost:3000/api/menu -H "Content-Type: application/json" -d "{\"name\":\"Curl Test Item\",\"description\":\"created by curl\",\"price\":7.25,\"category\":\"Snacks\",\"isAvailable\":true}" | jq
 
 # Update item 1
-curl.exe -X PUT http://localhost:3000/api/menu/1 -H "Content-Type: application/json" -d "{\"price\":8.10,\"category\":\"Snack\"}"
+curl.exe -X PUT http://localhost:3000/api/menu/1 -H "Content-Type: application/json" -d "{\"price\":8.10,\"category\":\"Snack\"}" | jq
 
 # Delete item 1
 curl.exe -X DELETE http://localhost:3000/api/menu/1
@@ -108,3 +128,30 @@ For common issues and solutions:
 
 - **Learning Guide**: [LEARNING_GUIDE.md](docs/guides/LEARNING_GUIDE.md)
 - **Testing Guide**: [TESTING_GUIDE.md](docs/guides/TESTING_GUIDE.md)
+
+## 🔌 Connectivity Verification (PowerShell)
+
+```powershell
+# From repo root — starts everything in one command
+npm run dev
+
+# In a separate terminal: verify backend + frontend connectivity
+(Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
+
+$menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing
+$menuItems = $menuResponse.Content | ConvertFrom-Json
+"menu-status=$($menuResponse.StatusCode) menu-count=$($menuItems.Count)"
+
+$cartResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/cart" -UseBasicParsing
+$cartItems = $cartResponse.Content | ConvertFrom-Json
+"cart-status=$($cartResponse.StatusCode) cart-count=$($cartItems.Count)"
+
+# Frontend should usually be on 5173 unless that port was already in use
+(Invoke-WebRequest -Uri "http://localhost:5173" -UseBasicParsing).StatusCode
+```
+
+Expected:
+- Health: `200`
+- Menu API: `menu-status=200`
+- Cart API: `cart-status=200`
+- Frontend: `200`

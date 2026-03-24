@@ -1070,7 +1070,7 @@ Before starting the order system, verify:
 
 - [ ] You can run `npm run dev` in both backend and frontend
 - [ ] Frontend shows at http://localhost:5173
-- [ ] Backend health check returns 200: `curl http://localhost:3000/health`
+- [ ] Backend health check returns 200: `curl http://localhost:3000/health | jq`
 - [ ] You can navigate between Home, Menu, About pages
 - [ ] You understand the difference between `apps/backend` and `apps/web`
 - [ ] You've read through this entire learning guide
@@ -1101,3 +1101,8 @@ Before starting the order system, verify:
 ---
 
 **Remember**: Every developer googles syntax, reads documentation, and debugs errors constantly. It's not about knowing everything—it's about knowing how to figure things out! 🚀
+
+## Connectivity Verification Commands
+
+Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md#connectivity-verification-powershell).
+
