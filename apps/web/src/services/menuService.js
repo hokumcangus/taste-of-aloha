@@ -2,19 +2,19 @@ import apiClient from './api.js';
 
 /**
  * MenuItem API service
- * Handles all API calls related to menuitems
+ * Handles all API calls related to menu items
  */
 
 export const menuService = {
     /**
-     * Get all menuitems
-     * @returns {Promise<Array>} Array of menuitems
+     * Get all menu items
+     * @returns {Promise<Array>} Array of menu items
      */
     getAllMenuItems: async () => {
         return apiClient.get('/api/menu');
     },
     /**
-     * Get menuitem by ID
+     * Get menu item by ID
      * @param {number} id - MenuItem ID
      * @returns {Promise<Object>} MenuItem object
      * */
@@ -22,24 +22,24 @@ export const menuService = {
         return apiClient.get(`/api/menu/${id}`);
     }, 
     /**
-     * Create a new menuitem
+     * Create a new menu item
      * @param {Object} menuItemData - MenuItem data (name, price, etc.)
-     * @returns {Promise<Object>} Created menuitem object
+     * @returns {Promise<Object>} Created menu item object
      */
     createMenuItem: async (menuItemData) => {
         return apiClient.post('/api/menu', menuItemData);
     },  
     /**
-     * Update a menuitem
+     * Update a menu item
      * @param {number} id - MenuItem ID
-     * @param {Object} menuItemData - Updated menuitem data
-     * @returns {Promise<Object>} Updated menuitem object
+     * @param {Object} menuItemData - Updated menu item data
+     * @returns {Promise<Object>} Updated menu item object
      */
     updateMenuItem: async (id, menuItemData) => {
         return apiClient.put(`/api/menu/${id}`, menuItemData);
     },
     /**
-     * Delete a menuitem
+     * Delete a menu item
      * @param {number} id - MenuItem ID
      * @returns {Promise<Object>} Deletion confirmation
      */

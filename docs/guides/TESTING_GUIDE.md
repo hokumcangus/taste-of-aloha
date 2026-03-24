@@ -218,7 +218,7 @@ apps/
 ### Backend Tests
 1. **Mock the database** - Never hit the real database in tests
 2. **Test happy paths AND error cases** - Both success and failure scenarios
-3. **Use descriptive test names** - "should return 404 when menuitem not found"
+3. **Use descriptive test names** - "should return 404 when menu item is not found"
 4. **Clear mocks between tests** - Use `beforeEach(() => jest.clearAllMocks())`
 5. **Test status codes AND response bodies** - Verify complete response
 
@@ -348,22 +348,6 @@ beforeEach(() => {
 
 **Happy Testing! 🧪**
 
-## Connectivity Verification Commands (PowerShell)
+## Connectivity Verification Commands
 
-```powershell
-# From repo root
-npm run dev
-
-# In a separate terminal
-(Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
-
-$menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing
-$menuItems = $menuResponse.Content | ConvertFrom-Json
-"menu-status=$($menuResponse.StatusCode) menu-count=$($menuItems.Count)"
-
-$cartResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/cart" -UseBasicParsing
-$cartItems = $cartResponse.Content | ConvertFrom-Json
-"cart-status=$($cartResponse.StatusCode) cart-count=$($cartItems.Count)"
-
-(Invoke-WebRequest -Uri "http://localhost:5173" -UseBasicParsing).StatusCode
-```
+Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md#connectivity-verification-powershell).

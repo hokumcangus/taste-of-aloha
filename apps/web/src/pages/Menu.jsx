@@ -66,9 +66,9 @@ const Menu = () => {
                     gap: '1.5rem',
                     marginTop: '2rem'
                 }}>
-                    {menuItems.map((menuitem) => (
+                    {menuItems.map((menuItem) => (
                         <div 
-                            key={menuitem.id}
+                            key={menuItem.id}
                             style={{
                                 border: '1px solid #ddd',
                                 borderRadius: '8px',
@@ -85,25 +85,25 @@ const Menu = () => {
                                 color: '#333',
                                 fontSize: '1.5rem'
                             }}>
-                                {menuitem.name}
+                                {menuItem.name}
                             </h3>
-                            {menuitem.price && (
+                            {menuItem.price && (
                                 <p style={{ 
                                     margin: '0.5rem 0',
                                     fontSize: '1.2rem',
                                     fontWeight: 'bold',
                                     color: '#646cff'
                                 }}>
-                                    ${menuitem.price.toFixed(2)}
+                                    ${menuItem.price.toFixed(2)}
                                 </p>
                             )}
-                            {menuitem.description && (
+                            {menuItem.description && (
                                 <p style={{ 
                                     margin: '0.5rem 0 0 0',
                                     color: '#666',
                                     fontSize: '0.9rem'
                                 }}>
-                                    {menuitem.description}
+                                    {menuItem.description}
                                 </p>
                             )}
                         </div>

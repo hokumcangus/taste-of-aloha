@@ -18,7 +18,7 @@ Place all screenshots in `docs/screenshots/` and reference them here. -->
 
 ### Example: UI Preview
 ![UI Preview](docs/screenshots/ui-preview.png)  
-*Figure 3: Frontend menuitem listing page*
+*Figure 3: Frontend menu item listing page*
 
 ## 🔄 Type of Change
 - [ ] ✨ Feature (new functionality)

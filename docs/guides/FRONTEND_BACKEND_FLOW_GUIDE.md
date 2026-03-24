@@ -266,23 +266,7 @@ Keep it consistent:
 
 The page asks, the slice manages, the service sends, the backend handles, the model queries, and the database answers.
 
-## Connectivity Verification Commands (PowerShell)
+## Connectivity Verification Commands
 
-```powershell
-# From repo root
-npm run dev
-
-# In a separate terminal
-(Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
-
-$menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing
-$menuItems = $menuResponse.Content | ConvertFrom-Json
-"menu-status=$($menuResponse.StatusCode) menu-count=$($menuItems.Count)"
-
-$cartResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/cart" -UseBasicParsing
-$cartItems = $cartResponse.Content | ConvertFrom-Json
-"cart-status=$($cartResponse.StatusCode) cart-count=$($cartItems.Count)"
-
-(Invoke-WebRequest -Uri "http://localhost:5173" -UseBasicParsing).StatusCode
-```
+Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md#connectivity-verification-powershell).
 
