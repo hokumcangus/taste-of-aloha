@@ -1,4 +1,4 @@
-﻿# ⚙️ Taste of Aloha — Backend
+# ⚙️ Taste of Aloha — Backend
 
 The Express server and Prisma ORM layer for Taste of Aloha.
 
@@ -7,7 +7,7 @@ The Express server and Prisma ORM layer for Taste of Aloha.
 - **Runtime**: Node.js 20+
 - **Framework**: Express.js
 - **ORM**: Prisma 7 with PostgreSQL adapter
-- **Database**: PostgreSQL 18
+- **Database**: PostgreSQL 16+ (Docker default is 16-alpine)
 - **Testing**: Jest + Supertest
 
 ## 🗄 Database (Prisma 7)
@@ -121,15 +121,15 @@ Invoke-WebRequest -Uri http://localhost:3000/health -UseBasicParsing
 
 ```powershell
 # IMPORTANT: In PowerShell, use curl.exe (not curl alias)
-curl.exe http://localhost:3000/health
-curl.exe http://localhost:3000/api/menu
-curl.exe "http://localhost:3000/api/menu?category=Snacks"
+curl.exe http://localhost:3000/health | jq
+curl.exe http://localhost:3000/api/menu | jq
+curl.exe "http://localhost:3000/api/menu?category=Snacks" | jq
 
 # Create
-curl.exe -X POST http://localhost:3000/api/menu -H "Content-Type: application/json" -d "{\"name\":\"Curl Test Item\",\"description\":\"created by curl\",\"price\":7.25,\"category\":\"Snacks\",\"isAvailable\":true}"
+curl.exe -X POST http://localhost:3000/api/menu -H "Content-Type: application/json" -d "{\"name\":\"Curl Test Item\",\"description\":\"created by curl\",\"price\":7.25,\"category\":\"Snacks\",\"isAvailable\":true}" | jq
 
 # Update
-curl.exe -X PUT http://localhost:3000/api/menu/1 -H "Content-Type: application/json" -d "{\"price\":8.10,\"category\":\"Snack\"}"
+curl.exe -X PUT http://localhost:3000/api/menu/1 -H "Content-Type: application/json" -d "{\"price\":8.10,\"category\":\"Snack\"}" | jq
 
 # Delete
 curl.exe -X DELETE http://localhost:3000/api/menu/1
@@ -162,7 +162,8 @@ src/
 Run the API test suite:
 
 ```bash
-npm run test:snack
+npm test
+npm run test:coverage
 ```
 
 ### Writing API Tests
@@ -211,3 +212,8 @@ PORT=3000
 
 - [Frontend Guide](../web/README.md) — React client
 - [Root README](../../README.md) — Full monorepo overview
+
+## 🔌 Connectivity Verification
+
+Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md#connectivity-verification-powershell).
+
