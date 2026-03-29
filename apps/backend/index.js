@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const menuRoutes = require('./src/routes/menuRoutes');
 const cartRoutes = require('./src/routes/cartRoutes');
+const orderRoutes = require('./src/routes/orderRoutes');
 const logger = require('./src/utils/logger');
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(logger);
 // Routes
 app.use('/api/menu', menuRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/orders', orderRoutes);
 
 app.get('/', (req, res) => {
   res.send('Taste of Aloha backend is running 🌺');
