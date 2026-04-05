@@ -15,4 +15,3 @@ A modern full-stack monorepo for an island-inspired shopping experience.
 ## 📂 Project Structure
 - `apps/web`: React frontend.
 - `apps/backend`: Express + Prisma backend.
-- `shared/`: Shared configs and types.
