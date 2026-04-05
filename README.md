@@ -1,5 +1,4 @@
 ﻿# 🌺 Taste of Aloha
-
 A modern full-stack monorepo for an island-inspired shopping experience.
 
 ## 🚀 Quick Start

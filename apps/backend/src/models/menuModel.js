@@ -37,6 +37,7 @@ const getMenusByCategory = async (category) => {
   });
 };
 
+
 const getAllSnacks = async () => {
   return await prisma.menu.findMany({
     where: { category: { in: SNACK_CATEGORIES } },
