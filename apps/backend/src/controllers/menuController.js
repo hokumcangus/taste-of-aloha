@@ -10,33 +10,33 @@ const isSnackCategory = (category) =>
 const normalizeSnackCategory = (category) =>
   isSnackCategory(category) ? SNACK_CATEGORY : category;
 
-// GET all menu items (optional category filter)
-const getAllMenuItems = async (req, res) => {
+// GET all menus (optional category filter)
+const getAllMenus = async (req, res) => {
   try {
     const { category } = req.query;
     // normalizeSnackCategory canonicalizes legacy 'Snack' → 'Snacks' before querying,
     // ensuring both spellings always resolve to the same DB category.
-    const menuItems = category
-      ? await MenuModel.getMenuItemsByCategory(normalizeSnackCategory(String(category)))
-      : await MenuModel.getAllMenuItems();
+    const menus = category
+      ? await MenuModel.getMenusByCategory(normalizeSnackCategory(String(category)))
+      : await MenuModel.getAllMenus();
 
-    res.json(menuItems);
+    res.json(menus);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Failed to fetch menu items' });
+    res.status(500).json({ message: 'Failed to fetch menus' });
   }
 };
 
 // GET one menu item by id
-const getMenuItemById = async (req, res) => {
+const getMenuById = async (req, res) => {
   try {
-    const menuItem = await MenuModel.getMenuItemById(req.params.id);
+    const menu = await MenuModel.getMenuById(req.params.id);
 
-    if (!menuItem) {
+    if (!menu) {
       return res.status(404).json({ message: 'Menu item not found' });
     }
 
-    res.json(menuItem);
+    res.json(menu);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Failed to fetch menu item' });
@@ -44,12 +44,12 @@ const getMenuItemById = async (req, res) => {
 };
 
 // CREATE menu item
-const createMenuItem = async (req, res) => {
+const createMenu = async (req, res) => {
   try {
     const payload = { ...req.body };
     payload.category = normalizeSnackCategory(payload.category);
 
-    const created = await MenuModel.createMenuItem(payload);
+    const created = await MenuModel.createMenu(payload);
     res.status(201).json(created);
   } catch (error) {
     console.error(error);
@@ -58,9 +58,9 @@ const createMenuItem = async (req, res) => {
 };
 
 // UPDATE menu item
-const updateMenuItem = async (req, res) => {
+const updateMenu = async (req, res) => {
   try {
-    const existing = await MenuModel.getMenuItemById(req.params.id);
+    const existing = await MenuModel.getMenuById(req.params.id);
 
     if (!existing) {
       return res.status(404).json({ message: 'Menu item not found' });
@@ -69,7 +69,7 @@ const updateMenuItem = async (req, res) => {
     const payload = { ...req.body };
     payload.category = normalizeSnackCategory(payload.category);
 
-    const updated = await MenuModel.updateMenuItem(req.params.id, payload);
+    const updated = await MenuModel.updateMenu(req.params.id, payload);
     res.json(updated);
   } catch (error) {
     console.error(error);
@@ -78,15 +78,15 @@ const updateMenuItem = async (req, res) => {
 };
 
 // DELETE menu item
-const deleteMenuItem = async (req, res) => {
+const deleteMenu = async (req, res) => {
   try {
-    const existing = await MenuModel.getMenuItemById(req.params.id);
+    const existing = await MenuModel.getMenuById(req.params.id);
 
     if (!existing) {
       return res.status(404).json({ message: 'Menu item not found' });
     }
 
-    await MenuModel.deleteMenuItem(req.params.id);
+    await MenuModel.deleteMenu(req.params.id);
     res.json({ message: 'Menu item deleted' });
   } catch (error) {
     console.error(error);
@@ -94,18 +94,7 @@ const deleteMenuItem = async (req, res) => {
   }
 };
 
-const getAllMenus = getAllMenuItems;
-const getMenuById = getMenuItemById;
-const createMenu = createMenuItem;
-const updateMenu = updateMenuItem;
-const deleteMenu = deleteMenuItem;
-
 module.exports = {
-  getAllMenuItems,
-  getMenuItemById,
-  createMenuItem,
-  updateMenuItem,
-  deleteMenuItem,
   getAllMenus,
   getMenuById,
   createMenu,
