@@ -2,14 +2,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import menuReducer, { fetchMenuItems, createMenuItem } from '../store/slices/menuSlice';
+import menuReducer, { fetchMenuItems, createMenu } from '../store/slices/menuSlice';
 import Menu from '../pages/Menu';
 
 // Mock the menuService
 vi.mock('../services/menuService', () => ({
   menuService: {
-    getAllMenuItems: vi.fn(),
-    createMenuItem: vi.fn(),
+    getAllMenus: vi.fn(),
+    createMenu: vi.fn(),
   },
 }));
 
@@ -28,7 +28,7 @@ describe('Menu Component', () => {
   });
 
   it('should render loading state initially', () => {
-    menuService.getAllMenuItems.mockImplementation(() => new Promise(() => {}));
+    menuService.getAllMenus.mockImplementation(() => new Promise(() => {}));
 
     render(
       <Provider store={store}>
@@ -45,7 +45,7 @@ describe('Menu Component', () => {
       { id: 2, name: 'Poke Bowl', price: 12.99, description: 'Fresh ahi tuna' },
     ];
 
-    menuService.getAllMenuItems.mockResolvedValue(mockMenuItems);
+    menuService.getAllMenus.mockResolvedValue(mockMenuItems);
 
     render(
       <Provider store={store}>
@@ -60,7 +60,7 @@ describe('Menu Component', () => {
   });
 
   it('should display error message when fetch fails', async () => {
-    menuService.getAllMenuItems.mockRejectedValue(new Error('Network error'));
+    menuService.getAllMenus.mockRejectedValue(new Error('Network error'));
 
     render(
       <Provider store={store}>
@@ -74,7 +74,7 @@ describe('Menu Component', () => {
   });
 
   it('should display message when no menu items are available', async () => {
-    menuService.getAllMenuItems.mockResolvedValue([]);
+    menuService.getAllMenus.mockResolvedValue([]);
 
     render(
       <Provider store={store}>
@@ -117,7 +117,7 @@ describe('Menu Slice Redux', () => {
     expect(state.menuItems).toEqual(mockMenuItems);
   });
 
-  it('should handle createMenuItem and add to state', async () => {
+  it('should handle createMenu and add to state', async () => {
     const newMenuItem = {
       name: 'Malasada',
       price: 3.50,
@@ -125,9 +125,9 @@ describe('Menu Slice Redux', () => {
     };
 
     const createdMenuItem = { id: 3, ...newMenuItem };
-    menuService.createMenuItem.mockResolvedValue(createdMenuItem);
+    menuService.createMenu.mockResolvedValue(createdMenuItem);
 
-    await store.dispatch(createMenuItem(newMenuItem));
+    await store.dispatch(createMenu(newMenuItem));
     const state = store.getState().menu;
 
     expect(state.menuItems).toContainEqual(createdMenuItem);

@@ -21,21 +21,21 @@ function mapToCartData(cartItem) {
   };
 }
 
-const getAllCarts = async () => {
+const getAllCartItems = async () => {
   return await prisma.cart.findMany({
     orderBy: { createdAt: 'desc' },
   });
 };
 
 // GET one cart item by ID
-const getCartById = async (id) => {
+const getCartItemById = async (id) => {
   return await prisma.cart.findUnique({
     where: { id: parseInt(id) }
   });
 };
 
 // CREATE a new cart
-const createCart = async (data) => {
+const createCartItem = async (data) => {
   const createData = {
     userId: data.userId,
     total: data.total !== undefined ? parseFloat(data.total) : 0,
@@ -54,7 +54,7 @@ const createCart = async (data) => {
 };
 
 // UPDATE a cart
-const updateCart = async (id, data) => {
+const updateCartItem = async (id, data) => {
   const updateData = {
     userId: data.userId !== undefined ? data.userId : undefined,
     total: data.total !== undefined ? parseFloat(data.total) : undefined,
@@ -82,14 +82,25 @@ const updateCart = async (id, data) => {
 };
 
 // DELETE a cart item
-const deleteCart = async (id) => {
+const deleteCartItem = async (id) => {
   return await prisma.cart.delete({
     where: { id: parseInt(id) }
   });
 };
 
+const getAllCarts = getAllCartItems;
+const getCartById = getCartItemById;
+const createCart = createCartItem;
+const updateCart = updateCartItem;
+const deleteCart = deleteCartItem;
+
 module.exports = {
   mapToCartData,
+  getAllCartItems,
+  getCartItemById,
+  createCartItem,
+  updateCartItem,
+  deleteCartItem,
   getAllCarts,
   getCartById,
   createCart,

@@ -4,7 +4,7 @@ import { menuService } from '../../services/menuService';
 // Initial state
 const initialState = {
     menuItems: [],
-    selectedMenuItem: null,
+    selectedMenu: null,
     loading: false,
     error: null,
 };
@@ -14,7 +14,7 @@ export const fetchMenuItems = createAsyncThunk(
     'menu/fetchMenuItems',
     async (_, { rejectWithValue }) => {
         try {
-            const data = await menuService.getAllMenuItems();
+            const data = await menuService.getAllMenus();
             return data;
         } catch (error) {
             return rejectWithValue(error.message || 'Failed to fetch menu items');
@@ -22,11 +22,11 @@ export const fetchMenuItems = createAsyncThunk(
     }
 );
 
-export const fetchMenuItemById = createAsyncThunk(
-    'menu/fetchMenuItemById',
+export const fetchMenuById = createAsyncThunk(
+    'menu/fetchMenuById',
     async (id, { rejectWithValue }) => {
         try {
-            const data = await menuService.getMenuItemById(id);
+            const data = await menuService.getMenuById(id);
             return data;
         } catch (error) {
             return rejectWithValue(error.message || 'Failed to fetch menu item by ID');
@@ -34,11 +34,11 @@ export const fetchMenuItemById = createAsyncThunk(
     }
 );
 
-export const createMenuItem = createAsyncThunk(
-    'menu/createMenuItem',
+export const createMenu = createAsyncThunk(
+    'menu/createMenu',
     async (menuItemData, { rejectWithValue }) => {
         try {
-            const data = await menuService.createMenuItem(menuItemData);
+            const data = await menuService.createMenu(menuItemData);
             return data;
         } catch (error) {
             return rejectWithValue(error.message || 'Failed to create menu item');
@@ -46,11 +46,11 @@ export const createMenuItem = createAsyncThunk(
     }
 );
 
-export const updateMenuItem = createAsyncThunk(
-    'menu/updateMenuItem',
+export const updateMenu = createAsyncThunk(
+    'menu/updateMenu',
     async ({ id, menuItemData }, { rejectWithValue }) => {
         try {
-            const data = await menuService.updateMenuItem(id, menuItemData);
+            const data = await menuService.updateMenu(id, menuItemData);
             return data;
         } catch (error) {
             return rejectWithValue(error.message || 'Failed to update menu item');
@@ -58,11 +58,11 @@ export const updateMenuItem = createAsyncThunk(
     }
 );
 
-export const deleteMenuItem = createAsyncThunk(
-    'menu/deleteMenuItem',
+export const deleteMenu = createAsyncThunk(
+    'menu/deleteMenu',
     async (id, { rejectWithValue }) => {
         try {
-            await menuService.deleteMenuItem(id);
+            await menuService.deleteMenu(id);
             return id;
         } catch (error) {
             return rejectWithValue(error.message || 'Failed to delete menu item');
@@ -77,8 +77,8 @@ const menuSlice = createSlice({
         clearError: (state) => {
             state.error = null;
         },
-        clearSelectedMenuItem: (state) => {
-            state.selectedMenuItem = null;
+        clearSelectedMenu: (state) => {
+            state.selectedMenu = null;
         },
     },
     extraReducers: (builder) => {
@@ -96,69 +96,69 @@ const menuSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(fetchMenuItemById.pending, (state) => {
+            .addCase(fetchMenuById.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(fetchMenuItemById.fulfilled, (state, action) => {
+            .addCase(fetchMenuById.fulfilled, (state, action) => {
                 state.loading = false;
-                state.selectedMenuItem = action.payload;
+                state.selectedMenu = action.payload;
                 state.error = null;
             })
-            .addCase(fetchMenuItemById.rejected, (state, action) => {
+            .addCase(fetchMenuById.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(createMenuItem.pending, (state) => {
+            .addCase(createMenu.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(createMenuItem.fulfilled, (state, action) => {
+            .addCase(createMenu.fulfilled, (state, action) => {
                 state.loading = false;
                 state.menuItems.push(action.payload);
                 state.error = null;
             })
-            .addCase(createMenuItem.rejected, (state, action) => {
+            .addCase(createMenu.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(updateMenuItem.pending, (state) => {
+            .addCase(updateMenu.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(updateMenuItem.fulfilled, (state, action) => {
+            .addCase(updateMenu.fulfilled, (state, action) => {
                 state.loading = false;
                 const index = state.menuItems.findIndex((menuItem) => menuItem.id === action.payload.id);
                 if (index !== -1) {
                     state.menuItems[index] = action.payload;
                 }
-                if (state.selectedMenuItem?.id === action.payload.id) {
-                    state.selectedMenuItem = action.payload;
+                if (state.selectedMenu?.id === action.payload.id) {
+                    state.selectedMenu = action.payload;
                 }
                 state.error = null;
             })
-            .addCase(updateMenuItem.rejected, (state, action) => {
+            .addCase(updateMenu.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(deleteMenuItem.pending, (state) => {
+            .addCase(deleteMenu.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(deleteMenuItem.fulfilled, (state, action) => {
+            .addCase(deleteMenu.fulfilled, (state, action) => {
                 state.loading = false;
                 state.menuItems = state.menuItems.filter((menuItem) => menuItem.id !== action.payload);
-                if (state.selectedMenuItem?.id === action.payload) {
-                    state.selectedMenuItem = null;
+                if (state.selectedMenu?.id === action.payload) {
+                    state.selectedMenu = null;
                 }
                 state.error = null;
             })
-            .addCase(deleteMenuItem.rejected, (state, action) => {
+            .addCase(deleteMenu.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });
     },
 });
 
-export const { clearError, clearSelectedMenuItem } = menuSlice.actions;
+export const { clearError, clearSelectedMenu } = menuSlice.actions;
 export default menuSlice.reducer;
