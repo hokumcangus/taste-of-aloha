@@ -74,6 +74,8 @@ BRANCH_IMPROVEMENTS.md
 PR_SUMMARY.md
 **/QUICK_REFERENCE_OLD.md
 git-branch-fix-commands.md
+BRANCH_ANALYSIS_AND_FIX_PLAN.md
+cart-order-flow-guide.md
 
 # App specific
 apps/backend/package-lock.json
