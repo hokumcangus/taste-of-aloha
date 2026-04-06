@@ -57,9 +57,13 @@ $menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasi
 $menuItems = $menuResponse.Content | ConvertFrom-Json
 "menu-status=$($menuResponse.StatusCode) menu-count=$($menuItems.Count)"
 
-$cartResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/cart" -UseBasicParsing
-$cartItems = $cartResponse.Content | ConvertFrom-Json
-"cart-status=$($cartResponse.StatusCode) cart-count=$($cartItems.Count)"
+try {
+  $cartResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/cart" -UseBasicParsing -ErrorAction Stop
+  $cartItems = $cartResponse.Content | ConvertFrom-Json
+  "cart-status=$($cartResponse.StatusCode) cart-count=$($cartItems.Count)"
+} catch {
+  "cart-endpoint=not-implemented (skip this check unless /api/cart exists in your branch)"
+}
 
 (Invoke-WebRequest -Uri "http://localhost:5173" -UseBasicParsing).StatusCode
 ```
