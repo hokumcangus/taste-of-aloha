@@ -73,9 +73,9 @@ $menuResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasi
 $menuItems = $menuResponse.Content | ConvertFrom-Json
 "menu-status=$($menuResponse.StatusCode) menu-count=$($menuItems.Count)"
 
-$cartResponse = Invoke-WebRequest -Uri "http://localhost:3000/api/cart" -UseBasicParsing
-$cartItems = $cartResponse.Content | ConvertFrom-Json
-"cart-status=$($cartResponse.StatusCode) cart-count=$($cartItems.Count)"
-
 (Invoke-WebRequest -Uri "http://localhost:5173" -UseBasicParsing).StatusCode
+
+# Cart functionality for this sprint is implemented in the frontend with localStorage,
+# so verify it in the browser UI instead of calling a backend /api/cart endpoint.
+# Confirm you can add items to cart and that the cart persists after refresh.
 ```
