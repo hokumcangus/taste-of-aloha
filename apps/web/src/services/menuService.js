@@ -1,8 +1,8 @@
 import apiClient from './api.js';
 
 /**
- * MenuItem API service
- * Handles all API calls related to menu items
+ * Menu API service
+ * Handles all API calls related to menus
  */
 
 export const menuService = {
@@ -10,40 +10,40 @@ export const menuService = {
      * Get all menu items
      * @returns {Promise<Array>} Array of menu items
      */
-    getAllMenuItems: async () => {
+    getAllMenus: async () => {
         return apiClient.get('/api/menu');
     },
     /**
-     * Get menu item by ID
-     * @param {number} id - MenuItem ID
-     * @returns {Promise<Object>} MenuItem object
+    * Get menu by ID
+    * @param {number} id - Menu ID
+    * @returns {Promise<Object>} Menu object
      * */
-    getMenuItemById: async (id) => {
+    getMenuById: async (id) => {
         return apiClient.get(`/api/menu/${id}`);
     }, 
     /**
      * Create a new menu item
-     * @param {Object} menuItemData - MenuItem data (name, price, etc.)
+    * @param {Object} menuData - Menu data (name, price, etc.)
      * @returns {Promise<Object>} Created menu item object
      */
-    createMenuItem: async (menuItemData) => {
-        return apiClient.post('/api/menu', menuItemData);
+    createMenu: async (menuData) => {
+        return apiClient.post('/api/menu', menuData);
     },  
     /**
      * Update a menu item
-     * @param {number} id - MenuItem ID
-     * @param {Object} menuItemData - Updated menu item data
+    * @param {number} id - Menu ID
+    * @param {Object} menuData - Updated menu data
      * @returns {Promise<Object>} Updated menu item object
      */
-    updateMenuItem: async (id, menuItemData) => {
-        return apiClient.put(`/api/menu/${id}`, menuItemData);
+    updateMenu: async (id, menuData) => {
+        return apiClient.put(`/api/menu/${id}`, menuData);
     },
     /**
      * Delete a menu item
-     * @param {number} id - MenuItem ID
+    * @param {number} id - Menu ID
      * @returns {Promise<Object>} Deletion confirmation
      */
-    deleteMenuItem: async (id) => {
+    deleteMenu: async (id) => {
         return apiClient.delete(`/api/menu/${id}`);
     },
 }
