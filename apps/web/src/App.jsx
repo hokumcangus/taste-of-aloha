@@ -3,6 +3,7 @@ import './App.css';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 import About from './pages/About';
+import Contact from './pages/Contact';
 
 function App() {
   return (
@@ -19,6 +20,9 @@ function App() {
             </Link>
             <Link to="/about" className="hover:text-blue-600">
               About
+            </Link>
+            <Link to="/contact" className="hover:text-blue-600">
+              Contact
             </Link>
           </div>
         </nav>

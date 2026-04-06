@@ -77,16 +77,16 @@ test('renders component', () => {
 });
 ```
 
-## 📚 Documentation
+## 📚 Documentation found in gitHub Wiki
 
-- **[Redux Guide](../../docs/guides/LEARNING_GUIDE.md)** — State management patterns
-- **[API Integration](../../docs/guides/BACKEND_API_GUIDE.md)** — Connecting to backend
+- **[Redux Guide](LEARNING_GUIDE)** — State management patterns
+- **[API Integration](BACKEND_API_GUIDE)** — Connecting to backend
 
 ## 🔗 Related
 
-- [Backend Guide](../backend/README.md) — API endpoints
-- [Root README](../../README.md) — Full monorepo overview
+- [Backend Guide](backend/README) — API endpoints
+- [Root README](README) — Full monorepo overview
 
 ## 🔌 Connectivity Verification
 
-Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md#connectivity-verification-powershell).
+Use the canonical connectivity checks in [QUICK_REFERENCE](QUICK_REFERENCE)- Connectivity-verification-powershell.
