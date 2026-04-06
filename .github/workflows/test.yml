@@ -1,17 +1,26 @@
-# .github/workflows/test.yml
-name: Tests
+name: Test Suite
+
 on: [push, pull_request]
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+
       - name: Install dependencies
-        run: npm ci --include=optional
+        run: npm ci
+
       - name: Run backend tests
-        run: npm --workspace apps/backend run test
+        # Use the name field from apps/backend/package.json
+        run: npm --workspace backend run test
+
       - name: Run web tests
-        run: npm --workspace apps/web run test
+        # Use the name field from apps/web/package.json
+        run: npm --workspace web run test
