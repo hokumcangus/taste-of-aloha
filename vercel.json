@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "taste-of-aloha-web": {
+      "rootDirectory": "apps/web"
+    }
+  }
+}
