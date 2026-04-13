@@ -1,49 +1,22 @@
-import { PrismaClient } from './generated/prisma'
-import "dotenv/config"
-const prisma = new PrismaClient()
-// use `prisma` in your application to read and write data in your DB
+const { PrismaClient } = require('@prisma/client');
+const { PrismaPg } = require('@prisma/adapter-pg');
 const { Pool } = require('pg');
-require('dotenv').config();
 
 /**
- * PostgreSQL connection pool
- * Uses environment variables for configuration
+ * Shared Prisma client for the application.
+ * Uses the PrismaPg adapter so the same pg Pool is reused across requests.
+ *
+ * Import this module wherever you need database access:
+ *   const { prisma } = require('./config/database');
  */
+const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString,
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
 });
 
-// Test connection on startup
-pool.on('connect', () => {
-  console.log('✅ Connected to PostgreSQL database');
-});
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 
-pool.on('error', (err) => {
-  console.error('❌ Unexpected error on idle PostgreSQL client', err);
-  // Log the error but don't exit - let the application handle the error gracefully
-});
+module.exports = { prisma, pool };
 
-/**
- * Execute a query with parameters
- * @param {string} text - SQL query
- * @param {Array} params - Query parameters
- * @returns {Promise<Object>} Query result
- */
-const query = (text, params) => {
-  return pool.query(text, params);
-};
-
-/**
- * Get a client from the pool for transactions
- * @returns {Promise<Object>} Database client
- */
-const getClient = () => {
-  return pool.connect();
-};
-
-module.exports = {
-  query,
-  getClient,
-  pool,
-};

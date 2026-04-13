@@ -2,26 +2,45 @@
   "name": "taste-of-aloha",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "workspaces": [
     "apps/*"
   ],
   "scripts": {
-    "dev:web": "npm run dev:web",
-    "dev:backend": "npm run dev:backend",
+    "dev": "powershell -ExecutionPolicy Bypass -File scripts/start-docker.ps1 && concurrently \"npm --workspace apps/backend run dev\" \"npm --workspace apps/web run dev\"",
+    "dev:web": "npm --workspace apps/web run dev",
+    "dev:backend": "npm --workspace apps/backend run dev",
+    "dev:db": "docker compose up -d postgres",
+    "dev:test": "npm --workspace apps/web run test && npm --workspace apps/backend run test",
+    "test:coverage": "npm --workspace apps/backend run test:coverage && npm --workspace apps/web run test:coverage",
     "lint": "eslint . --ext .js,.jsx",
     "format": "prettier --write ."
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.4",
     "@types/node": "^25.0.2",
     "@types/pg": "^8.16.0",
+    "concurrently": "^9.2.1",
     "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
+    "lightningcss": "^1.32.0",
+    "lightningcss-cli": "^1.32.0",
     "prettier": "^3.0.0",
     "prisma": "^7.1.0"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.1.0",
     "@prisma/client": "^7.1.0",
+    "@vitejs/plugin-react": "^4.7.0",
     "dotenv": "^17.2.3",
-    "pg": "^8.16.3"
+    "pg": "^8.16.3",
+    "vite": "^5.4.21",
+    "vitest": "^1.6.1"
+  },
+  "optionalDependencies": {
+    "lightningcss-linux-x64-gnu": "1.32.0",
+    "lightningcss-win32-x64-msvc": "1.32.0"
   }
 }

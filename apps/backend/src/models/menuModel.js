@@ -20,8 +20,27 @@ function mapToMenuData(menuItem) {
   };
 }
 
+const SNACK_CATEGORY = 'Snacks';
+const LEGACY_SNACK_CATEGORY = 'Snack';
+const SNACK_CATEGORIES = [SNACK_CATEGORY, LEGACY_SNACK_CATEGORY];
+
 const getAllMenus = async () => {
   return await prisma.menu.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
+};
+
+const getMenusByCategory = async (category) => {
+  return await prisma.menu.findMany({
+    where: { category: { equals: category, mode: 'insensitive' } },
+    orderBy: { createdAt: 'desc' },
+  });
+};
+
+
+const getAllSnacks = async () => {
+  return await prisma.menu.findMany({
+    where: { category: { in: SNACK_CATEGORIES } },
     orderBy: { createdAt: 'desc' },
   });
 };
@@ -30,6 +49,13 @@ const getAllMenus = async () => {
 const getMenuById = async (id) => {
   return await prisma.menu.findUnique({
     where: { id: parseInt(id) }
+  });
+};
+
+// GET one snack item by ID
+const getSnackById = async (id) => {
+  return await prisma.menu.findFirst({
+    where: { id: parseInt(id), category: { in: SNACK_CATEGORIES } }
   });
 };
 
@@ -47,34 +73,97 @@ const createMenu = async (data) => {
   });
 };
 
-
-// UPDATE a menu item
-const updateMenu = async (id, data) => {
-  return await prisma.menu.update({
-    where: { id: parseInt(id) },
+// CREATE a new snack item
+const createSnack = async (data) => {
+  return await prisma.menu.create({
     data: {
-      name: data.name || undefined,
-      description: data.description || undefined,
-      price: data.price ? parseFloat(data.price) : undefined,
-      category: data.category || undefined,
-      image: data.image || undefined,
-      isAvailable: data.isAvailable !== undefined ? data.isAvailable : undefined
+      name: data.name,
+      description: data.description,
+      price: parseFloat(data.price),
+      category: SNACK_CATEGORY,
+      image: data.image || null,
+      isAvailable: data.isAvailable !== false  // Default to true
     }
   });
 };
 
+// UPDATE a menu item
+const updateMenu = async (id, data) => {
+  try {
+    return await prisma.menu.update({
+      where: { id: parseInt(id) },
+      data: {
+        name: data.name || undefined,
+        description: data.description || undefined,
+        price: data.price ? parseFloat(data.price) : undefined,
+        category: data.category || undefined,
+        image: data.image || undefined,
+        isAvailable: data.isAvailable !== undefined ? data.isAvailable : undefined
+      }
+    });
+  } catch (error) {
+    if (error.code === 'P2025') return null;
+    throw error;
+  }
+};
+
+// UPDATE a snack item
+const updateSnack = async (id, data) => {
+  try {
+    return await prisma.menu.update({
+      where: { id: parseInt(id) },
+      data: {
+        name: data.name || undefined,
+        description: data.description || undefined,
+        price: data.price ? parseFloat(data.price) : undefined,
+        category: SNACK_CATEGORY,  // Ensure category stays as 'Snacks'
+        image: data.image || undefined,
+        isAvailable: data.isAvailable !== undefined ? data.isAvailable : undefined
+      }
+    });
+  } catch (error) {
+    if (error.code === 'P2025') return null;
+    throw error;
+  }
+};
+
 // DELETE a menu item
 const deleteMenu = async (id) => {
-  return await prisma.menu.delete({
-    where: { id: parseInt(id) }
-  });
+  try {
+    await prisma.menu.delete({
+      where: { id: parseInt(id) }
+    });
+    return true;
+  } catch (error) {
+    if (error.code === 'P2025') return false;
+    throw error;
+  }
+};
+
+// DELETE a snack item
+const deleteSnack = async (id) => {
+  try {
+    await prisma.menu.delete({
+      where: { id: parseInt(id) }
+    });
+    return true;
+  } catch (error) {
+    if (error.code === 'P2025') return false;
+    throw error;
+  }
 };
 
 module.exports = {
   mapToMenuData,
   getAllMenus,
+  getMenusByCategory,
+  getAllSnacks,
   getMenuById,
+  getSnackById,
   createMenu,
+  createSnack,
   updateMenu,
+  updateSnack,
   deleteMenu,
+  deleteSnack,
 };

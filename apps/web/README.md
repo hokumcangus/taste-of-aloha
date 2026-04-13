@@ -38,7 +38,7 @@ Open http://localhost:5173 to view the app.
 ### Docker
 
 ```bash
-docker-compose up frontend
+docker compose up frontend
 ```
 
 ## 🏗 Project Structure
@@ -58,7 +58,9 @@ src/
 Run the test suite:
 
 ```bash
-npm run test
+npm test
+npm run test:coverage
+npm run test:watch
 ```
 
 ### Writing Tests
@@ -78,10 +80,13 @@ test('renders component', () => {
 ## 📚 Documentation
 
 - **[Redux Guide](../../docs/guides/LEARNING_GUIDE.md)** — State management patterns
-- **[Component Library](./src/components/README.md)** — Available components
 - **[API Integration](../../docs/guides/BACKEND_API_GUIDE.md)** — Connecting to backend
 
 ## 🔗 Related
 
 - [Backend Guide](../backend/README.md) — API endpoints
 - [Root README](../../README.md) — Full monorepo overview
+
+## 🔌 Connectivity Verification
+
+Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md#connectivity-verification-powershell).

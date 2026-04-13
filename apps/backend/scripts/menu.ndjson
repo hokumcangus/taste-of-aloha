@@ -1,0 +1,102 @@
+{"name":"Hawaiian Luau Plate","description":"","price":0,"category":"Aloha Friday Special","image":null,"isAvailable":false}
+
+{"name":"1/2 lb Lomi Salmon","description":"","price":7.99,"category":"Buy Da Pound","image":null,"isAvailable":true}
+{"name":"1/2 lb Poke","description":"","price":11.99,"category":"Buy Da Pound","image":null,"isAvailable":true}
+{"name":"1/2 lb Mac Salad","description":"","price":0,"category":"Buy Da Pound","image":null,"isAvailable":false}
+{"name":"1 lb Kalua Pig","description":"","price":17.99,"category":"Buy Da Pound","image":null,"isAvailable":true}
+{"name":"1 lb Mac Salad","description":"","price":9.99,"category":"Buy Da Pound","image":null,"isAvailable":true}
+{"name":"1 lb Poke","description":"","price":22.99,"category":"Buy Da Pound","image":null,"isAvailable":true}
+{"name":"1/2 lb Kalua Pork","description":"","price":8.99,"category":"Buy Da Pound","image":null,"isAvailable":true}
+{"name":"1 lb Lomi Lomi Salmon","description":"","price":14.99,"category":"Buy Da Pound","image":null,"isAvailable":true}
+
+{"name":"Coconut Water","description":"","price":4.50,"category":"Drinks","image":null,"isAvailable":true}
+{"name":"Coke/Sprite","description":"","price":2.50,"category":"Drinks","image":null,"isAvailable":true}
+{"name":"Hawaiian Sun Drink","description":"","price":3.37,"category":"Drinks","image":null,"isAvailable":true}
+{"name":"Water","description":"","price":1.99,"category":"Drinks","image":null,"isAvailable":true}
+{"name":"Arizona Iced Tea","description":"","price":1.99,"category":"Drinks","image":null,"isAvailable":true}
+{"name":"Rock Star","description":"","price":2.50,"category":"Drinks","image":null,"isAvailable":true}
+
+{"name":"Mini Teri Beef","description":"","price":9.99,"category":"Mini Plates","image":null,"isAvailable":true}
+{"name":"Mini Chicken Cutlet","description":"","price":0,"category":"Mini Plates","image":null,"isAvailable":false}
+{"name":"Mini Meat Jun","description":"","price":0,"category":"Mini Plates","image":null,"isAvailable":false}
+{"name":"Mini Kalua Pig","description":"","price":9.99,"category":"Mini Plates","image":null,"isAvailable":true}
+{"name":"Mini Mochiko","description":"","price":9.99,"category":"Mini Plates","image":null,"isAvailable":true}
+{"name":"Mini Shoyu Chicken","description":"","price":8.99,"category":"Mini Plates","image":null,"isAvailable":true}
+{"name":"T SPECIAL","description":"","price":0,"category":"Mini Plates","image":null,"isAvailable":false}
+{"name":"T-SPECIAL Mini KP","description":"","price":0,"category":"Mini Plates","image":null,"isAvailable":true}
+{"name":"Mini Kalua Pig Cabbage","description":"","price":9.50,"category":"Mini Plates","image":null,"isAvailable":true}
+{"name":"Mini Katsu","description":"","price":0,"category":"Mini Plates","image":null,"isAvailable":false}
+
+{"name":"Deluxe Grab and Go","description":"Spam + Portuguese Sausage Scramble","price":12.99,"category":"Grab N Go'z","image":null,"isAvailable":true}
+{"name":"Kalua Pig Loco Moco","description":"","price":0,"category":"Grab N Go'z","image":null,"isAvailable":false}
+{"name":"Loco Moco","description":"","price":14.99,"category":"Grab N Go'z","image":null,"isAvailable":true}
+{"name":"Portuguese Sausage, Scrambled Eggs & Rice","description":"","price":9.99,"category":"Grab N Go'z","image":null,"isAvailable":true}
+{"name":"Spam, Scrambled Eggs & Rice","description":"","price":9.99,"category":"Grab N Go'z","image":null,"isAvailable":true}
+{"name":"Brenda’s Loco Moco","description":"","price":5.75,"category":"Grab N Go'z","image":null,"isAvailable":true}
+
+{"name":"Chicken Cutlet","description":"","price":18.99,"category":"Plates","image":null,"isAvailable":true}
+{"name":"Chicken Cutlet Loco Moco w/ Mac","description":"","price":0,"category":"Plates","image":null,"isAvailable":false}
+{"name":"Chicken Katsu Curry","description":"","price":0,"category":"Plates","image":null,"isAvailable":false}
+{"name":"Da Sumo","description":"","price":24.99,"category":"Plates","image":null,"isAvailable":true}
+{"name":"Kalbi Lunch Plate","description":"","price":0,"category":"Plates","image":null,"isAvailable":false}
+{"name":"Kalua Pig Plate","description":"","price":17.99,"category":"Plates","image":null,"isAvailable":true}
+{"name":"Laulau Plate","description":"","price":0,"category":"Plates","image":null,"isAvailable":false}
+{"name":"Meat Jun","description":"","price":18.99,"category":"Plates","image":null,"isAvailable":true}
+{"name":"Mixed Plate (Kalua Pig + Laulau)","description":"","price":22.99,"category":"Plates","image":null,"isAvailable":true}
+{"name":"1 PC Kalbi","description":"","price":0,"category":"Plates","image":null,"isAvailable":false}
+{"name":"Mochiko Chicken","description":"","price":17.99,"category":"Plates","image":null,"isAvailable":true}
+{"name":"Mochiko/Kalua Pig Combo","description":"","price":0,"category":"Plates","image":null,"isAvailable":false}
+{"name":"Poke Bowl","description":"","price":17.99,"category":"Plates","image":null,"isAvailable":true}
+{"name":"Spicy Ahi Tuna Bowl","description":"","price":0,"category":"Plates","image":null,"isAvailable":false}
+{"name":"Teriyaki Beef Plate","description":"","price":18.99,"category":"Plates","image":null,"isAvailable":true}
+{"name":"Beef Teriyaki + Shoyu Chicken Mixed Plate","description":"","price":22.99,"category":"Plates","image":null,"isAvailable":true}
+{"name":"Kalua Pig + Beef Teriyaki Mixed Plate","description":"","price":22.99,"category":"Plates","image":null,"isAvailable":true}
+{"name":"Teribeef/Laulau Mix Plate","description":"","price":22.99,"category":"Plates","image":null,"isAvailable":true}
+{"name":"Mochiko/Meat Jun Combo","description":"","price":0,"category":"Plates","image":null,"isAvailable":false}
+{"name":"Hamburger Steak Loco Moco","description":"","price":20.99,"category":"Plates","image":null,"isAvailable":true}
+{"name":"Hawaiian Luau Plate","description":"","price":0,"category":"Plates","image":null,"isAvailable":false}
+{"name":"Mochiko/Teri Beef","description":"","price":23.99,"category":"Plates","image":null,"isAvailable":true}
+{"name":"Chicken Katsu","description":"","price":17.99,"category":"Plates","image":null,"isAvailable":true}
+{"name":"Kalua Pork Cabbage","description":"","price":17.99,"category":"Plates","image":null,"isAvailable":true}
+
+{"name":"Shrimp Lumpia","description":"","price":0,"category":"Pupu's","image":null,"isAvailable":false}
+{"name":"Shrimp Tempura (4 pcs)","description":"","price":7.99,"category":"Pupu's","image":null,"isAvailable":true}
+{"name":"Spam Musubi","description":"","price":0,"category":"Pupu's","image":null,"isAvailable":false}
+{"name":"Kimchee Cucumber","description":"","price":0,"category":"Pupu's","image":null,"isAvailable":false}
+{"name":"Fried Spam Musubi","description":"","price":4.99,"category":"Pupu's","image":null,"isAvailable":true}
+{"name":"Katsu Musubi","description":"","price":0,"category":"Pupu's","image":null,"isAvailable":false}
+
+{"name":"Kalua Pig Crunch Wrap","description":"","price":10.99,"category":"Sandwiches / Wraps","image":null,"isAvailable":true}
+{"name":"Shaka Teri Beef Sandwich","description":"","price":10.99,"category":"Sandwiches / Wraps","image":null,"isAvailable":true}
+{"name":"Shaka Teriyaki Beef Sandwich w/ Fries","description":"","price":13.99,"category":"Sandwiches / Wraps","image":null,"isAvailable":true}
+{"name":"Spicy Crunch Wrap","description":"","price":11.99,"category":"Sandwiches / Wraps","image":null,"isAvailable":true}
+
+{"name":"Laulau (1 ea)","description":"","price":9.99,"category":"Side Items","image":null,"isAvailable":true}
+{"name":"Shrimp Tempura (2 pcs)","description":"","price":4.99,"category":"Side Items","image":null,"isAvailable":true}
+{"name":"Side Shoyu Chicken","description":"","price":0,"category":"Side Items","image":null,"isAvailable":false}
+{"name":"Side Lomi Lomi Salmon","description":"","price":3.99,"category":"Side Items","image":null,"isAvailable":true}
+{"name":"Side of Kalbi (2 pcs)","description":"","price":0,"category":"Side Items","image":null,"isAvailable":false}
+{"name":"Side Poke","description":"","price":0,"category":"Side Items","image":null,"isAvailable":false}
+{"name":"Side PS (2 ea)","description":"","price":2.40,"category":"Side Items","image":null,"isAvailable":true}
+{"name":"Side Rice","description":"","price":2.99,"category":"Side Items","image":null,"isAvailable":true}
+{"name":"Scoop Mac Salad","description":"","price":4.99,"category":"Side Items","image":null,"isAvailable":true}
+{"name":"Side Spam (1 pc)","description":"","price":0,"category":"Side Items","image":null,"isAvailable":false}
+{"name":"Sriracha Sauce","description":"","price":0,"category":"Side Items","image":null,"isAvailable":false}
+{"name":"Soy Sauce","description":"","price":1.99,"category":"Side Items","image":null,"isAvailable":true}
+{"name":"Teriyaki Sauce","description":"","price":0,"category":"Side Items","image":null,"isAvailable":false}
+{"name":"Side Mochiko (Mini Container)","description":"","price":8.99,"category":"Side Items","image":null,"isAvailable":true}
+{"name":"Side Egg","description":"","price":1.99,"category":"Side Items","image":null,"isAvailable":true}
+{"name":"Side Gravy","description":"","price":2.99,"category":"Side Items","image":null,"isAvailable":true}
+{"name":"Side Fries","description":"","price":3.99,"category":"Side Items","image":null,"isAvailable":true}
+{"name":"Mochiko Sauce","description":"","price":0,"category":"Side Items","image":null,"isAvailable":false}
+
+{"name":"Saimin","description":"Char Siu, Green Onion","price":13.99,"category":"Soups","image":null,"isAvailable":true}
+
+{"name":"Poke Bowl","description":"","price":17.99,"category":"Poke Bowlz","image":null,"isAvailable":true}
+{"name":"Spicy Ahi Tuna Bowl","description":"","price":0,"category":"Poke Bowlz","image":null,"isAvailable":false}
+
+{"name":"Butter Mochi","description":"","price":0,"category":"Dessert","image":null,"isAvailable":false}
+{"name":"Rachay’z Cookie Monsters","description":"","price":5.99,"category":"Dessert","image":null,"isAvailable":true}
+
+{"name":"Po Da Gee Bean Soup (No Rice/Mac)","description":"","price":8.99,"category":"Specials of the Day","image":null,"isAvailable":true}
+{"name":"Po Da Gee Bean Soup Plate","description":"","price":14.99,"category":"Specials of the Day","image":null,"isAvailable":true}

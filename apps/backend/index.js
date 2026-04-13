@@ -1,7 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const snackRoutes = require('./src/routes/snackRoutes');
+const menuRoutes = require('./src/routes/menuRoutes');
+const cartRoutes = require('./src/routes/cartRoutes');
 const logger = require('./src/utils/logger');
 
 const app = express();
@@ -12,14 +13,15 @@ app.use(express.json());
 app.use(logger);
 
 // Routes
-app.use('/api/snacks', snackRoutes);
+app.use('/api/menu', menuRoutes);
+app.use('/api/cart', cartRoutes);
 
 app.get('/', (req, res) => {
   res.send('Taste of Aloha backend is running 🌺');
 });
 
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.status(200).json({ status: 'Good Vibes 🌺', timestamp: new Date().toISOString() });
 });
 
 app.listen(PORT, () => {

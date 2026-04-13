@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchSnacks } from '../store/slices/snackSlice';
+import { fetchMenuItems } from '../store/slices/menuSlice';
 
 const Menu = () => {
     const dispatch = useDispatch();
-    const { snacks, loading, error } = useSelector((state) => state.snacks);
+    const { menuItems, loading, error } = useSelector((state) => state.menu);
     useEffect(() => {
-        dispatch(fetchSnacks());
+        dispatch(fetchMenuItems());
     }, [dispatch]);
 
     if (loading) {
@@ -16,7 +16,7 @@ const Menu = () => {
                 textAlign: 'center' 
             }}>
                 <h1>Menu</h1>
-                <p>Loading snacks...</p>
+                <p>Loading menu items...</p>
             </div>
         );
     }
@@ -29,7 +29,7 @@ const Menu = () => {
             }}>
                 <h1>Menu</h1>
                 <p style={{ color: 'red' }}>Error: {error}</p>
-                <button onClick={() => dispatch(fetchSnacks())}>
+                <button onClick={() => dispatch(fetchMenuItems())}>
                     Retry
                 </button>
             </div>
@@ -51,13 +51,13 @@ const Menu = () => {
                 Menu
             </h1>
             
-            {snacks.length === 0 ? (
+            {menuItems.length === 0 ? (
                 <p style={{ 
                     fontSize: '1.2rem', 
                     color: '#666',
                     marginTop: '2rem'
                 }}>
-                    No snacks available. Check back later!
+                    No menu items available. Check back later!
                 </p>
             ) : (
                 <div style={{
@@ -66,9 +66,9 @@ const Menu = () => {
                     gap: '1.5rem',
                     marginTop: '2rem'
                 }}>
-                    {snacks.map((snack) => (
+                    {menuItems.map((menuItem) => (
                         <div 
-                            key={snack.id}
+                            key={menuItem.id}
                             style={{
                                 border: '1px solid #ddd',
                                 borderRadius: '8px',
@@ -85,25 +85,25 @@ const Menu = () => {
                                 color: '#333',
                                 fontSize: '1.5rem'
                             }}>
-                                {snack.name}
+                                {menuItem.name}
                             </h3>
-                            {snack.price && (
+                            {menuItem.price && (
                                 <p style={{ 
                                     margin: '0.5rem 0',
                                     fontSize: '1.2rem',
                                     fontWeight: 'bold',
                                     color: '#646cff'
                                 }}>
-                                    ${snack.price.toFixed(2)}
+                                    ${menuItem.price.toFixed(2)}
                                 </p>
                             )}
-                            {snack.description && (
+                            {menuItem.description && (
                                 <p style={{ 
                                     margin: '0.5rem 0 0 0',
                                     color: '#666',
                                     fontSize: '0.9rem'
                                 }}>
-                                    {snack.description}
+                                    {menuItem.description}
                                 </p>
                             )}
                         </div>
