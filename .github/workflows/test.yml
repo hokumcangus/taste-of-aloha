@@ -17,6 +17,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Run lint
+        run: npm run lint
+
       - name: Run backend tests
         # Use the name field from apps/backend/package.json
         run: npm --workspace backend run test
