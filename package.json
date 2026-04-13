@@ -13,6 +13,7 @@
     "dev:db": "docker compose up -d postgres",
     "dev:test": "npm --workspace apps/web run test && npm --workspace apps/backend run test",
     "test:coverage": "npm --workspace apps/backend run test:coverage && npm --workspace apps/web run test:coverage",
+    "build": "npm --workspace apps/web run build",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
