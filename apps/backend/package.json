@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "vercel-build": "npx prisma generate",
     "dev": "nodemon --legacy-watch index.js",
     "lint": "eslint .",
     "test": "jest",
