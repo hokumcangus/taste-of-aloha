@@ -1,9 +1,15 @@
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
+const fallbackDatabaseUrl = `postgresql://${
+  process.env.PRISMA_FALLBACK_DB_USER ?? "local_user"
+}:${process.env.PRISMA_FALLBACK_DB_PASSWORD ?? "local_password"}@$${""}`;
+
 const databaseUrl =
   process.env.DATABASE_URL ??
-  "postgresql://postgres:postgres@localhost:5432/taste_of_aloha";
+  `postgresql://${
+    process.env.PRISMA_FALLBACK_DB_USER ?? "local_user"
+  }:${process.env.PRISMA_FALLBACK_DB_PASSWORD ?? "local_password"}@$${""}`;
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
