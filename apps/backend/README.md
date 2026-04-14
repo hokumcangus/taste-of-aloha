@@ -146,6 +146,35 @@ Server runs at **http://localhost:3000**
 docker compose up backend
 ```
 
+## ▲ Vercel Deployment
+
+Run backend deploy commands from `apps/backend`, not the repo root. This app has its own `package.json` and `vercel.json`.
+
+### Build Locally
+
+```bash
+cd apps/backend
+npm run vercel-build
+```
+
+### Deploy with Vercel CLI
+
+```bash
+cd apps/backend
+vercel deploy
+vercel deploy --prod
+```
+
+### Required Runtime Environment Variables
+
+```env
+DATABASE_URL=postgresql://...
+JWT_SECRET=your-runtime-secret
+PORT=3000
+```
+
+If `DATABASE_URL` is missing during build, `prisma.config.ts` falls back to the optional `PRISMA_FALLBACK_DB_*` variables so `prisma generate` can still run.
+
 ## 🏗 Project Structure
 
 ```
@@ -198,7 +227,7 @@ test('GET /api/menu', async () => {
 Create `.env` in `apps/backend/`:
 
 ```env
-DATABASE_URL=postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha
+DATABASE_URL=postgresql://<db_user>:<db_password>@<db_host>:<db_port>/<db_name>
 PORT=3000
 ```
 

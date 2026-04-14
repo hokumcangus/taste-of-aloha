@@ -31,7 +31,7 @@ This guide documents the complete database setup process for Taste of Aloha, inc
    - ❌ pgBouncer (skip - not needed)
    - ❌ Database Drivers (skip - we use pg npm package)
    - ❌ Stack Builder (skip - optional)
-5. Set **postgres** password to your local project value (currently `tasteofalohadb`)
+5. Set **postgres** password to your local project value (for example: `<db_password>`)
 6. Keep port as `5432` (default)
 
 **Verify Installation:**
@@ -131,15 +131,15 @@ psql -U postgres -d taste_of_aloha
 
 ```env
 # Use your own password — do not commit real secrets
-DATABASE_URL=postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha
+DATABASE_URL=postgresql://<db_user>:<db_password>@<db_host>:<db_port>/<db_name>
 ```
 
 **Breakdown:**
 - `postgresql://` - Database type
-- `postgres` - PostgreSQL username
-- `tasteofalohadb` - Current local PostgreSQL password used by this project
-- `localhost:5432` - PostgreSQL server address and port
-- `taste_of_aloha` - Your database name
+- `<db_user>` - PostgreSQL username
+- `<db_password>` - PostgreSQL password
+- `<db_host>:<db_port>` - PostgreSQL server address and port
+- `<db_name>` - Your database name
 
 **⚠️ Important:** Do NOT commit `.env` to git! It contains passwords.
 
@@ -464,12 +464,12 @@ The `url` goes in `prisma.config.ts`, not here.
 # In prisma/schema.prisma:
 datasource db {
   provider = "postgresql"
-  url = "postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha"
+  url = "postgresql://<db_user>:<db_password>@<db_host>:<db_port>/<db_name>"
 }
 
 # Option 2: Set DATABASE_URL before running prisma commands
 Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
-$env:DATABASE_URL = "postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha"
+$env:DATABASE_URL = "postgresql://<db_user>:<db_password>@<db_host>:<db_port>/<db_name>"
 npx prisma studio --port 5555
 
 # Option 3: Start Prisma Studio normally from apps/backend

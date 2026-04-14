@@ -44,6 +44,68 @@ Files to update when seed content changes:
 (Invoke-WebRequest -Uri "http://localhost:5173" -UseBasicParsing).StatusCode
 ```
 
+## ▲ Vercel Deploy Checklist
+
+Create two separate Vercel projects and set each project root to its app directory, not the monorepo root.
+
+### Frontend Project
+- Root directory: `apps/web`
+- Local build command:
+
+```bash
+cd apps/web
+npm run build
+```
+
+- Production deploy command:
+
+```bash
+cd apps/web
+vercel deploy --prod
+```
+
+- Required env vars:
+
+```env
+VITE_API_URL=https://<your-backend-domain>
+```
+
+### Backend Project
+- Root directory: `apps/backend`
+- Local build command:
+
+```bash
+cd apps/backend
+npm run vercel-build
+```
+
+- Production deploy command:
+
+```bash
+cd apps/backend
+vercel deploy --prod
+```
+
+- Required runtime env vars:
+
+```env
+DATABASE_URL=postgresql://...
+JWT_SECRET=your-runtime-secret
+PORT=3000
+```
+
+- Optional build-time fallback vars:
+
+```env
+PRISMA_FALLBACK_DB_USER=postgres
+PRISMA_FALLBACK_DB_PASSWORD=postgres
+PRISMA_FALLBACK_DB_HOST=localhost
+PRISMA_FALLBACK_DB_PORT=5432
+PRISMA_FALLBACK_DB_NAME=taste_of_aloha
+```
+
+Use the fallback vars only if you intentionally want `prisma generate` to succeed when `DATABASE_URL` is absent during build.
+
 ## 🩹 Troubleshooting (PowerShell)
 If Vite says `Port 5173 is in use`, clear stale listeners and restart dev:
 
