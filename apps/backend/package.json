@@ -4,7 +4,7 @@
   "description": "Backend service for Taste of Aloha",
   "main": "index.js",
   "scripts": {
-    "build": "echo 'No build needed'",
+    "build": "npx cross-env DATABASE_URL=postgres://dummy:dummy@localhost:5432/dummy npx prisma generate",
     "start": "node index.js",
     "dev": "nodemon --legacy-watch index.js",
     "lint": "eslint .",
