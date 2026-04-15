@@ -9,7 +9,6 @@ lerna-debug.log*
 
 # Dependencies
 node_modules
-package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
@@ -78,7 +77,6 @@ BRANCH_ANALYSIS_AND_FIX_PLAN.md
 cart-order-flow-guide.md
 
 # App specific
-apps/backend/package-lock.json
 apps/web/dist
 apps/web/build
 node_modules
