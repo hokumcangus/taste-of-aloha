@@ -45,7 +45,7 @@
   { "name": "Teribeef/lLau Lau mix plate", "description": "Teriyaki beef and taro leaf pork combo.", "price": 22.99, "category": "Plates", "image": null, "isAvailable": true },
   { "name": "Mochiko/Meat Jun Combo", "description": "Fried chicken and battered beef plate.", "price": 22.99, "category": "Plates", "image": null, "isAvailable": true },
   { "name": "Hamburger Steak Loco Moco", "description": "Grilled patties with gravy and eggs.", "price": 20.99, "category": "Plates", "image": null, "isAvailable": true },
-  { "name": "Mochiko\\Teri beef", "description": "Fried chicken and marinated beef plate.", "price": 23.99, "category": "Plates", "image": null, "isAvailable": true },
+  { "name": "Mochiko/Teri beef", "description": "Fried chicken and marinated beef plate.", "price": 23.99, "category": "Plates", "image": null, "isAvailable": true },
   { "name": "Shoyu Chicken & Mochiko", "description": "Soy chicken and fried chicken combo.", "price": 22.99, "category": "Plates", "image": null, "isAvailable": true },
   { "name": "Chicken Katsu", "description": "Crispy breaded chicken plate.", "price": 17.99, "category": "Plates", "image": "/images/katsu.jpg", "isAvailable": true },
   { "name": "Kalua Pork Cabbage", "description": "Slow-cooked pork simmered with fresh cabbage.", "price": 17.99, "category": "Plates", "image": null, "isAvailable": true },
