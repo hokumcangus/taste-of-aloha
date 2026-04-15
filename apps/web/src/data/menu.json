@@ -7,7 +7,7 @@
   { "name": "1lb Mac Salad", "description": "Full pound of island favorite macaroni salad.", "price": 9.99, "category": "Buy Da Pound", "image": null, "isAvailable": true },
   { "name": "1lb Poke", "description": "Full pound of fresh seasoned ahi tuna.", "price": 22.99, "category": "Buy Da Pound", "image": null, "isAvailable": true },
   { "name": "Kalua Pork 1/2 Pound", "description": "Savory, smoky slow-roasted pork.", "price": 8.99, "category": "Buy Da Pound", "image": null, "isAvailable": true },
-  { "name": "1 Lb Lomi Lomi Salomon", "description": "Traditional side with salted salmon and tomatoes.", "price": 14.99, "category": "Buy Da Pound", "image": null, "isAvailable": true },
+  { "name": "1 Lb Lomi Lomi Salmon", "description": "Traditional side with salted salmon and tomatoes.", "price": 14.99, "category": "Buy Da Pound", "image": null, "isAvailable": true },
   { "name": "Coke/Sprite", "description": "Chilled canned soda.", "price": 2.50, "category": "Drinks", "image": null, "isAvailable": true },
   { "name": "Hawaiian Sun Drink", "description": "Assorted island fruit flavors.", "price": 3.37, "category": "Drinks", "image": "/images/hawaiian-sun.jpg", "isAvailable": true },
   { "name": "Water", "description": "Bottled water.", "price": 1.99, "category": "Drinks", "image": null, "isAvailable": true },
