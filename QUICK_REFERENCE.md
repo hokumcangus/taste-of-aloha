@@ -120,3 +120,51 @@ if ($pids) {
 
 npm run dev
 ```
+
+## 🌿 Branch Status + Merge Checklist
+
+Run from repo root:
+
+```powershell
+# 1) See current branch and uncommitted changes
+git status --short --branch
+
+# 2) Update remote refs
+git fetch origin --prune
+
+# 3) List local branches with tracking info
+git branch -vv
+
+# 4) List remote branches
+git branch -r
+
+# 5) Compare branch divergence vs main
+# output format: <commits only on main> <commits only on your branch>
+git rev-list --left-right --count main...fix/vercel-deploy-only
+```
+
+Optional checks before merge:
+
+```powershell
+# Ensure lockfile exists for CI (required for npm ci)
+Test-Path .\package-lock.json
+
+# Run tests locally (workspace commands)
+npm --workspace apps/backend run test
+npm --workspace apps/web run test
+```
+
+Merge readiness checklist:
+- Working tree is clean (`git status` shows no pending edits for tracked files you do not want in the PR).
+- Branch is ahead of `main` and not missing required commits from `main` for your release policy.
+- GitHub PR checks are green (Test Suite + Vercel checks).
+- No requested changes from reviewers.
+
+If lockfile is missing, regenerate and commit it:
+
+```powershell
+npm install
+git add package-lock.json
+git commit -m "chore(ci): restore lockfile for npm ci"
+git push
+```
