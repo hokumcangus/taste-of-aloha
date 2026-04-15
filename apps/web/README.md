@@ -41,6 +41,27 @@ Open http://localhost:5173 to view the app.
 docker compose up frontend
 ```
 
+## ▲ Vercel Deployment
+
+Run frontend deploy commands from `apps/web`, not the repo root. This app has its own `package.json` and `vercel.json`.
+
+### Build Locally
+
+```bash
+cd apps/web
+npm run build
+```
+
+### Deploy with Vercel CLI
+
+```bash
+cd apps/web
+vercel deploy
+vercel deploy --prod
+```
+
+The Vercel rewrite rules for the SPA live in `apps/web/vercel.json`.
+
 ## 🏗 Project Structure
 
 ```

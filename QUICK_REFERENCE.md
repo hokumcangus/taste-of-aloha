@@ -44,6 +44,68 @@ Files to update when seed content changes:
 (Invoke-WebRequest -Uri "http://localhost:5173" -UseBasicParsing).StatusCode
 ```
 
+## ▲ Vercel Deploy Checklist
+
+Create two separate Vercel projects and set each project root to its app directory, not the monorepo root.
+
+### Frontend Project
+- Root directory: `apps/web`
+- Local build command:
+
+```bash
+cd apps/web
+npm run build
+```
+
+- Production deploy command:
+
+```bash
+cd apps/web
+vercel deploy --prod
+```
+
+- Required env vars:
+
+```env
+VITE_API_URL=https://<your-backend-domain>
+```
+
+### Backend Project
+- Root directory: `apps/backend`
+- Local build command:
+
+```bash
+cd apps/backend
+npm run vercel-build
+```
+
+- Production deploy command:
+
+```bash
+cd apps/backend
+vercel deploy --prod
+```
+
+- Required runtime env vars:
+
+```env
+DATABASE_URL=postgresql://...
+JWT_SECRET=your-runtime-secret
+PORT=3000
+```
+
+- Optional build-time fallback vars:
+
+```env
+PRISMA_FALLBACK_DB_USER=postgres
+PRISMA_FALLBACK_DB_PASSWORD=postgres
+PRISMA_FALLBACK_DB_HOST=localhost
+PRISMA_FALLBACK_DB_PORT=5432
+PRISMA_FALLBACK_DB_NAME=taste_of_aloha
+```
+
+Use the fallback vars only if you intentionally want `prisma generate` to succeed when `DATABASE_URL` is absent during build.
+
 ## 🩹 Troubleshooting (PowerShell)
 If Vite says `Port 5173 is in use`, clear stale listeners and restart dev:
 
@@ -57,4 +119,52 @@ if ($pids) {
 }
 
 npm run dev
+```
+
+## 🌿 Branch Status + Merge Checklist
+
+Run from repo root:
+
+```powershell
+# 1) See current branch and uncommitted changes
+git status --short --branch
+
+# 2) Update remote refs
+git fetch origin --prune
+
+# 3) List local branches with tracking info
+git branch -vv
+
+# 4) List remote branches
+git branch -r
+
+# 5) Compare branch divergence vs main
+# output format: <commits only on main> <commits only on your branch>
+git rev-list --left-right --count main...fix/vercel-deploy-only
+```
+
+Optional checks before merge:
+
+```powershell
+# Ensure lockfile exists for CI (required for npm ci)
+Test-Path .\package-lock.json
+
+# Run tests locally (workspace commands)
+npm --workspace apps/backend run test
+npm --workspace apps/web run test
+```
+
+Merge readiness checklist:
+- Working tree is clean (`git status` shows no pending edits for tracked files you do not want in the PR).
+- Branch is ahead of `main` and not missing required commits from `main` for your release policy.
+- GitHub PR checks are green (Test Suite + Vercel checks).
+- No requested changes from reviewers.
+
+If lockfile is missing, regenerate and commit it:
+
+```powershell
+npm install
+git add package-lock.json
+git commit -m "chore(ci): restore lockfile for npm ci"
+git push
 ```
