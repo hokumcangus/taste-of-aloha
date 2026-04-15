@@ -70,7 +70,7 @@
   { "name": "side rice", "description": "Side of white island rice.", "price": 2.99, "category": "Side Items", "image": null, "isAvailable": true },
   { "name": "Side scoop Mac Salad", "description": "Single scoop of macaroni salad.", "price": 4.99, "category": "Side Items", "image": null, "isAvailable": true },
   { "name": "Side Spam 1 ea", "description": "Single piece of marinated Spam.", "price": 1.99, "category": "Side Items", "image": null, "isAvailable": true },
-  { "name": "Siracha Sauce", "description": "Side of spicy siracha sauce.", "price": 1.99, "category": "Side Items", "image": null, "isAvailable": true },
+  { "name": "Sriracha Sauce", "description": "Side of spicy sriracha sauce.", "price": 1.99, "category": "Side Items", "image": null, "isAvailable": true },
   { "name": "Soy sauce", "description": "Side of traditional soy sauce.", "price": 1.99, "category": "Side Items", "image": null, "isAvailable": true },
   { "name": "Teriyaki Sauce", "description": "Side of homemade teriyaki sauce.", "price": 1.91, "category": "Side Items", "image": null, "isAvailable": true },
   { "name": "Side Mochiko (Mini Container)", "description": "Small container of fried chicken.", "price": 8.99, "category": "Side Items", "image": null, "isAvailable": true },
