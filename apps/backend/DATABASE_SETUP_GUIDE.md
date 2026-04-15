@@ -123,7 +123,7 @@ psql -U postgres -d taste_of_aloha
 **Files Created:**
 - `apps/backend/.env` - Environment variables (database connection string)
 - `apps/backend/prisma/schema.prisma` - Database schema definition
-- `apps/backend/prisma.config.ts` - Prisma CLI configuration
+- `apps/backend/prisma.config.js` - Prisma CLI configuration
 
 ### Configure Environment Variables
 
@@ -151,11 +151,15 @@ Add to `.gitignore`:
 
 ### Configure Prisma Config
 
-**File: `apps/backend/prisma.config.ts`**
+**File: `apps/backend/prisma.config.js`**
 
-```typescript
+```javascript
 import "dotenv/config";
-import { defineConfig, env } from "prisma/config";
+import { defineConfig } from "prisma/config";
+
+const databaseUrl =
+  process.env.DATABASE_URL ??
+  `postgresql://local_user:local_password@localhost:5432/taste_of_aloha`;
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
@@ -163,8 +167,7 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    adapter: "postgres",  // Important: tells Prisma to use PostgreSQL
-    url: env("DATABASE_URL"),  // Reads from .env file
+    url: databaseUrl,  // Reads from .env file, falls back to local defaults
   },
 });
 ```
@@ -246,7 +249,7 @@ npx prisma migrate dev --name init
 
 **Expected Output:**
 ```
-Loaded Prisma config from prisma.config.ts.
+Loaded Prisma config from prisma.config.js.
 PostgreSQL database taste_of_aloha created at localhost:5432
 Applying migration `20251214184223_init`
 Your database is now in sync with your schema.
@@ -438,7 +441,7 @@ psql -h localhost -p 5432 -U postgres -d postgres -c "SELECT pg_terminate_backen
 **Solution:**
 1. Remove `url` from `prisma/schema.prisma` datasource block
 2. Keep only `provider = "postgresql"`
-3. Add `adapter` and `url` to `prisma.config.ts`
+3. Add `adapter` and `url` to `prisma.config.js`
 
 ### Error: "Schema must contain a datasource block"
 
@@ -452,7 +455,7 @@ datasource db {
 }
 ```
 
-The `url` goes in `prisma.config.ts`, not here.
+The `url` goes in `prisma.config.js`, not here.
 
 ### Error: "No database URL found" (Prisma Studio)
 

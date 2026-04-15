@@ -16,11 +16,11 @@ We use Prisma to interface with PostgreSQL. The schema defines all data models (
 
 **Key Files:**
 - `prisma/schema.prisma` — Data models
-- `prisma.config.ts` - Prisma CLI configuration and env loading
+- `prisma.config.js` - Prisma CLI configuration and env loading
 - `prisma/migrations/` — Version-controlled database changes
 - `.env` — Database connection string (DATABASE_URL)
 
-**Important:** Prisma 7 uses an external config file (`prisma.config.ts`) to read environment variables.
+**Important:** Prisma 7 uses an external config file (`prisma.config.js`) to read environment variables.
 
 ## 🛠 Database Commands
 
@@ -173,7 +173,7 @@ JWT_SECRET=your-runtime-secret
 PORT=3000
 ```
 
-If `DATABASE_URL` is missing during build, `prisma.config.ts` falls back to the optional `PRISMA_FALLBACK_DB_*` variables so `prisma generate` can still run.
+If `DATABASE_URL` is missing during build, `prisma.config.js` falls back to the optional `PRISMA_FALLBACK_DB_*` variables so `prisma generate` can still run.
 
 ## 🏗 Project Structure
 
