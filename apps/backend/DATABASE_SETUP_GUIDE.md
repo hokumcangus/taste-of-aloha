@@ -31,7 +31,7 @@ This guide documents the complete database setup process for Taste of Aloha, inc
    - ❌ pgBouncer (skip - not needed)
    - ❌ Database Drivers (skip - we use pg npm package)
    - ❌ Stack Builder (skip - optional)
-5. Set **postgres** password to your local project value (currently `tasteofalohadb`)
+5. Set **postgres** password to your local project value (for example: `<db_password>`)
 6. Keep port as `5432` (default)
 
 **Verify Installation:**
@@ -123,7 +123,7 @@ psql -U postgres -d taste_of_aloha
 **Files Created:**
 - `apps/backend/.env` - Environment variables (database connection string)
 - `apps/backend/prisma/schema.prisma` - Database schema definition
-- `apps/backend/prisma.config.ts` - Prisma CLI configuration
+- `apps/backend/prisma.config.js` - Prisma CLI configuration
 
 ### Configure Environment Variables
 
@@ -131,15 +131,15 @@ psql -U postgres -d taste_of_aloha
 
 ```env
 # Use your own password — do not commit real secrets
-DATABASE_URL=postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha
+DATABASE_URL=postgresql://<db_user>:<db_password>@<db_host>:<db_port>/<db_name>
 ```
 
 **Breakdown:**
 - `postgresql://` - Database type
-- `postgres` - PostgreSQL username
-- `tasteofalohadb` - Current local PostgreSQL password used by this project
-- `localhost:5432` - PostgreSQL server address and port
-- `taste_of_aloha` - Your database name
+- `<db_user>` - PostgreSQL username
+- `<db_password>` - PostgreSQL password
+- `<db_host>:<db_port>` - PostgreSQL server address and port
+- `<db_name>` - Your database name
 
 **⚠️ Important:** Do NOT commit `.env` to git! It contains passwords.
 
@@ -151,11 +151,15 @@ Add to `.gitignore`:
 
 ### Configure Prisma Config
 
-**File: `apps/backend/prisma.config.ts`**
+**File: `apps/backend/prisma.config.js`**
 
-```typescript
+```javascript
 import "dotenv/config";
-import { defineConfig, env } from "prisma/config";
+import { defineConfig } from "prisma/config";
+
+const databaseUrl =
+  process.env.DATABASE_URL ??
+  `postgresql://local_user:local_password@localhost:5432/taste_of_aloha`;
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
@@ -163,8 +167,7 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    adapter: "postgres",  // Important: tells Prisma to use PostgreSQL
-    url: env("DATABASE_URL"),  // Reads from .env file
+    url: databaseUrl,  // Reads from .env file, falls back to local defaults
   },
 });
 ```
@@ -246,7 +249,7 @@ npx prisma migrate dev --name init
 
 **Expected Output:**
 ```
-Loaded Prisma config from prisma.config.ts.
+Loaded Prisma config from prisma.config.js.
 PostgreSQL database taste_of_aloha created at localhost:5432
 Applying migration `20251214184223_init`
 Your database is now in sync with your schema.
@@ -438,7 +441,7 @@ psql -h localhost -p 5432 -U postgres -d postgres -c "SELECT pg_terminate_backen
 **Solution:**
 1. Remove `url` from `prisma/schema.prisma` datasource block
 2. Keep only `provider = "postgresql"`
-3. Add `adapter` and `url` to `prisma.config.ts`
+3. Add `adapter` and `url` to `prisma.config.js`
 
 ### Error: "Schema must contain a datasource block"
 
@@ -452,7 +455,7 @@ datasource db {
 }
 ```
 
-The `url` goes in `prisma.config.ts`, not here.
+The `url` goes in `prisma.config.js`, not here.
 
 ### Error: "No database URL found" (Prisma Studio)
 
@@ -464,12 +467,12 @@ The `url` goes in `prisma.config.ts`, not here.
 # In prisma/schema.prisma:
 datasource db {
   provider = "postgresql"
-  url = "postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha"
+  url = "postgresql://<db_user>:<db_password>@<db_host>:<db_port>/<db_name>"
 }
 
 # Option 2: Set DATABASE_URL before running prisma commands
 Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
-$env:DATABASE_URL = "postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha"
+$env:DATABASE_URL = "postgresql://<db_user>:<db_password>@<db_host>:<db_port>/<db_name>"
 npx prisma studio --port 5555
 
 # Option 3: Start Prisma Studio normally from apps/backend

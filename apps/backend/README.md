@@ -16,11 +16,11 @@ We use Prisma to interface with PostgreSQL. The schema defines all data models (
 
 **Key Files:**
 - `prisma/schema.prisma` — Data models
-- `prisma.config.ts` - Prisma CLI configuration and env loading
+- `prisma.config.js` - Prisma CLI configuration and env loading
 - `prisma/migrations/` — Version-controlled database changes
 - `.env` — Database connection string (DATABASE_URL)
 
-**Important:** Prisma 7 uses an external config file (`prisma.config.ts`) to read environment variables.
+**Important:** Prisma 7 uses an external config file (`prisma.config.js`) to read environment variables.
 
 ## 🛠 Database Commands
 
@@ -146,6 +146,35 @@ Server runs at **http://localhost:3000**
 docker compose up backend
 ```
 
+## ▲ Vercel Deployment
+
+Run backend deploy commands from `apps/backend`, not the repo root. This app has its own `package.json` and `vercel.json`.
+
+### Build Locally
+
+```bash
+cd apps/backend
+npm run vercel-build
+```
+
+### Deploy with Vercel CLI
+
+```bash
+cd apps/backend
+vercel deploy
+vercel deploy --prod
+```
+
+### Required Runtime Environment Variables
+
+```env
+DATABASE_URL=postgresql://...
+JWT_SECRET=your-runtime-secret
+PORT=3000
+```
+
+If `DATABASE_URL` is missing during build, `prisma.config.js` falls back to the optional `PRISMA_FALLBACK_DB_*` variables so `prisma generate` can still run.
+
 ## 🏗 Project Structure
 
 ```
@@ -198,7 +227,7 @@ test('GET /api/menu', async () => {
 Create `.env` in `apps/backend/`:
 
 ```env
-DATABASE_URL=postgresql://postgres:tasteofalohadb@localhost:5432/taste_of_aloha
+DATABASE_URL=postgresql://<db_user>:<db_password>@<db_host>:<db_port>/<db_name>
 PORT=3000
 ```
 
