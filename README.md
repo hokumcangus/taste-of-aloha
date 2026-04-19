@@ -15,3 +15,25 @@ A modern full-stack monorepo for an island-inspired shopping experience.
 - `apps/web`: React frontend.
 - `apps/backend`: Express + Prisma backend.
 - `shared/`: Shared configs and types.
+
+## ▲ Deploying on Vercel
+
+Deploy each app from its own folder, not from the monorepo root.
+
+### Frontend
+
+```bash
+cd apps/web
+npm run build
+vercel deploy --prod
+```
+
+### Backend
+
+```bash
+cd apps/backend
+npm run vercel-build
+vercel deploy --prod
+```
+
+`apps/web` and `apps/backend` each contain their own `vercel.json`, so those directories should be the Vercel project root for CLI deploys and in the Vercel dashboard.
