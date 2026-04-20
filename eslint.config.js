@@ -46,6 +46,15 @@ export default defineConfig([
     },
   },
   {
+    files: ['apps/backend/prisma.config.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+      sourceType: 'module',
+    },
+  },
+  {
     files: ['**/*config.js', '**/*config.cjs', 'eslint.config.js'],
     languageOptions: {
       globals: {
