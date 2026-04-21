@@ -1,17 +1,20 @@
 # ⚡ Quick Reference
 
 ## 🛠 Development
-| Command | Description |
-| :--- | :--- |
-| `npm run dev` | Starts DB, Backend, and Frontend in parallel |
-| `npm run dev:backend` | API only |
-| `npm run dev:web` | Frontend only |
+
+| Command               | Description                                  |
+| :-------------------- | :------------------------------------------- |
+| `npm run dev`         | Starts DB, Backend, and Frontend in parallel |
+| `npm run dev:backend` | API only                                     |
+| `npm run dev:web`     | Frontend only                                |
 
 ## 🗄 Database (Prisma)
+
 - `npx prisma studio`: Open database UI.
 - `npm run db:seed`: Reset and re-seed the menu items.
 
 ## ⚡ DB Populate in 60 Seconds
+
 Run from repo root:
 
 ```powershell
@@ -29,6 +32,7 @@ Invoke-RestMethod -Method GET -Uri "http://localhost:3000/api/menu"
 ```
 
 Files to update when seed content changes:
+
 - `apps/backend/prisma/seed.js` (main seed dataset)
 - `apps/backend/prisma/schema.prisma` (DB table/field shape)
 - `apps/backend/prisma/menu.seed.json` (bulk menu data source)
@@ -36,6 +40,7 @@ Files to update when seed content changes:
 - `apps/backend/scripts/addMenuItem.js` (one-off quick inserts)
 
 ## 🧪 Verification (PowerShell)
+
 ```powershell
 # Check Backend Health
 (Invoke-WebRequest -Uri "http://localhost:3000/health").StatusCode
@@ -49,6 +54,7 @@ Files to update when seed content changes:
 Create two separate Vercel projects and set each project root to its app directory, not the monorepo root.
 
 ### Frontend Project
+
 - Root directory: `apps/web`
 - Local build command:
 
@@ -71,6 +77,7 @@ VITE_API_URL=https://<your-backend-domain>
 ```
 
 ### Backend Project
+
 - Root directory: `apps/backend`
 - Local build command:
 
@@ -107,6 +114,7 @@ PRISMA_FALLBACK_DB_NAME=taste_of_aloha
 Use the fallback vars only if you intentionally want `prisma generate` to succeed when `DATABASE_URL` is absent during build.
 
 ## 🩹 Troubleshooting (PowerShell)
+
 If Vite says `Port 5173 is in use`, clear stale listeners and restart dev:
 
 ```powershell
@@ -155,6 +163,7 @@ npm --workspace apps/web run test
 ```
 
 Merge readiness checklist:
+
 - Working tree is clean (`git status` shows no pending edits for tracked files you do not want in the PR).
 - Branch is ahead of `main` and not missing required commits from `main` for your release policy.
 - GitHub PR checks are green (Test Suite + Vercel checks).

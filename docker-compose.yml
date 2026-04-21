@@ -15,7 +15,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./infra/init-db:/docker-entrypoint-initdb.d  # Optional: SQL init scripts
+      - ./infra/init-db:/docker-entrypoint-initdb.d # Optional: SQL init scripts
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
       interval: 10s
@@ -72,8 +72,8 @@ services:
     networks:
       - app-network
     restart: unless-stopped
-    stdin_open: true  # Keep stdin open for Vite
-    tty: true         # Allocate pseudo-TTY
+    stdin_open: true # Keep stdin open for Vite
+    tty: true # Allocate pseudo-TTY
 
 volumes:
   postgres_data:

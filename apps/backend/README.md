@@ -15,6 +15,7 @@ The Express server and Prisma ORM layer for Taste of Aloha.
 We use Prisma to interface with PostgreSQL. The schema defines all data models (Menu, User, Order, etc.).
 
 **Key Files:**
+
 - `prisma/schema.prisma` — Data models
 - `prisma.config.js` - Prisma CLI configuration and env loading
 - `prisma/migrations/` — Version-controlled database changes
@@ -32,6 +33,7 @@ npm run db:migrate
 ```
 
 Example:
+
 ```bash
 npx prisma migrate dev --name add_orders_table
 ```
@@ -200,11 +202,11 @@ npm run test:coverage
 Tests use **Jest** and **Supertest** for HTTP assertions:
 
 ```javascript
-import request from 'supertest';
-import app from '../index';
+import request from "supertest";
+import app from "../index";
 
-test('GET /api/menu', async () => {
-  const response = await request(app).get('/api/menu');
+test("GET /api/menu", async () => {
+  const response = await request(app).get("/api/menu");
   expect(response.status).toBe(200);
   expect(Array.isArray(response.body)).toBe(true);
 });
@@ -213,6 +215,7 @@ test('GET /api/menu', async () => {
 ## 📋 API Endpoints
 
 **Menu:**
+
 - `GET /api/menu` — Get all menu items
 - `POST /api/menu` — Create a menu item
 - `GET /api/menu/:id` — Get menu item by ID
@@ -220,6 +223,7 @@ test('GET /api/menu', async () => {
 - `DELETE /api/menu/:id` — Delete menu item
 
 **Health:**
+
 - `GET /health` — Server health check
 
 ## 🔑 Environment Variables
@@ -245,4 +249,3 @@ PORT=3000
 ## 🔌 Connectivity Verification
 
 Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md#connectivity-verification-powershell).
-

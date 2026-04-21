@@ -1,9 +1,9 @@
-import 'dotenv/config';
-import { PrismaClient } from '@prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
-import { Pool } from 'pg';
-import fs from 'fs';
-import path from 'path';
+import "dotenv/config";
+import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
+import fs from "fs";
+import path from "path";
 
 const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({ connectionString });
@@ -20,13 +20,15 @@ type SeedMenuItem = {
 };
 
 async function main() {
-  const seedPath = path.resolve(process.cwd(), 'prisma', 'menu.seed.json');
-  const data = JSON.parse(fs.readFileSync(seedPath, 'utf-8')) as SeedMenuItem[];
+  const seedPath = path.resolve(process.cwd(), "prisma", "menu.seed.json");
+  const data = JSON.parse(fs.readFileSync(seedPath, "utf-8")) as SeedMenuItem[];
 
   console.log(`🌺 Seeding ${data.length} menu items…`);
 
   for (const item of data) {
-    const existing = await prisma.menu.findFirst({ where: { name: item.name } });
+    const existing = await prisma.menu.findFirst({
+      where: { name: item.name },
+    });
 
     if (existing) {
       continue;
@@ -44,7 +46,7 @@ async function main() {
     });
   }
 
-  console.log('✅ Menu seeding complete!');
+  console.log("✅ Menu seeding complete!");
 }
 
 main()

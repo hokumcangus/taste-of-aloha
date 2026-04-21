@@ -5,6 +5,7 @@ This guide documents the complete database setup process for Taste of Aloha, inc
 ---
 
 ## Table of Contents
+
 1. [Installation Steps](#installation-steps)
 2. [PostgreSQL Setup](#postgresql-setup)
 3. [Prisma Setup](#prisma-setup)
@@ -21,6 +22,7 @@ This guide documents the complete database setup process for Taste of Aloha, inc
 ### Step 1: Install PostgreSQL 18 (Windows)
 
 **Download & Install:**
+
 1. Go to [postgresql.org/download/windows](https://www.postgresql.org/download/windows/)
 2. Download PostgreSQL 18
 3. Run installer
@@ -35,6 +37,7 @@ This guide documents the complete database setup process for Taste of Aloha, inc
 6. Keep port as `5432` (default)
 
 **Verify Installation:**
+
 ```powershell
 psql --version
 # Output: psql (PostgreSQL) 18.x.x
@@ -55,6 +58,7 @@ npm install @prisma/client @prisma/adapter-pg pg dotenv
 ```
 
 **What these packages do:**
+
 - `prisma` - CLI tool for managing database schema
 - `@prisma/client` - JavaScript ORM client to query database
 - `pg` - PostgreSQL driver (allows Node.js to connect to PostgreSQL)
@@ -121,6 +125,7 @@ psql -U postgres -d taste_of_aloha
 ### Initialize Prisma in Backend
 
 **Files Created:**
+
 - `apps/backend/.env` - Environment variables (database connection string)
 - `apps/backend/prisma/schema.prisma` - Database schema definition
 - `apps/backend/prisma.config.js` - Prisma CLI configuration
@@ -135,6 +140,7 @@ DATABASE_URL=postgresql://<db_user>:<db_password>@<db_host>:<db_port>/<db_name>
 ```
 
 **Breakdown:**
+
 - `postgresql://` - Database type
 - `<db_user>` - PostgreSQL username
 - `<db_password>` - PostgreSQL password
@@ -144,6 +150,7 @@ DATABASE_URL=postgresql://<db_user>:<db_password>@<db_host>:<db_port>/<db_name>
 **⚠️ Important:** Do NOT commit `.env` to git! It contains passwords.
 
 Add to `.gitignore`:
+
 ```
 .env
 .env.local
@@ -167,7 +174,7 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: databaseUrl,  // Reads from .env file, falls back to local defaults
+    url: databaseUrl, // Reads from .env file, falls back to local defaults
   },
 });
 ```
@@ -222,6 +229,7 @@ model Order {
 ```
 
 **Understanding Field Attributes:**
+
 - `@id` - Primary key (unique identifier)
 - `@default(autoincrement())` - Automatically increment ID
 - `@default(now())` - Set current timestamp
@@ -242,12 +250,14 @@ npx prisma migrate dev --name init
 ```
 
 **What happens:**
+
 1. Analyzes your schema against current database
 2. Creates a migration file in `apps/backend/prisma/migrations/`
 3. Applies the migration (creates tables in PostgreSQL)
 4. Generates Prisma Client
 
 **Expected Output:**
+
 ```
 Loaded Prisma config from prisma.config.js.
 PostgreSQL database taste_of_aloha created at localhost:5432
@@ -270,17 +280,20 @@ This creates the JavaScript methods you'll use in your code.
 ### Database Commands (psql)
 
 **Basic Connection Syntax:**
+
 ```powershell
 psql -h <hostname> -p <port> -U <username> -d <database>
 ```
 
 **Parameters:**
+
 - `-h` or `--host` - PostgreSQL server hostname (default: localhost)
 - `-p` or `--port` - PostgreSQL port (default: 5432)
 - `-U` or `--username` - PostgreSQL username (default: postgres)
 - `-d` or `--dbname` - Database name to connect to
 
 **For Taste of Aloha (local development):**
+
 ```powershell
 # Connect to PostgreSQL server (no specific database)
 psql -h localhost -p 5432 -U postgres
@@ -296,12 +309,14 @@ psql -U postgres -d taste_of_aloha
 ```
 
 **For Docker (from host machine):**
+
 ```powershell
 # The PostgreSQL container is named 'postgres' in docker compose
 psql -h localhost -p 5432 -U postgres -d taste_of_aloha
 ```
 
 **Common psql Commands:**
+
 ```powershell
 # List all databases
 \l
@@ -329,6 +344,7 @@ psql -U postgres -d taste_of_aloha -f script.sql
 ```
 
 **Troubleshooting psql Connection:**
+
 ```powershell
 # Test basic connection (no database)
 psql -h localhost -p 5432 -U postgres
@@ -390,6 +406,7 @@ psql -U postgres -d taste_of_aloha -c "SELECT 1;"
 **Cause:** Wrong password or username in DATABASE_URL
 
 **Solution:**
+
 1. Check your password in `.env`
 2. Verify with: `psql -h localhost -p 5432 -U postgres` (tests if postgres user works)
 3. Make sure database exists: `psql -h localhost -p 5432 -U postgres -c "\l"`
@@ -400,6 +417,7 @@ psql -U postgres -d taste_of_aloha -c "SELECT 1;"
 **Cause:** PostgreSQL service not running or wrong connection parameters
 
 **Solution:**
+
 ```powershell
 # For Windows - Restart PostgreSQL service
 Restart-Service postgresql-x64-18 -Force
@@ -416,6 +434,7 @@ netstat -ano | findstr :5432
 **Cause:** Too many connections to database
 
 **Solution:**
+
 ```powershell
 # Disconnect all active sessions
 psql -h localhost -p 5432 -U postgres -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='taste_of_aloha' AND pid <> pg_backend_pid();"
@@ -428,6 +447,7 @@ psql -h localhost -p 5432 -U postgres -d postgres -c "SELECT pg_terminate_backen
 **Cause:** PostgreSQL tools not in system PATH
 
 **Solution (Windows):**
+
 1. Find PostgreSQL bin directory: `C:\Program Files\PostgreSQL\18\bin`
 2. Add to PATH: Right-click Computer → Properties → Environment Variables
 3. Edit PATH and add: `C:\Program Files\PostgreSQL\18\bin`
@@ -439,6 +459,7 @@ psql -h localhost -p 5432 -U postgres -d postgres -c "SELECT pg_terminate_backen
 **Cause:** Using Prisma 7 which requires datasource in config file, not schema
 
 **Solution:**
+
 1. Remove `url` from `prisma/schema.prisma` datasource block
 2. Keep only `provider = "postgresql"`
 3. Add `adapter` and `url` to `prisma.config.js`
@@ -449,6 +470,7 @@ psql -h localhost -p 5432 -U postgres -d postgres -c "SELECT pg_terminate_backen
 
 **Solution:**
 Include in `prisma/schema.prisma`:
+
 ```prisma
 datasource db {
   provider = "postgresql"
@@ -462,6 +484,7 @@ The `url` goes in `prisma.config.js`, not here.
 **Cause:** Prisma 7.x doesn't automatically load `.env` files; `env()` function in schema needs explicit environment setup
 
 **Solution:**
+
 ```powershell
 # Option 1: Hardcode URL in schema.prisma (development only)
 # In prisma/schema.prisma:
@@ -485,6 +508,7 @@ npx prisma studio --port 5555
 ### PostgreSQL Server Won't Start
 
 **For Windows:**
+
 ```powershell
 # Check service status
 Get-Service postgresql-x64-18
@@ -526,6 +550,7 @@ PostgreSQL Database (taste_of_aloha)
 ```
 
 **Data Flow Example:**
+
 ```javascript
 // 1. Your code
 const menu = await prisma.menu.create({
@@ -558,4 +583,3 @@ console.log(menu); // { id: 1, name: "Spam Musubi", price: 5.99, ... }
 ## Connectivity Verification Commands
 
 Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md#connectivity-verification-powershell).
-

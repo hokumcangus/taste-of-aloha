@@ -14,11 +14,13 @@ This is the React client for Taste of Aloha, providing an intuitive shopping exp
 The cart is managed via Redux in `src/store/cartSlice.js`.
 
 **Selectors:**
+
 - `selectCartTotal` — Display the total price
 - `selectCartItems` — Get all items in cart
 - `selectCartCount` — Get number of items
 
 **Actions:**
+
 - `addItem(item)` — Add product to cart
 - `removeItem(id)` — Remove product from cart
 - `clearCart()` — Empty the cart
@@ -89,10 +91,10 @@ npm run test:watch
 Tests use **Vitest** and **React Testing Library**:
 
 ```javascript
-import { render, screen } from '@testing-library/react';
-import MyComponent from './MyComponent';
+import { render, screen } from "@testing-library/react";
+import MyComponent from "./MyComponent";
 
-test('renders component', () => {
+test("renders component", () => {
   render(<MyComponent />);
   expect(screen.getByText(/hello/i)).toBeInTheDocument();
 });
