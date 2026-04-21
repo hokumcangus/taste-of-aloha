@@ -1,6 +1,6 @@
 # Docker Compose for Production
 # Optimized builds, nginx reverse proxy, health checks
-version: '3.8'
+version: "3.8"
 
 services:
   # PostgreSQL Database
@@ -46,7 +46,11 @@ services:
       - app-network
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:3000/api/menu', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})\""]
+      test:
+        [
+          "CMD-SHELL",
+          'node -e "require(''http'').get(''http://localhost:3000/api/menu'', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"',
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -61,7 +65,7 @@ services:
     container_name: taste-of-aloha-web-prod
     ports:
       - "80:80"
-      - "443:443"  # For future HTTPS
+      - "443:443" # For future HTTPS
     depends_on:
       backend:
         condition: service_healthy
@@ -69,7 +73,11 @@ services:
       - app-network
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost/ || exit 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "wget --quiet --tries=1 --spider http://localhost/ || exit 1",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3

@@ -14,11 +14,13 @@ This is the React client for Taste of Aloha, providing an intuitive shopping exp
 The cart is managed via Redux in `src/store/cartSlice.js`.
 
 **Selectors:**
+
 - `selectCartTotal` — Display the total price
 - `selectCartItems` — Get all items in cart
 - `selectCartCount` — Get number of items
 
 **Actions:**
+
 - `addItem(item)` — Add product to cart
 - `removeItem(id)` — Remove product from cart
 - `clearCart()` — Empty the cart
@@ -89,10 +91,10 @@ npm run test:watch
 Tests use **Vitest** and **React Testing Library**:
 
 ```javascript
-import { render, screen } from '@testing-library/react';
-import MyComponent from './MyComponent';
+import { render, screen } from "@testing-library/react";
+import MyComponent from "./MyComponent";
 
-test('renders component', () => {
+test("renders component", () => {
   render(<MyComponent />);
   expect(screen.getByText(/hello/i)).toBeInTheDocument();
 });
@@ -111,3 +113,32 @@ test('renders component', () => {
 ## 🔌 Connectivity Verification
 
 Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md#connectivity-verification-powershell).
+
+## Simple Commands (What / Why / How)
+
+### Local mode
+
+What: Run frontend against local backend.
+Why: Fast feedback while building UI.
+How:
+
+```powershell
+npm run dev:web
+(Invoke-WebRequest -Uri "http://localhost:5173" -UseBasicParsing).StatusCode
+```
+
+### Neon-backed backend mode
+
+What: Run frontend while backend points to Neon.
+Why: Validate UI behavior with cloud database responses.
+How:
+
+```powershell
+# In terminal 1, set Neon env vars and run backend
+npm run dev:backend
+
+# In terminal 2, run frontend
+npm run dev:web
+
+(Invoke-WebRequest -Uri "http://localhost:5173/api/menu" -UseBasicParsing).StatusCode
+```
