@@ -1,7 +1,7 @@
-require('dotenv/config');
-const { PrismaClient } = require('@prisma/client');
-const { PrismaPg } = require('@prisma/adapter-pg');
-const { Pool } = require('pg');
+require("dotenv/config");
+const { PrismaClient } = require("@prisma/client");
+const { PrismaPg } = require("@prisma/adapter-pg");
+const { Pool } = require("pg");
 
 const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({ connectionString });
@@ -11,11 +11,12 @@ const prisma = new PrismaClient({ adapter });
 
 function mapToCartData(cartItem) {
   return {
-    id : cartItem.id,
-    userId : cartItem.userId,
+    id: cartItem.id,
+    userId: cartItem.userId,
     items: cartItem.items || [],
     total: cartItem.total !== undefined ? Number(cartItem.total) : 0,
-    itemCount: cartItem.itemCount !== undefined ? Number(cartItem.itemCount) : 0,
+    itemCount:
+      cartItem.itemCount !== undefined ? Number(cartItem.itemCount) : 0,
     createdAt: cartItem.createdAt || new Date(),
     updatedAt: cartItem.updatedAt || new Date(),
   };
@@ -23,14 +24,14 @@ function mapToCartData(cartItem) {
 
 const getAllCartItems = async () => {
   return await prisma.cart.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: { createdAt: "desc" },
   });
 };
 
 // GET one cart item by ID
 const getCartItemById = async (id) => {
   return await prisma.cart.findUnique({
-    where: { id: parseInt(id) }
+    where: { id: parseInt(id) },
   });
 };
 
@@ -58,7 +59,8 @@ const updateCartItem = async (id, data) => {
   const updateData = {
     userId: data.userId !== undefined ? data.userId : undefined,
     total: data.total !== undefined ? parseFloat(data.total) : undefined,
-    itemCount: data.itemCount !== undefined ? parseInt(data.itemCount) : undefined,
+    itemCount:
+      data.itemCount !== undefined ? parseInt(data.itemCount) : undefined,
   };
 
   if (Array.isArray(data.items)) {
@@ -84,7 +86,7 @@ const updateCartItem = async (id, data) => {
 // DELETE a cart item
 const deleteCartItem = async (id) => {
   return await prisma.cart.delete({
-    where: { id: parseInt(id) }
+    where: { id: parseInt(id) },
   });
 };
 
