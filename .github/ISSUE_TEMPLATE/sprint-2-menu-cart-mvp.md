@@ -86,3 +86,29 @@ $cartItems = $cartResponse.Content | ConvertFrom-Json
 
 (Invoke-WebRequest -Uri "http://localhost:5173" -UseBasicParsing).StatusCode
 ```
+
+### Simple What / Why / How Commands
+
+#### Local Docker DB mode
+
+What: Build and test Sprint 2 work with local DB.
+Why: Fast and repeatable dev cycle.
+How:
+
+```powershell
+npm run dev:db
+npm run dev:backend
+npm run dev:web
+```
+
+#### Neon mode
+
+What: Validate Sprint 2 behavior against Neon.
+Why: Reduce cloud deployment surprises.
+How:
+
+```powershell
+$env:DATABASE_URL = "postgresql://<your_user>:<your_password>@<host>/<db>?sslmode=require&channel_binding=require"
+npm run dev:backend
+npm --workspace apps/backend run db:seed
+```

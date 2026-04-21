@@ -249,3 +249,35 @@ PORT=3000
 ## 🔌 Connectivity Verification
 
 Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md#connectivity-verification-powershell).
+
+## Simple Commands (What / Why / How)
+
+### Local Docker DB mode
+
+What: Backend uses local Docker PostgreSQL.
+Why: Most stable setup for local API development.
+How:
+
+```powershell
+npm run dev:db
+npm run dev:backend
+
+(Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
+(Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing).StatusCode
+```
+
+### Neon mode
+
+What: Backend uses Neon PostgreSQL.
+Why: Verify cloud DB connectivity and schema behavior.
+How:
+
+```powershell
+$env:PGUSER = "<your_user>"
+$env:PGPASSWORD = "<your_password>"
+$env:DATABASE_URL = "postgresql://<your_user>:<your_password>@<host>/<db>?sslmode=require&channel_binding=require"
+
+npm run dev
+npx prisma db push
+npm run db:seed
+```

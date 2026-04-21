@@ -1,3 +1,4 @@
+require("dotenv").config({ path: ".env.local" });
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -29,11 +30,5 @@ app.get("/health", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
-
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-  });
-}
 
 module.exports = app;

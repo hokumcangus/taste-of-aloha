@@ -583,3 +583,34 @@ console.log(menu); // { id: 1, name: "Spam Musubi", price: 5.99, ... }
 ## Connectivity Verification Commands
 
 Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md#connectivity-verification-powershell).
+
+## Simple Commands (What / Why / How)
+
+### Local Docker DB mode
+
+What: Use local Docker PostgreSQL for development.
+Why: Quick setup with fewer external dependencies.
+How:
+
+```powershell
+npm run dev:db
+npm --workspace apps/backend run db:migrate
+npm --workspace apps/backend run db:seed
+npm run dev:backend
+```
+
+### Neon mode
+
+What: Use Neon PostgreSQL as backend datasource.
+Why: Cloud parity testing before deploy.
+How:
+
+```powershell
+$env:PGUSER = "<your_user>"
+$env:PGPASSWORD = "<your_password>"
+$env:DATABASE_URL = "postgresql://<your_user>:<your_password>@<host>/<db>?sslmode=require&channel_binding=require"
+
+npm run dev:backend
+npx prisma db push
+npm --workspace apps/backend run db:seed
+```

@@ -13,6 +13,39 @@
 - `npx prisma studio`: Open database UI.
 - `npm run db:seed`: Reset and re-seed the menu items.
 
+## 🧭 Simple What / Why / How
+
+### Local Docker DB mode
+
+What: Run backend and frontend with local PostgreSQL in Docker.
+Why: Best for repeatable local dev and debugging.
+How:
+
+```powershell
+npm run dev:db
+npm run dev:backend
+npm run dev:web
+
+(Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
+(Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing).StatusCode
+```
+
+### Neon mode
+
+What: Point backend to Neon PostgreSQL.
+Why: Validate production-like DB behavior.
+How:
+
+```powershell
+$env:PGUSER = "<your_user>"
+$env:PGPASSWORD = "<your_password>"
+$env:DATABASE_URL = "postgresql://<your_user>:<your_password>@<host>/<db>?sslmode=require&channel_binding=require"
+
+npm run dev:backend
+npm --workspace apps/backend run db:seed
+(Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing).StatusCode
+```
+
 ## ⚡ DB Populate in 60 Seconds
 
 Run from repo root:

@@ -71,3 +71,29 @@ $cartItems = $cartResponse.Content | ConvertFrom-Json
 
 (Invoke-WebRequest -Uri "http://localhost:5173" -UseBasicParsing).StatusCode
 ```
+
+## 🧭 Simple What / Why / How Commands
+
+### Local Docker DB mode
+
+What: Verify feature against local Docker DB.
+Why: Reliable local validation before review.
+How:
+
+```powershell
+npm run dev:db
+npm run dev:backend
+npm run dev:web
+```
+
+### Neon mode
+
+What: Verify feature against Neon.
+Why: Catch cloud-only DB issues early.
+How:
+
+```powershell
+$env:DATABASE_URL = "postgresql://<your_user>:<your_password>@<host>/<db>?sslmode=require&channel_binding=require"
+npm run dev:backend
+npm --workspace apps/backend run db:seed
+```

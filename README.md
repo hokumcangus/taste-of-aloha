@@ -41,3 +41,36 @@ vercel deploy --prod
 ```
 
 `apps/web` and `apps/backend` each contain their own `vercel.json`, so those directories should be the Vercel project root for CLI deploys and in the Vercel dashboard.
+
+## Simple Commands (What / Why / How)
+
+### Local Docker DB mode
+
+What: Run app with local PostgreSQL in Docker.
+Why: Fastest and most predictable local development.
+How:
+
+```powershell
+npm run dev:db
+npm run dev:backend
+npm run dev:web
+
+(Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
+(Invoke-WebRequest -Uri "http://localhost:5173" -UseBasicParsing).StatusCode
+```
+
+### Neon mode
+
+What: Run backend against Neon cloud PostgreSQL.
+Why: Validate cloud DB behavior before deploy.
+How:
+
+```powershell
+$env:PGUSER = "<your_user>"
+$env:PGPASSWORD = "<your_password>"
+$env:DATABASE_URL = "postgresql://<your_user>:<your_password>@<host>/<db>?sslmode=require&channel_binding=require"
+
+npm run dev:backend
+npm --workspace apps/backend run db:seed
+(Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing).StatusCode
+```
