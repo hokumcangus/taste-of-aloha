@@ -1,7 +1,7 @@
-require('dotenv/config');
-const { PrismaClient } = require('@prisma/client');
-const { PrismaPg } = require('@prisma/adapter-pg');
-const { Pool } = require('pg');
+require("dotenv/config");
+const { PrismaClient } = require("@prisma/client");
+const { PrismaPg } = require("@prisma/adapter-pg");
+const { Pool } = require("pg");
 
 const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({ connectionString });
@@ -12,50 +12,50 @@ const prisma = new PrismaClient({ adapter });
 function mapToMenuData(menuItem) {
   return {
     name: menuItem.name,
-    description: menuItem.description || '',
+    description: menuItem.description || "",
     price: menuItem.price !== undefined ? Number(menuItem.price) : 0,
     image: menuItem.image || null,
-    category: menuItem.category || 'General',
-    isAvailable: menuItem.isAvailable !== undefined ? Boolean(menuItem.isAvailable) : true,
+    category: menuItem.category || "General",
+    isAvailable:
+      menuItem.isAvailable !== undefined ? Boolean(menuItem.isAvailable) : true,
   };
 }
 
-const SNACK_CATEGORY = 'Snacks';
-const LEGACY_SNACK_CATEGORY = 'Snack';
+const SNACK_CATEGORY = "Snacks";
+const LEGACY_SNACK_CATEGORY = "Snack";
 const SNACK_CATEGORIES = [SNACK_CATEGORY, LEGACY_SNACK_CATEGORY];
 
 const getAllMenus = async () => {
   return await prisma.menu.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: { createdAt: "desc" },
   });
 };
 
 const getMenusByCategory = async (category) => {
   return await prisma.menu.findMany({
-    where: { category: { equals: category, mode: 'insensitive' } },
-    orderBy: { createdAt: 'desc' },
+    where: { category: { equals: category, mode: "insensitive" } },
+    orderBy: { createdAt: "desc" },
   });
 };
-
 
 const getAllSnacks = async () => {
   return await prisma.menu.findMany({
     where: { category: { in: SNACK_CATEGORIES } },
-    orderBy: { createdAt: 'desc' },
+    orderBy: { createdAt: "desc" },
   });
 };
 
 // GET one menu item by ID
 const getMenuById = async (id) => {
   return await prisma.menu.findUnique({
-    where: { id: parseInt(id) }
+    where: { id: parseInt(id) },
   });
 };
 
 // GET one snack item by ID
 const getSnackById = async (id) => {
   return await prisma.menu.findFirst({
-    where: { id: parseInt(id), category: { in: SNACK_CATEGORIES } }
+    where: { id: parseInt(id), category: { in: SNACK_CATEGORIES } },
   });
 };
 
@@ -68,8 +68,8 @@ const createMenu = async (data) => {
       price: parseFloat(data.price),
       category: data.category,
       image: data.image || null,
-      isAvailable: data.isAvailable !== false  // Default to true
-    }
+      isAvailable: data.isAvailable !== false, // Default to true
+    },
   });
 };
 
@@ -82,8 +82,8 @@ const createSnack = async (data) => {
       price: parseFloat(data.price),
       category: SNACK_CATEGORY,
       image: data.image || null,
-      isAvailable: data.isAvailable !== false  // Default to true
-    }
+      isAvailable: data.isAvailable !== false, // Default to true
+    },
   });
 };
 
@@ -98,11 +98,12 @@ const updateMenu = async (id, data) => {
         price: data.price ? parseFloat(data.price) : undefined,
         category: data.category || undefined,
         image: data.image || undefined,
-        isAvailable: data.isAvailable !== undefined ? data.isAvailable : undefined
-      }
+        isAvailable:
+          data.isAvailable !== undefined ? data.isAvailable : undefined,
+      },
     });
   } catch (error) {
-    if (error.code === 'P2025') return null;
+    if (error.code === "P2025") return null;
     throw error;
   }
 };
@@ -116,13 +117,14 @@ const updateSnack = async (id, data) => {
         name: data.name || undefined,
         description: data.description || undefined,
         price: data.price ? parseFloat(data.price) : undefined,
-        category: SNACK_CATEGORY,  // Ensure category stays as 'Snacks'
+        category: SNACK_CATEGORY, // Ensure category stays as 'Snacks'
         image: data.image || undefined,
-        isAvailable: data.isAvailable !== undefined ? data.isAvailable : undefined
-      }
+        isAvailable:
+          data.isAvailable !== undefined ? data.isAvailable : undefined,
+      },
     });
   } catch (error) {
-    if (error.code === 'P2025') return null;
+    if (error.code === "P2025") return null;
     throw error;
   }
 };
@@ -131,11 +133,11 @@ const updateSnack = async (id, data) => {
 const deleteMenu = async (id) => {
   try {
     await prisma.menu.delete({
-      where: { id: parseInt(id) }
+      where: { id: parseInt(id) },
     });
     return true;
   } catch (error) {
-    if (error.code === 'P2025') return false;
+    if (error.code === "P2025") return false;
     throw error;
   }
 };
@@ -144,11 +146,11 @@ const deleteMenu = async (id) => {
 const deleteSnack = async (id) => {
   try {
     await prisma.menu.delete({
-      where: { id: parseInt(id) }
+      where: { id: parseInt(id) },
     });
     return true;
   } catch (error) {
-    if (error.code === 'P2025') return false;
+    if (error.code === "P2025") return false;
     throw error;
   }
 };

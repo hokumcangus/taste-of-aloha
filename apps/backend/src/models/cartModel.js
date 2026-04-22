@@ -225,5 +225,4 @@ module.exports = {
   createCart,
   updateCart,
   deleteCart,
-  CartValidationError,
 };

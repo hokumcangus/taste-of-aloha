@@ -42,6 +42,9 @@ describe("Menu Component", () => {
           <Menu />
         </Provider>
       </MemoryRouter>,
+      <Provider store={store}>
+        <Menu />
+      </Provider>,
     );
 
     expect(screen.getByText(/Loading menu items/i)).toBeInTheDocument();
@@ -66,6 +69,9 @@ describe("Menu Component", () => {
           <Menu />
         </Provider>
       </MemoryRouter>,
+      <Provider store={store}>
+        <Menu />
+      </Provider>,
     );
 
     await waitFor(() => {
@@ -83,6 +89,9 @@ describe("Menu Component", () => {
           <Menu />
         </Provider>
       </MemoryRouter>,
+      <Provider store={store}>
+        <Menu />
+      </Provider>,
     );
 
     await waitFor(() => {
@@ -93,12 +102,12 @@ describe("Menu Component", () => {
   it("should display message when no menu items are available", async () => {
     menuService.getAllMenus.mockResolvedValue([]);
 
-    render(
+render(
       <MemoryRouter>
         <Provider store={store}>
           <Menu />
         </Provider>
-      </MemoryRouter>,
+      </MemoryRouter>
     );
 
     await waitFor(() => {
