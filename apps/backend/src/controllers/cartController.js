@@ -1,4 +1,4 @@
-import CartModel from "../models/cartModel.js";
+const CartModel = require("../models/cartModel");
 
 function handleCartError(res, error, fallbackMessage) {
   console.error(error);
@@ -76,7 +76,7 @@ const deleteCartItem = async (req, res) => {
   }
 };
 
-export = {
+module.exports = {
   getAllCartItems,
   getCartItemById,
   createCartItem,

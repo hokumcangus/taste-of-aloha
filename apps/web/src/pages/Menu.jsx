@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMenuItems } from "../store/slices/menuSlice";
 import { addToCart } from "../store/slices/cartSlice";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchMenuItems } from "../store/slices/menuSlice";
 
 const Menu = () => {
   const dispatch = useDispatch();
