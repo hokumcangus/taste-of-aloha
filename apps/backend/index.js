@@ -1,11 +1,11 @@
-import express from "express";
-import cors from "cors";
-import "dotenv/config";
+require("dotenv/config");
+const express = require("express");
+const cors = require("cors");
 
-import menuRoutes from "./src/routes/menuRoutes.js";
-import cartRoutes from "./src/routes/cartRoutes.js";
-import orderRoutes from "./src/routes/orderRoutes.js";
-import logger from "./src/utils/logger.js";
+const menuRoutes = require("./src/routes/menuRoutes");
+const cartRoutes = require("./src/routes/cartRoutes");
+const orderRoutes = require("./src/routes/orderRoutes");
+const logger = require("./src/utils/logger");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,10 +30,10 @@ app.get("/health", (req, res) => {
   });
 });
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
   });
 }
 
-export default app;
+module.exports = app;
