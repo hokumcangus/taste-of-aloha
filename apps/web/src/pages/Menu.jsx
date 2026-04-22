@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMenuItems } from "../store/slices/menuSlice";
+import { addToCart } from "../store/slices/cartSlice";
 
 const Menu = () => {
   const dispatch = useDispatch();
@@ -56,6 +58,9 @@ const Menu = () => {
       >
         Menu
       </h1>
+      <div style={{ marginBottom: "1rem" }}>
+        <Link to="/checkout">Go to checkout</Link>
+      </div>
 
       {menuItems.length === 0 ? (
         <p
@@ -126,6 +131,22 @@ const Menu = () => {
                   {menuItem.description}
                 </p>
               )}
+              <button
+                onClick={() => dispatch(addToCart(menuItem))}
+                style={{
+                  marginTop: "1rem",
+                  width: "100%",
+                  padding: "0.6rem 0.8rem",
+                  border: "none",
+                  borderRadius: "6px",
+                  backgroundColor: "#1d4ed8",
+                  color: "#fff",
+                  cursor: "pointer",
+                  fontWeight: "600",
+                }}
+              >
+                Add to cart
+              </button>
             </div>
           ))}
         </div>

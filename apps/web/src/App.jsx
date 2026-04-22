@@ -1,10 +1,14 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import "./App.css";
 import Home from "./pages/Home";
 import Menu from "./pages/Menu";
 import About from "./pages/About";
+import Checkout from "./pages/Checkout";
 
 function App() {
+  const itemCount = useSelector((state) => state.cart.itemCount);
+
   return (
     <Router>
       <div className="min-h-screen bg-gray-50">
@@ -17,6 +21,9 @@ function App() {
             <Link to="/menu" className="hover:text-blue-600">
               Menu
             </Link>
+            <Link to="/checkout" className="hover:text-blue-600">
+              Checkout ({itemCount})
+            </Link>
             <Link to="/about" className="hover:text-blue-600">
               About
             </Link>
@@ -27,6 +34,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/menu" element={<Menu />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/about" element={<About />} />
         </Routes>
       </div>

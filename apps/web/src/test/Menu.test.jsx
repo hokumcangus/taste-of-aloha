@@ -1,11 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
+import { MemoryRouter } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
 import menuReducer, {
   fetchMenuItems,
   createMenu,
 } from "../store/slices/menuSlice";
+import cartReducer from "../store/slices/cartSlice";
 import Menu from "../pages/Menu";
 
 // Mock the menuService
@@ -25,6 +27,7 @@ describe("Menu Component", () => {
     store = configureStore({
       reducer: {
         menu: menuReducer,
+        cart: cartReducer,
       },
     });
     vi.clearAllMocks();
@@ -34,6 +37,11 @@ describe("Menu Component", () => {
     menuService.getAllMenus.mockImplementation(() => new Promise(() => {}));
 
     render(
+      <MemoryRouter>
+        <Provider store={store}>
+          <Menu />
+        </Provider>
+      </MemoryRouter>,
       <Provider store={store}>
         <Menu />
       </Provider>,
@@ -56,6 +64,11 @@ describe("Menu Component", () => {
     menuService.getAllMenus.mockResolvedValue(mockMenuItems);
 
     render(
+      <MemoryRouter>
+        <Provider store={store}>
+          <Menu />
+        </Provider>
+      </MemoryRouter>,
       <Provider store={store}>
         <Menu />
       </Provider>,
@@ -71,6 +84,11 @@ describe("Menu Component", () => {
     menuService.getAllMenus.mockRejectedValue(new Error("Network error"));
 
     render(
+      <MemoryRouter>
+        <Provider store={store}>
+          <Menu />
+        </Provider>
+      </MemoryRouter>,
       <Provider store={store}>
         <Menu />
       </Provider>,
@@ -84,10 +102,12 @@ describe("Menu Component", () => {
   it("should display message when no menu items are available", async () => {
     menuService.getAllMenus.mockResolvedValue([]);
 
-    render(
-      <Provider store={store}>
-        <Menu />
-      </Provider>,
+render(
+      <MemoryRouter>
+        <Provider store={store}>
+          <Menu />
+        </Provider>
+      </MemoryRouter>
     );
 
     await waitFor(() => {
@@ -103,6 +123,7 @@ describe("Menu Slice Redux", () => {
     store = configureStore({
       reducer: {
         menu: menuReducer,
+        cart: cartReducer,
       },
     });
     vi.clearAllMocks();
