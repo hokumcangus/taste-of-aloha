@@ -10,10 +10,6 @@ const { databaseUrl } = require("./databaseUrl");
  * Import this module wherever you need database access:
  *   const { prisma } = require('./config/database');
  */
-<<<<<<< Updated upstream
-const connectionString = process.env.DATABASE_URL;
-=======
->>>>>>> Stashed changes
 const pool = new Pool({
   connectionString: databaseUrl,
   ssl:
