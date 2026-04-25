@@ -14,13 +14,13 @@
     "db:migrate": "npx prisma migrate dev",
     "db:migrate:deploy": "npx prisma migrate deploy",
     "db:generate": "npx prisma generate",
-    "db:seed": "node prisma/seed.js",
+    "db:seed": "node prisma/menu.seed.js",
     "db:reset": "npx prisma migrate reset",
     "db:studio": "npx prisma studio",
     "seed:menu": "node scripts/addMenuItem.js"
   },
   "prisma": {
-    "seed": "node prisma/seed.js"
+    "seed": "node prisma/menu.seed.js"
   },
   "keywords": [
     "taste-of-aloha",
