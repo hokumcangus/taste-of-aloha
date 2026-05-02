@@ -16,11 +16,11 @@ export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
-    seed: "node prisma/seed.js",
+    seed: "node prisma/menu.seed.js",
   },
   datasource: {
     // `prisma generate` does not require a live DB connection, but Prisma config
     // must still have a valid URL at load time (e.g., on Vercel build).
-    url: databaseUrl,
+    url: process.env.DATABASE_URL,
   },
 });

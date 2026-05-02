@@ -1,6 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const { PrismaPg } = require("@prisma/adapter-pg");
 const { Pool } = require("pg");
+const { databaseUrl } = require("./databaseUrl");
 
 /**
  * Shared Prisma client for the application.
@@ -9,22 +10,8 @@ const { Pool } = require("pg");
  * Import this module wherever you need database access:
  *   const { prisma } = require('./config/database');
  */
-const connectionString =
-  process.env.DATABASE_URL ||
-  process.env.POSTGRES_PRISMA_URL ||
-  process.env.POSTGRES_URL ||
-  process.env.tasteofalohadb_POSTGRES_PRISMA_URL ||
-  process.env.tasteofalohadb_POSTGRES_URL ||
-  process.env.tasteofalohadb_DATABASE_URL;
-
-if (!connectionString) {
-  throw new Error(
-    "Missing database connection URL. Set DATABASE_URL or a supported POSTGRES_* variable.",
-  );
-}
-
 const pool = new Pool({
-  connectionString,
+  connectionString: databaseUrl,
   ssl:
     process.env.NODE_ENV === "production"
       ? { rejectUnauthorized: false }
