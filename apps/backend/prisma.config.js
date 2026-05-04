@@ -9,6 +9,7 @@ const fallbackDbPort = process.env.PRISMA_FALLBACK_DB_PORT ?? "5432";
 const fallbackDbName = process.env.PRISMA_FALLBACK_DB_NAME ?? "taste_of_aloha";
 
 const databaseUrl =
+  process.env.DATABASE_URL_UNPOOLED ??
   process.env.DATABASE_URL ??
   `postgresql://${fallbackDbUser}:${fallbackDbPassword}@${fallbackDbHost}:${fallbackDbPort}/${fallbackDbName}`;
 
@@ -19,8 +20,8 @@ export default defineConfig({
     seed: "node prisma/menu.seed.js",
   },
   datasource: {
-    // `prisma generate` does not require a live DB connection, but Prisma config
-    // must still have a valid URL at load time (e.g., on Vercel build).
-    url: process.env.DATABASE_URL,
+    // Use unpooled URL for migrations (shadow DB needs direct connection)
+    // The app runtime uses the pooled DATABASE_URL via src/config/databaseUrl.js
+    url: process.env.DATABASE_URL_UNPOOLED,
   },
 });

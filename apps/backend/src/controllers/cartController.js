@@ -14,6 +14,7 @@ const getAllCartItems = async (_req, res) => {
   try {
     const cartItems = await CartModel.getAllCartItems();
     res.json(cartItems);
+    console.log("Fetched cart items:", res.cartItems);
   } catch (error) {
     handleCartError(res, error, "Failed to fetch cart items");
   }
@@ -23,6 +24,7 @@ const getAllCartItems = async (_req, res) => {
 const getCartItemById = async (req, res) => {
   try {
     const cartItem = await CartModel.getCartItemById(req.params.id);
+    console.log("Fetched 1 cart item:", res.cartItem);
 
     if (!cartItem) {
       return res.status(404).json({ message: "Cart item not found" });
@@ -38,6 +40,7 @@ const createCartItem = async (req, res) => {
   try {
     const created = await CartModel.createCartItem(req.body || {});
     res.status(201).json(created);
+    console.log("Created cart item:", created);
   } catch (error) {
     handleCartError(res, error, "Failed to create cart item");
   }
@@ -46,7 +49,7 @@ const createCartItem = async (req, res) => {
 const updateCartItem = async (req, res) => {
   try {
     const existing = await CartModel.getCartItemById(req.params.id);
-
+    console.log("Updating cart item:", existing);
     if (!existing) {
       return res.status(404).json({ message: "Cart item not found" });
     }
@@ -55,6 +58,7 @@ const updateCartItem = async (req, res) => {
       req.params.id,
       req.body || {},
     );
+    console.log("Updated cart item:", updated);
     res.json(updated);
   } catch (error) {
     handleCartError(res, error, "Failed to update cart item");
