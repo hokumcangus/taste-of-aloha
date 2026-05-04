@@ -61,7 +61,7 @@ npm run db:seed
 # or: npx prisma db seed
 ```
 
-Populates the Menu table with sample Hawaiian menu items defined in `prisma/seed.js`.
+`npm run db:seed` and `npx prisma db seed` both run `prisma/menu.seed.js`.
 
 ### Add a Single Menu Item (CLI)
 
@@ -234,6 +234,14 @@ Create `.env` in `apps/backend/`:
 DATABASE_URL=postgresql://<db_user>:<db_password>@<db_host>:<db_port>/<db_name>
 PORT=3000
 ```
+
+Connection URL resolution fallback (used by app runtime and seed scripts):
+- `DATABASE_URL`
+- `POSTGRES_PRISMA_URL`
+- `POSTGRES_URL`
+- `POSTGRES_PRISMA_URL`
+- `POSTGRES_URL`
+- `DATABASE_URL`
 
 ## 📚 Documentation
 
