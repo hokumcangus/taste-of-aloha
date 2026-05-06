@@ -6,11 +6,37 @@ datasource db {
   provider = "postgresql"
 }
 
+enum UserRole {
+  CUSTOMER
+  ADMIN
+}
+
+enum OrderStatus {
+  PLACED
+  PREPARING
+  READY
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  name         String?
+  passwordHash String    @default("")
+  role         UserRole  @default(CUSTOMER)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  posts        Post[]
+  carts        Cart[]
+  orders       Order[]
 }
 
 model Menu {
@@ -42,6 +68,7 @@ model Cart {
   itemCount Int        @default(0)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  user      User?      @relation(fields: [userId], references: [id])
   items     CartItem[]
 }
 
@@ -58,4 +85,34 @@ model CartItem {
   menu      Menu     @relation(fields: [menuId], references: [id])
 
   @@unique([cartId, menuId])
+}
+
+model Order {
+  id               Int           @id @default(autoincrement())
+  userId           Int
+  status           OrderStatus   @default(PLACED)
+  paymentStatus    PaymentStatus @default(PENDING)
+  paymentMethod    String
+  paymentReference String?
+  total            Float
+  itemCount        Int
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  user             User          @relation(fields: [userId], references: [id])
+  items            OrderItem[]
+}
+
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  orderId   Int
+  menuId    Int
+  menuName  String
+  unitPrice Float
+  quantity  Int
+  subtotal  Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
 }
