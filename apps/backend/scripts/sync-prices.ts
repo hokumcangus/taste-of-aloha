@@ -63,4 +63,4 @@ syncPrices()
     console.error('Error syncing prices:', err instanceof Error ? err.message : String(err));
     process.exit(1);
   })
-  .finally(() => prisma.$disconnect());
+  .finally(() => prisma.$disconnect().catch(() => {}));

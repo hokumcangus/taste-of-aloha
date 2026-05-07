@@ -68,8 +68,8 @@ async function migrateImages() {
   console.log(`Found ${items.length} menu item(s) to process.`);
 
   for (const { itemName, imageUrl } of items) {
-    // Sanitize: replace spaces, slashes, and other path-unsafe chars
-    const safeBaseName = itemName.replace(/[/\\]/g, '-').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').toLowerCase();
+    // Sanitize: lowercase first, then replace path-unsafe chars
+    const safeBaseName = itemName.toLowerCase().replace(/[/\\]/g, '-').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
     const fileName = `${safeBaseName}.jpg`;
     const filePath = path.join(IMAGE_DIR, fileName);
     try {
@@ -92,4 +92,4 @@ migrateImages()
     console.error('Fatal:', err instanceof Error ? err.message : String(err));
     process.exit(1);
   })
-  .finally(() => prisma.$disconnect());
+  .finally(() => prisma.$disconnect().catch(() => {}));
