@@ -1,11 +1,12 @@
-import axios from 'axios';
-import * as cheerio from 'cheerio';
+import { chromium } from 'playwright';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import * as dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
+import https from 'https';
+import http from 'http';
 import { fileURLToPath } from 'url';
 
 dotenv.config();
@@ -20,55 +21,75 @@ const pool = new Pool({
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter } as any);
 const IMAGE_DIR = path.join(__dirname, '../public/menu-images');
+const MENU_URL = 'https://taste-of-aloha-marysville.cloveronline.com/menu/all';
+
+function downloadFile(url: string, dest: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const file = fs.createWriteStream(dest);
+    file.on('error', reject); // attach before any I/O
+    const protocol = url.startsWith('https') ? https : http;
+    protocol.get(url, (res) => {
+      res.pipe(file);
+      file.on('finish', () => file.close(() => resolve()));
+    }).on('error', (err) => {
+      fs.unlink(dest, () => {}); // clean up partial file
+      reject(err);
+    });
+  });
+}
 
 async function migrateImages() {
-  // Ensure directory exists
   if (!fs.existsSync(IMAGE_DIR)) fs.mkdirSync(IMAGE_DIR, { recursive: true });
 
-  const { data } = await axios.get('https://taste-of-aloha-marysville.cloveronline.com/menu/all');
-  const $ = cheerio.load(data);
+  console.log('Launching browser...');
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage();
 
-  console.log("Starting image migration...");
+  console.log(`Navigating to ${MENU_URL} ...`);
+  await page.goto(MENU_URL, { waitUntil: 'networkidle', timeout: 30000 });
 
-  // Collect items synchronously first, then process with async/await
-  const items: { itemName: string; imageUrl: string }[] = [];
-  $('.menu-item-card').each((_, el) => {
-    const itemName = $(el).find('.item-name').text().trim();
-    const imageUrl = $(el).find('img').attr('src');
-    if (imageUrl && itemName) {
-      items.push({ itemName, imageUrl });
-    }
+  // Card selector: avoids Tailwind bracket classes (h-[120px]) which need CSS escaping
+  const CARD_SEL = 'div.flex.shadow-md.rounded-b-md.cursor-pointer.bg-white';
+  const NAME_SEL = 'span.line-clamp-1.text-lg.font-medium.text-ellipsis';
+
+  await page.waitForSelector(CARD_SEL, { timeout: 15000 }).catch(() => {
+    console.warn('⚠️  Card selector not found — Clover may have updated their markup.');
   });
+
+  const items = await page.evaluate(([card, nameSel]) => {
+    return Array.from(document.querySelectorAll(card)).map((el) => ({
+      itemName: el.querySelector(nameSel)?.textContent?.trim() ?? '',
+      imageUrl: (el.querySelector('img') as HTMLImageElement | null)?.src ?? '',
+    })).filter(({ itemName, imageUrl }) => itemName && imageUrl);
+  }, [CARD_SEL, NAME_SEL]);
+
+  await browser.close();
 
   console.log(`Found ${items.length} menu item(s) to process.`);
 
   for (const { itemName, imageUrl } of items) {
-    const fileName = `${itemName.replace(/\s+/g, '-').toLowerCase()}.jpg`;
+    // Sanitize: replace spaces, slashes, and other path-unsafe chars
+    const safeBaseName = itemName.replace(/[/\\]/g, '-').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').toLowerCase();
+    const fileName = `${safeBaseName}.jpg`;
     const filePath = path.join(IMAGE_DIR, fileName);
-
     try {
-      // Download the image
-      const response = await axios({ url: imageUrl, responseType: 'stream' });
-      await new Promise<void>((resolve, reject) => {
-        const writer = fs.createWriteStream(filePath);
-        response.data.pipe(writer);
-        writer.on('finish', resolve);
-        writer.on('error', reject);
-      });
-
-      // Update Prisma with the local path
+      await downloadFile(imageUrl, filePath);
       await prisma.menu.updateMany({
         where: { name: itemName },
-        data: { image: `/menu-images/${fileName}` }
+        data: { image: `/menu-images/${fileName}` },
       });
       console.log(`✅ Saved & Linked: ${itemName}`);
     } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      console.error(`❌ Failed for ${itemName}:`, message);
+      console.error(`❌ Failed for ${itemName}:`, err instanceof Error ? err.message : String(err));
     }
   }
+
+  console.log('Migration complete!');
 }
 
 migrateImages()
-  .catch(console.error)
+  .catch((err) => {
+    console.error('Fatal:', err instanceof Error ? err.message : String(err));
+    process.exit(1);
+  })
   .finally(() => prisma.$disconnect());
