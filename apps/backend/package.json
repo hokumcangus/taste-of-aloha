@@ -18,7 +18,8 @@
     "db:seed": "node prisma/menu.seed.js",
     "db:reset": "npx prisma migrate reset",
     "db:studio": "npx prisma studio",
-    "seed:menu": "node scripts/addMenuItem.js"
+    "seed:menu": "node scripts/addMenuItem.js",
+    "sync-menu": "ts-node scripts/sync-prices.ts"
   },
   "prisma": {
     "seed": "node prisma/menu.seed.js"
@@ -37,6 +38,7 @@
     "eslint": "^9.39.1",
     "jest": "^29.7.0",
     "nodemon": "^3.1.11",
+    "playwright": "^1.59.1",
     "prettier": "^3.6.2",
     "prisma": "^7.7.0",
     "supertest": "^7.0.0",
@@ -46,7 +48,9 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
+    "axios": "^1.16.0",
     "bcrypt": "^6.0.0",
+    "cheerio": "^1.2.0",
     "cors": "^2.8.5",
     "dotenv": "^17.4.2",
     "express": "^5.1.0",

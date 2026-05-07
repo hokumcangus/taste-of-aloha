@@ -51,7 +51,18 @@ model Menu {
   isAvailable Boolean    @default(true)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  
+  // Relations
+  modifiers   Modifier[]
   cartItems   CartItem[]
+}
+
+model Modifier {
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       Float    @default(0.0)
+  isAvailable Boolean  @default(true)
+  menuItems   Menu[]   // Many-to-many relationship
 }
 
 model Post {

@@ -73,7 +73,34 @@ async function main() {
       console.log(`  ✅ Created: ${item.name}`);
     }
   }
+  async function seedModifiers() {
+  // 1. Create global modifiers
+  const noOnions = await prisma.modifier.create({
+    data: { name: "No Green Onions", price: 0.0 }
+  });
+  
+  const extraGravy = await prisma.modifier.create({
+    data: { name: "Extra Gravy", price: 1.50 }
+  });
 
+  const allMac = await prisma.modifier.create({
+    data: { name: "All Mac Salad no rice", price: 2.99 }
+  });
+
+  // 2. Connect them to a specific Menu item (e.g., the Combo Plate)
+  await prisma.menu.update({
+    where: { name: "Kalua Pig and Shoyu Chicken Combo" },
+    data: {
+      modifiers: {
+        connect: [
+          { id: noOnions.id },
+          { id: extraGravy.id },
+          { id: allMac.id }
+        ]
+      }
+    }
+  });
+}
   console.log("🌺 Seeding complete.");
 }
 
