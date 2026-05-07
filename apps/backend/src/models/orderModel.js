@@ -234,4 +234,23 @@ module.exports = {
     getOrderById,
     deleteOrder,
     updateOrderStatus,
+    markOrderPaidByReference,
 };
+
+async function markOrderPaidByReference(paymentReference) {
+    const order = await prisma.order.findFirst({
+        where: { paymentReference: String(paymentReference) },
+    });
+
+    if (!order) {
+        return null;
+    }
+
+    const updated = await prisma.order.update({
+        where: { id: order.id },
+        data: { paymentStatus: "PAID" },
+        include: { items: true },
+    });
+
+    return mapOrderData(updated);
+}
