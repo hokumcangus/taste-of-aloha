@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.post("/register", authController.register);
 router.post("/login", authController.login);
+router.post("/guest", authController.guestAuth);
 router.get("/me", requireAuth, authController.me);
 router.patch("/users/:id/role", requireAuth, requireRole("ADMIN"), authController.updateUserRole);
 

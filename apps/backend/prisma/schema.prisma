@@ -7,6 +7,7 @@ datasource db {
 }
 
 enum UserRole {
+  GUEST
   CUSTOMER
   ADMIN
 }
@@ -29,6 +30,7 @@ enum PaymentStatus {
 model User {
   id           Int       @id @default(autoincrement())
   email        String    @unique
+  phone        String?   @unique
   name         String?
   passwordHash String    @default("")
   role         UserRole  @default(CUSTOMER)

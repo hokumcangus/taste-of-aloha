@@ -7,6 +7,7 @@ import {
 	setItemQuantity,
 	syncCartToBackend,
 } from "../store/slices/cartSlice";
+import { guestLogin } from "../store/slices/authSlice";
 import { paymentService } from "../services/paymentService";
 import { orderService } from "../services/orderService";
 
@@ -20,9 +21,25 @@ const Checkout = () => {
 	const [placeOrderStatus, setPlaceOrderStatus] = React.useState("idle");
 	const [checkoutError, setCheckoutError] = React.useState(null);
 	const [placedOrder, setPlacedOrder] = React.useState(null);
+	const [guestPhone, setGuestPhone] = React.useState("");
+	const [guestStatus, setGuestStatus] = React.useState("idle");
+	const [guestError, setGuestError] = React.useState(null);
 
 	const isSyncing = syncStatus === "loading";
 	const isPlacingOrder = placeOrderStatus === "loading";
+	const isGuestLoading = guestStatus === "loading";
+
+	const handleGuestContinue = async () => {
+		setGuestError(null);
+		try {
+			setGuestStatus("loading");
+			await dispatch(guestLogin({ phone: guestPhone })).unwrap();
+			setGuestStatus("succeeded");
+		} catch (err) {
+			setGuestError(err || "Failed to continue as guest");
+			setGuestStatus("failed");
+		}
+	};
 
 	const handlePlaceOrder = async () => {
 		if (!authUser) {
@@ -214,8 +231,57 @@ const Checkout = () => {
 						</select>
 					</div>
 					{!authUser && (
-						<div style={{ color: "#b45309", fontSize: "0.85rem", marginTop: "0.5rem" }}>
-							Login is required to place your order.
+						<div
+							style={{
+								marginTop: "1rem",
+								border: "1px solid #d97706",
+								borderRadius: "8px",
+								padding: "1rem",
+								backgroundColor: "#fffbeb",
+							}}
+						>
+							<p style={{ margin: "0 0 0.75rem", fontWeight: 600, color: "#92400e" }}>
+								Enter your phone number to continue as a guest
+							</p>
+							<div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+								<input
+									type="tel"
+									placeholder="e.g. 8085551234"
+									value={guestPhone}
+									onChange={(e) => setGuestPhone(e.target.value)}
+									style={{
+										flex: 1,
+										minWidth: "160px",
+										padding: "0.5rem",
+										borderRadius: "6px",
+										border: "1px solid #d97706",
+									}}
+								/>
+								<button
+									onClick={handleGuestContinue}
+									disabled={isGuestLoading || !guestPhone.trim()}
+									style={{
+										border: "none",
+										borderRadius: "6px",
+										backgroundColor: "#d97706",
+										color: "#fff",
+										padding: "0.5rem 1rem",
+										cursor: isGuestLoading || !guestPhone.trim() ? "not-allowed" : "pointer",
+										opacity: isGuestLoading || !guestPhone.trim() ? 0.6 : 1,
+									}}
+								>
+									{isGuestLoading ? "Verifying..." : "Continue as Guest"}
+								</button>
+							</div>
+							{guestError && (
+								<p style={{ color: "#dc2626", fontSize: "0.85rem", marginTop: "0.5rem" }}>
+									{guestError}
+								</p>
+							)}
+							<p style={{ marginTop: "0.5rem", fontSize: "0.8rem", color: "#78716c" }}>
+								Already have an account?{" "}
+								<Link to="/login" style={{ color: "#1d4ed8" }}>Sign in</Link>
+							</p>
 						</div>
 					)}
 					{syncedAt && (

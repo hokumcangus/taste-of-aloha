@@ -87,9 +87,19 @@ async function updateUserRole(req, res) {
   }
 }
 
+async function guestAuth(req, res) {
+  try {
+    const user = await authModel.findOrCreateGuest(req.body?.phone);
+    return res.status(200).json(buildAuthResponse(user));
+  } catch (error) {
+    return handleAuthError(res, error, "Failed to continue as guest");
+  }
+}
+
 module.exports = {
   register,
   login,
   me,
+  guestAuth,
   updateUserRole,
 };

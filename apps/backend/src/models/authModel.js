@@ -11,11 +11,22 @@ function sanitizeUser(user) {
   return {
     id: user.id,
     email: user.email,
+    phone: user.phone ?? null,
     name: user.name,
     role: user.role,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   };
+}
+
+function normalizePhone(raw) {
+  const digits = String(raw || "").replace(/\D/g, "");
+  if (digits.length < 10 || digits.length > 15) {
+    const error = new Error("Phone number must be 10–15 digits");
+    error.statusCode = 400;
+    throw error;
+  }
+  return digits;
 }
 
 async function findByEmail(email) {
@@ -94,8 +105,33 @@ async function verifyUser({ email, password }) {
   return sanitizeUser(user);
 }
 
+async function findOrCreateGuest(rawPhone) {
+  const phone = normalizePhone(rawPhone);
+
+  // Use a synthetic internal email that guests never see
+  const guestEmail = `guest_${phone}@guest.taste-of-aloha.local`;
+
+  const existing = await prisma.user.findUnique({ where: { phone } });
+  if (existing) {
+    return sanitizeUser(existing);
+  }
+
+  const created = await prisma.user.create({
+    data: {
+      email: guestEmail,
+      phone,
+      role: "GUEST",
+      passwordHash: "",
+      name: null,
+    },
+  });
+
+  return sanitizeUser(created);
+}
+
 module.exports = {
   createUser,
   verifyUser,
   findById,
+  findOrCreateGuest,
 };

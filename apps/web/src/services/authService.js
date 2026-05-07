@@ -12,4 +12,8 @@ export const authService = {
   me: async () => {
     return apiClient.get("/api/auth/me");
   },
+
+  guestAuth: async ({ phone }) => {
+    return apiClient.post("/api/auth/guest", { phone });
+  },
 };

@@ -84,6 +84,17 @@ export const fetchMyProfile = createAsyncThunk(
   },
 );
 
+export const guestLogin = createAsyncThunk(
+  "auth/guestLogin",
+  async (payload, { rejectWithValue }) => {
+    try {
+      return await authService.guestAuth(payload);
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to continue as guest");
+    }
+  },
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState: loadAuthState(),
@@ -135,6 +146,21 @@ const authSlice = createSlice({
       })
       .addCase(fetchMyProfile.rejected, (state, action) => {
         state.error = action.payload || "Failed to fetch profile";
+      })
+      .addCase(guestLogin.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(guestLogin.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.error = null;
+        persistAuthState(state);
+      })
+      .addCase(guestLogin.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to continue as guest";
       });
   },
 });

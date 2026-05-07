@@ -201,3 +201,62 @@ describe("PATCH /api/auth/users/:id/role", () => {
     expect(res.body.message).toMatch(/CUSTOMER or ADMIN/i);
   });
 });
+
+describe("POST /api/auth/guest", () => {
+  const guestUser = {
+    id: 10,
+    email: "guest_8085551234@guest.taste-of-aloha.local",
+    phone: "8085551234",
+    name: null,
+    passwordHash: "",
+    role: "GUEST",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
+  test("should create a new guest user and return a JWT", async () => {
+    mockPrisma.user.findUnique.mockResolvedValue(null);
+    mockPrisma.user.create.mockResolvedValue(guestUser);
+
+    const res = await request(app)
+      .post("/api/auth/guest")
+      .send({ phone: "808-555-1234" });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("token");
+    expect(res.body.user.role).toBe("GUEST");
+    expect(res.body.user.phone).toBe("8085551234");
+    expect(res.body.user).not.toHaveProperty("passwordHash");
+  });
+
+  test("should return the same token for a returning guest (same phone)", async () => {
+    mockPrisma.user.findUnique.mockResolvedValue(guestUser);
+
+    const res = await request(app)
+      .post("/api/auth/guest")
+      .send({ phone: "8085551234" });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("token");
+    // create should NOT have been called since user already exists
+    expect(mockPrisma.user.create).not.toHaveBeenCalled();
+  });
+
+  test("should return 400 for a phone number that is too short", async () => {
+    const res = await request(app)
+      .post("/api/auth/guest")
+      .send({ phone: "123" });
+
+    expect(res.status).toBe(400);
+    expect(res.body.message).toMatch(/10/);
+  });
+
+  test("should return 400 if phone is missing", async () => {
+    const res = await request(app)
+      .post("/api/auth/guest")
+      .send({});
+
+    expect(res.status).toBe(400);
+  });
+});
+
