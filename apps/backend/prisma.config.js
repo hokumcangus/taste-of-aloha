@@ -22,8 +22,7 @@ export default defineConfig({
   datasource: {
     // Use unpooled URL for migrations (shadow DB needs direct connection)
     // The app runtime uses the pooled DATABASE_URL via src/config/databaseUrl.js
-    url: process.env.databaseUrl, // This will be DATABASE_URL_UNPOOLED if set, otherwise falls back to DATABASE_URL or constructed URL 
+    url: databaseUrl,
   },
 });
 
-export default defineConfig;
