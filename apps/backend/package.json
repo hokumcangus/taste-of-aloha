@@ -19,7 +19,9 @@
     "db:reset": "npx prisma migrate reset",
     "db:studio": "npx prisma studio",
     "seed:menu": "node scripts/addMenuItem.js",
-    "sync-menu": "ts-node scripts/sync-prices.ts"
+    "sync-menu": "ts-node scripts/sync-prices.ts",
+    "extract:images": "ts-node scripts/extract-imgs.ts --url=https://www.ordertasteofaloha.com/order",
+    "extract:images:db": "ts-node scripts/extract-imgs.ts --url=https://www.ordertasteofaloha.com/order --db"
   },
   "prisma": {
     "seed": "node prisma/menu.seed.js"

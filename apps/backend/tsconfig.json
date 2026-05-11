@@ -6,8 +6,10 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "strict": false,
+    "strict": true,
     "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "rootDir": "./",
     "outDir": "dist"
   },
   "include": ["scripts/**/*.ts", "src/**/*.ts"],

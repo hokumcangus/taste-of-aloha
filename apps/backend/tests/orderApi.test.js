@@ -9,6 +9,13 @@ let mockPrisma;
 jest.mock("@prisma/client", () => {
   mockPrisma = {
     menu: { findMany: jest.fn() },
+    notification: {
+      createMany: jest.fn(),
+    },
+    user: {
+      findMany: jest.fn(),
+      findUnique: jest.fn(),
+    },
     order: {
       findMany: jest.fn(),
       findUnique: jest.fn(),
@@ -53,6 +60,9 @@ let consoleErrorSpy;
 beforeEach(() => {
   jest.clearAllMocks();
   consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+  mockPrisma.notification.createMany.mockResolvedValue({ count: 1 });
+  mockPrisma.user.findMany.mockResolvedValue([{ id: 1 }]);
+  mockPrisma.user.findUnique.mockResolvedValue({ id: 7, role: "DRIVER" });
 });
 
 afterEach(() => {
@@ -169,6 +179,7 @@ describe("GET /api/orders/:id", () => {
 
 describe("PATCH /api/orders/:id/status", () => {
   test("admin can update order status", async () => {
+    mockPrisma.order.findUnique.mockResolvedValue(baseOrder);
     mockPrisma.order.update.mockResolvedValue({ ...baseOrder, status: "PREPARING" });
 
     const res = await request(app)
@@ -190,6 +201,8 @@ describe("PATCH /api/orders/:id/status", () => {
   });
 
   test("should return 400 for invalid status", async () => {
+    mockPrisma.order.findUnique.mockResolvedValue(baseOrder);
+
     const res = await request(app)
       .patch("/api/orders/1/status")
       .set("Authorization", `Bearer ${adminToken}`)
