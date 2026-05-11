@@ -7,7 +7,22 @@ import { configureStore } from "@reduxjs/toolkit";
 vi.mock("../services/dashboardService", () => ({
   dashboardService: {
     getMyDashboard: vi.fn(),
+    getDriverDashboard: vi.fn(),
     getAdminDashboard: vi.fn(),
+  },
+}));
+
+vi.mock("../services/notificationService", () => ({
+  notificationService: {
+    getMyNotifications: vi.fn().mockResolvedValue({ notifications: [], unreadCount: 0 }),
+    markRead: vi.fn(),
+    markAllRead: vi.fn(),
+  },
+}));
+
+vi.mock("../services/orderService", () => ({
+  orderService: {
+    updateOrderStatus: vi.fn(),
   },
 }));
 
@@ -15,6 +30,7 @@ import { dashboardService } from "../services/dashboardService";
 import Dashboard from "../pages/Dashboard";
 
 const customerUser = { id: 5, email: "c@test.com", name: "Hoku", role: "CUSTOMER" };
+const driverUser = { id: 7, email: "d@test.com", name: "Driver", role: "DRIVER" };
 const adminUser = { id: 1, email: "a@test.com", name: "Admin", role: "ADMIN" };
 
 const mockCustomerData = {
@@ -77,6 +93,9 @@ function renderDashboard(user) {
 describe("Dashboard page", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    dashboardService.getMyDashboard.mockResolvedValue(mockCustomerData);
+    dashboardService.getAdminDashboard.mockResolvedValue(mockAdminData);
+    dashboardService.getDriverDashboard.mockResolvedValue(mockCustomerData);
   });
 
   it("shows loading state initially", () => {
@@ -110,6 +129,19 @@ describe("Dashboard page", () => {
     });
 
     expect(dashboardService.getMyDashboard).not.toHaveBeenCalled();
+  });
+
+  it("calls getDriverDashboard for DRIVER users", async () => {
+    dashboardService.getDriverDashboard.mockResolvedValue(mockCustomerData);
+
+    renderDashboard(driverUser);
+
+    await waitFor(() => {
+      expect(dashboardService.getDriverDashboard).toHaveBeenCalledTimes(1);
+    });
+
+    expect(dashboardService.getMyDashboard).not.toHaveBeenCalled();
+    expect(dashboardService.getAdminDashboard).not.toHaveBeenCalled();
   });
 
   it("renders admin revenue summary", async () => {
