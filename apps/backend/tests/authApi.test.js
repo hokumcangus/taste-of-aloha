@@ -198,7 +198,7 @@ describe("PATCH /api/auth/users/:id/role", () => {
       .send({ role: "SUPERUSER" });
 
     expect(res.status).toBe(400);
-    expect(res.body.message).toMatch(/CUSTOMER or ADMIN/i);
+    expect(res.body.message).toMatch(/CUSTOMER, DRIVER, or ADMIN/i);
   });
 });
 

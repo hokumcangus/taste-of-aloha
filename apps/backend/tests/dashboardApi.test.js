@@ -29,6 +29,7 @@ app.use("/api/dashboard", dashboardRoutes);
 
 const JWT_SECRET = "dev-secret-change-me";
 const customerToken = jwt.sign({ sub: 5, email: "c@test.com", role: "CUSTOMER" }, JWT_SECRET);
+const driverToken = jwt.sign({ sub: 7, email: "d@test.com", role: "DRIVER" }, JWT_SECRET);
 const adminToken = jwt.sign({ sub: 1, email: "a@test.com", role: "ADMIN" }, JWT_SECRET);
 
 const mockRecentOrders = [
@@ -109,6 +110,33 @@ describe("GET /api/dashboard/admin", () => {
 
   test("should return 401 if not authenticated", async () => {
     const res = await request(app).get("/api/dashboard/admin");
+    expect(res.status).toBe(401);
+  });
+});
+
+describe("GET /api/dashboard/driver", () => {
+  test("should return driver dashboard summary", async () => {
+    const res = await request(app)
+      .get("/api/dashboard/driver")
+      .set("Authorization", `Bearer ${driverToken}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body.summary).toHaveProperty("assignedOrders", 3);
+    expect(res.body.summary).toHaveProperty("activeOrders", 3);
+    expect(res.body.summary).toHaveProperty("completedOrders", 3);
+    expect(Array.isArray(res.body.recentOrders)).toBe(true);
+  });
+
+  test("should return 403 for non-DRIVER users", async () => {
+    const res = await request(app)
+      .get("/api/dashboard/driver")
+      .set("Authorization", `Bearer ${customerToken}`);
+
+    expect(res.status).toBe(403);
+  });
+
+  test("should return 401 if not authenticated", async () => {
+    const res = await request(app).get("/api/dashboard/driver");
     expect(res.status).toBe(401);
   });
 });

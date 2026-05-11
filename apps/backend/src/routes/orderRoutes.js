@@ -8,7 +8,7 @@ router.use(requireAuth);
 router.get("/", orderController.getOrders);
 router.get("/:id", orderController.getOrderById);
 router.post("/", orderController.placeOrder);
-router.patch("/:id/status", requireRole("ADMIN"), orderController.updateOrderStatus);
+router.patch("/:id/status", requireRole("ADMIN", "DRIVER"), orderController.updateOrderStatus);
 router.delete("/:id", orderController.deleteOrder);
 
 module.exports = router;
