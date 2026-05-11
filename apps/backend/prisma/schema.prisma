@@ -9,6 +9,7 @@ datasource db {
 enum UserRole {
   GUEST
   CUSTOMER
+  DRIVER
   ADMIN
 }
 
@@ -27,6 +28,13 @@ enum PaymentStatus {
   REFUNDED
 }
 
+enum NotificationType {
+  ORDER_CREATED
+  ORDER_UPDATED
+  ORDER_STATUS_CHANGED
+  ORDER_ASSIGNED
+}
+
 model User {
   id           Int       @id @default(autoincrement())
   email        String    @unique
@@ -39,6 +47,8 @@ model User {
   posts        Post[]
   carts        Cart[]
   orders       Order[]
+  assignedOrders Order[] @relation("DriverOrders")
+  notifications Notification[]
 }
 
 model Menu {
@@ -103,6 +113,7 @@ model CartItem {
 model Order {
   id               Int           @id @default(autoincrement())
   userId           Int
+  assignedDriverId Int?
   status           OrderStatus   @default(PLACED)
   paymentStatus    PaymentStatus @default(PENDING)
   paymentMethod    String
@@ -112,7 +123,11 @@ model Order {
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
   user             User          @relation(fields: [userId], references: [id])
+  assignedDriver   User?         @relation("DriverOrders", fields: [assignedDriverId], references: [id])
   items            OrderItem[]
+  notifications    Notification[]
+
+  @@index([assignedDriverId])
 }
 
 model OrderItem {
@@ -127,5 +142,22 @@ model OrderItem {
   updatedAt DateTime @updatedAt
   order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
+  @@index([orderId])
+}
+
+model Notification {
+  id        Int              @id @default(autoincrement())
+  userId    Int
+  orderId   Int?
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  readAt    DateTime?
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order     Order?           @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  @@index([userId, isRead, createdAt])
   @@index([orderId])
 }
