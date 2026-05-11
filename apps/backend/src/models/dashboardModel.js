@@ -17,7 +17,12 @@ async function getUserDashboard(userId) {
         where: { userId: normalizedUserId },
         orderBy: { createdAt: "desc" },
         take: 5,
-        include: { items: true },
+        include: {
+          items: true,
+          assignedDriver: {
+            select: { id: true, email: true, name: true, role: true },
+          },
+        },
       }),
       prisma.order.groupBy({
         by: ["status"],
@@ -56,6 +61,9 @@ async function getAdminDashboard() {
           user: {
             select: { id: true, email: true, name: true, role: true },
           },
+          assignedDriver: {
+            select: { id: true, email: true, name: true, role: true },
+          },
         },
       }),
       prisma.order.groupBy({
@@ -78,7 +86,58 @@ async function getAdminDashboard() {
   };
 }
 
+async function getDriverDashboard(driverId) {
+  const normalizedDriverId = Number(driverId);
+
+  const [assignedOrders, activeOrders, completedOrders, recentOrders, statusBreakdown] =
+    await Promise.all([
+      prisma.order.count({ where: { assignedDriverId: normalizedDriverId } }),
+      prisma.order.count({
+        where: {
+          assignedDriverId: normalizedDriverId,
+          status: { in: ["PLACED", "PREPARING", "READY"] },
+        },
+      }),
+      prisma.order.count({
+        where: {
+          assignedDriverId: normalizedDriverId,
+          status: "COMPLETED",
+        },
+      }),
+      prisma.order.findMany({
+        where: { assignedDriverId: normalizedDriverId },
+        orderBy: { updatedAt: "desc" },
+        take: 10,
+        include: {
+          items: true,
+          user: {
+            select: { id: true, email: true, name: true, role: true },
+          },
+        },
+      }),
+      prisma.order.groupBy({
+        by: ["status"],
+        where: { assignedDriverId: normalizedDriverId },
+        _count: { _all: true },
+      }),
+    ]);
+
+  return {
+    summary: {
+      assignedOrders,
+      activeOrders,
+      completedOrders,
+    },
+    orderStatusBreakdown: statusBreakdown.map((entry) => ({
+      status: entry.status,
+      count: entry._count._all,
+    })),
+    recentOrders,
+  };
+}
+
 module.exports = {
   getUserDashboard,
   getAdminDashboard,
+  getDriverDashboard,
 };

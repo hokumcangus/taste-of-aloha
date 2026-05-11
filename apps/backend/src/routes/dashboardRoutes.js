@@ -6,5 +6,6 @@ const router = express.Router();
 
 router.get("/me", requireAuth, dashboardController.myDashboard);
 router.get("/admin", requireAuth, requireRole("ADMIN"), dashboardController.adminDashboard);
+router.get("/driver", requireAuth, requireRole("DRIVER"), dashboardController.driverDashboard);
 
 module.exports = router;

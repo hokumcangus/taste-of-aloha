@@ -20,7 +20,18 @@ async function adminDashboard(_req, res) {
   }
 }
 
+async function driverDashboard(req, res) {
+  try {
+    const data = await dashboardModel.getDriverDashboard(req.user.id);
+    return res.json(data);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Failed to fetch driver dashboard" });
+  }
+}
+
 module.exports = {
   myDashboard,
   adminDashboard,
+  driverDashboard,
 };
