@@ -1,4 +1,25 @@
 const orderModel = require("../models/orderModel");
+const notificationModel = require("../models/notificationModel");
+
+function canAccessOrder(user, order) {
+    if (!user || !order) {
+        return false;
+    }
+
+    if (user.role === "ADMIN") {
+        return true;
+    }
+
+    if (order.userId === user.id) {
+        return true;
+    }
+
+    if (user.role === "DRIVER" && order.assignedDriverId === user.id) {
+        return true;
+    }
+
+    return false;
+}
 
 function handleOrderError(res, error, fallbackMessage) {
     if (error?.statusCode) {
@@ -12,9 +33,15 @@ function handleOrderError(res, error, fallbackMessage) {
 // GET all orders
 exports.getOrders = async (req, res) => {
     try {
-        const orders = await orderModel.getOrders(
-            req.user.role === "ADMIN" ? {} : { userId: req.user.id },
-        );
+        let scope = { userId: req.user.id };
+
+        if (req.user.role === "ADMIN") {
+            scope = {};
+        } else if (req.user.role === "DRIVER") {
+            scope = { assignedDriverId: req.user.id };
+        }
+
+        const orders = await orderModel.getOrders(scope);
         res.json(orders);
     } catch (error) {
         return handleOrderError(res, error, "Failed to fetch orders");
@@ -29,7 +56,7 @@ exports.getOrderById = async (req, res) => {
             return res.status(404).json({ error: "Order not found" });
         }
 
-        if (req.user.role !== "ADMIN" && order.userId !== req.user.id) {
+        if (!canAccessOrder(req.user, order)) {
             return res.status(403).json({ error: "Not allowed to view this order" });
         }
 
@@ -46,6 +73,18 @@ exports.placeOrder = async (req, res) => {
             ...(req.body || {}),
             userId: req.user.id,
         });
+
+        await notificationModel.createOrderNotifications({
+            order,
+            type: "ORDER_CREATED",
+            title: `Order #${order.id} placed`,
+            message: `Order #${order.id} was placed and is awaiting preparation.`,
+            includeCustomer: true,
+            includeAdmins: true,
+            includeDrivers: true,
+            includeAssignedDriver: false,
+        });
+
         res.status(201).json(order);
     } catch (error) {
         return handleOrderError(res, error, "Failed to place order");
@@ -77,13 +116,52 @@ exports.deleteOrder = async (req, res) => {
     }
 };
 
-// PATCH order status
 exports.updateOrderStatus = async (req, res) => {
     try {
-        const updated = await orderModel.updateOrderStatus(
-            req.params.id,
-            req.body?.status,
-        );
+        const existing = await orderModel.getOrderById(req.params.id);
+        if (!existing) {
+            return res.status(404).json({ error: "Order not found" });
+        }
+
+        if (req.user.role === "DRIVER") {
+            if (existing.assignedDriverId !== req.user.id) {
+                return res.status(403).json({ error: "Driver is not assigned to this order" });
+            }
+
+            if (req.body?.assignedDriverId !== undefined) {
+                return res.status(403).json({ error: "Driver cannot reassign order" });
+            }
+        }
+
+        const updated = await orderModel.updateOrder(req.params.id, {
+            status: req.body?.status,
+            assignedDriverId: req.body?.assignedDriverId,
+        });
+
+        const changes = [];
+        if (req.body?.status !== undefined && updated.status !== existing.status) {
+            changes.push(`status changed from ${existing.status} to ${updated.status}`);
+        }
+        if (req.body?.assignedDriverId !== undefined && updated.assignedDriverId !== existing.assignedDriverId) {
+            if (updated.assignedDriverId) {
+                changes.push(`driver assignment changed to user #${updated.assignedDriverId}`);
+            } else {
+                changes.push("driver assignment cleared");
+            }
+        }
+
+        if (changes.length > 0) {
+            await notificationModel.createOrderNotifications({
+                order: updated,
+                type: req.body?.status !== undefined ? "ORDER_STATUS_CHANGED" : "ORDER_UPDATED",
+                title: `Order #${updated.id} updated`,
+                message: `Order #${updated.id} update: ${changes.join("; ")}.`,
+                includeCustomer: true,
+                includeAdmins: true,
+                includeDrivers: true,
+                includeAssignedDriver: true,
+            });
+        }
 
         return res.json(updated);
     } catch (error) {

@@ -20,6 +20,7 @@ function mapOrderData(order) {
     return {
         id: order.id,
         userId: order.userId,
+        assignedDriverId: order.assignedDriverId ?? null,
         status: order.status,
         paymentStatus: order.paymentStatus,
         paymentMethod: order.paymentMethod,
@@ -36,6 +37,22 @@ function mapOrderData(order) {
         })),
         createdAt: order.createdAt,
         updatedAt: order.updatedAt,
+        user: order.user
+            ? {
+                  id: order.user.id,
+                  email: order.user.email,
+                  name: order.user.name,
+                  role: order.user.role,
+              }
+            : undefined,
+        assignedDriver: order.assignedDriver
+            ? {
+                  id: order.assignedDriver.id,
+                  email: order.assignedDriver.email,
+                  name: order.assignedDriver.name,
+                  role: order.assignedDriver.role,
+              }
+            : undefined,
     };
 }
 
@@ -172,11 +189,18 @@ async function getOrders(scope = {}) {
     if (scope.userId) {
         where.userId = Number(scope.userId);
     }
+    if (scope.assignedDriverId) {
+        where.assignedDriverId = Number(scope.assignedDriverId);
+    }
 
     const orders = await prisma.order.findMany({
         where,
         orderBy: { createdAt: "desc" },
-        include: { items: true },
+        include: {
+            items: true,
+            user: { select: { id: true, email: true, name: true, role: true } },
+            assignedDriver: { select: { id: true, email: true, name: true, role: true } },
+        },
     });
 
     return orders.map(mapOrderData);
@@ -185,7 +209,11 @@ async function getOrders(scope = {}) {
 async function getOrderById(orderId) {
     const order = await prisma.order.findUnique({
         where: { id: parsePositiveInt(orderId, "order id") },
-        include: { items: true },
+        include: {
+            items: true,
+            user: { select: { id: true, email: true, name: true, role: true } },
+            assignedDriver: { select: { id: true, email: true, name: true, role: true } },
+        },
     });
 
     return order ? mapOrderData(order) : null;
@@ -208,7 +236,7 @@ async function deleteOrder(orderId) {
     }
 }
 
-async function updateOrderStatus(orderId, status) {
+function validateStatus(status) {
     const normalizedStatus = String(status || "").toUpperCase();
     const allowed = ["PLACED", "PREPARING", "READY", "COMPLETED", "CANCELLED"];
 
@@ -216,15 +244,51 @@ async function updateOrderStatus(orderId, status) {
         throw new OrderValidationError("Invalid order status");
     }
 
+    return normalizedStatus;
+}
+
+async function updateOrder(orderId, { status, assignedDriverId } = {}) {
+    const data = {};
+
+    if (status !== undefined) {
+        data.status = validateStatus(status);
+    }
+
+    if (assignedDriverId !== undefined) {
+        if (assignedDriverId === null || assignedDriverId === "") {
+            data.assignedDriverId = null;
+        } else {
+            data.assignedDriverId = parsePositiveInt(assignedDriverId, "assignedDriverId");
+            const driver = await prisma.user.findUnique({
+                where: { id: data.assignedDriverId },
+                select: { id: true, role: true },
+            });
+
+            if (!driver || driver.role !== "DRIVER") {
+                throw new OrderValidationError("assignedDriverId must belong to a DRIVER user");
+            }
+        }
+    }
+
+    if (Object.keys(data).length === 0) {
+        throw new OrderValidationError("No order changes provided");
+    }
+
     const updated = await prisma.order.update({
         where: { id: parsePositiveInt(orderId, "order id") },
-        data: {
-            status: normalizedStatus,
+        data,
+        include: {
+            items: true,
+            user: { select: { id: true, email: true, name: true, role: true } },
+            assignedDriver: { select: { id: true, email: true, name: true, role: true } },
         },
-        include: { items: true },
     });
 
     return mapOrderData(updated);
+}
+
+async function updateOrderStatus(orderId, status) {
+    return updateOrder(orderId, { status });
 }
 
 module.exports = {
@@ -233,6 +297,7 @@ module.exports = {
     getOrders,
     getOrderById,
     deleteOrder,
+    updateOrder,
     updateOrderStatus,
     markOrderPaidByReference,
 };

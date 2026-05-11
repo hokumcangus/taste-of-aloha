@@ -62,11 +62,11 @@ async function me(req, res) {
 }
 
 async function updateUserRole(req, res) {
-  const allowed = ["CUSTOMER", "ADMIN"];
+  const allowed = ["CUSTOMER", "DRIVER", "ADMIN"];
   const role = String(req.body?.role || "").toUpperCase();
 
   if (!allowed.includes(role)) {
-    return res.status(400).json({ message: "Role must be CUSTOMER or ADMIN" });
+    return res.status(400).json({ message: "Role must be CUSTOMER, DRIVER, or ADMIN" });
   }
 
   try {
