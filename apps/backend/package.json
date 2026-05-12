@@ -20,6 +20,8 @@
     "db:studio": "npx prisma studio",
     "seed:menu": "node scripts/addMenuItem.js",
     "sync-menu": "ts-node scripts/sync-prices.ts",
+    "menu:dedupe:check": "node scripts/dedupe-menu.js",
+    "menu:dedupe:apply": "node scripts/dedupe-menu.js --apply",
     "extract:images": "ts-node scripts/extract-imgs.ts --url=https://www.ordertasteofaloha.com/order",
     "extract:images:db": "ts-node scripts/extract-imgs.ts --url=https://www.ordertasteofaloha.com/order --db"
   },

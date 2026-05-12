@@ -4,3 +4,6 @@
 /generated/prisma
 .vercel
 .env*.local
+
+# Local temporary validation helpers
+scripts/check-prices.cjs
