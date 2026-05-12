@@ -5,5 +5,6 @@ module.exports = {
   testMatch: ["**/tests/**/*.test.js", "**/__tests__/**/*.js"],
   coveragePathIgnorePatterns: ["/node_modules/"],
   verbose: true,
+  testEnvironmentOptions: {},
   setupFiles: ["<rootDir>/tests/setup.js"],
 };
