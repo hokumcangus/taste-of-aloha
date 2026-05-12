@@ -129,7 +129,7 @@ const Checkout = () => {
 		>
 			<h1 style={{ marginBottom: "0.5rem" }}>Checkout</h1>
 			<p style={{ marginTop: 0, color: "#4b5563" }}>
-				Review your cart, update quantities, then sync to backend.
+				Review your cart, update quantities, then calculate your total.
 			</p>
 
 			<div style={{ display: "grid", gap: "0.75rem", marginTop: "1.5rem" }}>
@@ -148,7 +148,7 @@ const Checkout = () => {
 					>
 						<div>
 							<div style={{ fontWeight: 600 }}>{item.name}</div>
-							<div style={{ color: "#4b5563", fontSize: "0.9rem" }}>
+							<div style={{ color: "#1c2025", fontSize: "0.9rem", border: "1px solid #8d8d8e", display: "inline-block", padding: "0.25rem 0.5rem", borderRadius: "4px" }}>
 								${Number(item.price).toFixed(2)} each
 							</div>
 						</div>
@@ -174,7 +174,7 @@ const Checkout = () => {
 										}),
 									)
 								}
-								style={{ width: "80px", padding: "0.4rem" }}
+								style={{ width: "80px", padding: "0.4rem", borderRadius: "6px", border: "1px solid #a6a9ae" }}
 							/>
 
 							<div style={{ fontWeight: 600 }}>
@@ -212,7 +212,7 @@ const Checkout = () => {
 				}}
 			>
 				<div>
-					<div>Items: {itemCount}</div>
+					<div id="item-count">Items: {itemCount}</div>
 					<div style={{ fontSize: "1.25rem", fontWeight: 700 }}>
 						Total: ${Number(total).toFixed(2)}
 					</div>
@@ -232,6 +232,7 @@ const Checkout = () => {
 					</div>
 					{!authUser && (
 						<div
+							id="guest-checkout"
 							style={{
 								marginTop: "1rem",
 								border: "1px solid #d97706",
@@ -246,6 +247,7 @@ const Checkout = () => {
 							<div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
 								<input
 									type="tel"
+									id="guest-phone"
 									placeholder="e.g. 8085551234"
 									value={guestPhone}
 									onChange={(e) => setGuestPhone(e.target.value)}
@@ -258,6 +260,7 @@ const Checkout = () => {
 									}}
 								/>
 								<button
+									id="guest-continue"
 									onClick={handleGuestContinue}
 									disabled={isGuestLoading || !guestPhone.trim()}
 									style={{
@@ -328,7 +331,7 @@ const Checkout = () => {
 							opacity: isSyncing ? 0.7 : 1,
 						}}
 					>
-						{isSyncing ? "Syncing..." : "Sync Cart"}
+						{isSyncing ? "Syncing..." : "Total"}
 					</button>
 					<button
 						onClick={handlePlaceOrder}
