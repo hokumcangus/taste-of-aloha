@@ -291,3 +291,53 @@ npm --workspace apps/backend run dev
 npm --workspace apps/backend run db:migrate:dev
 npm --workspace apps/backend run db:seed
 ```
+
+## 🖼 Menu Image & Price Extraction
+
+Scripts to scrape menu item images and prices from the live Menufy ordering site and sync them to the database.
+
+### Scripts
+
+| File | Description |
+|------|-------------|
+| `scripts/extract-imgs.ts` | Playwright scraper — downloads images and extracts prices from the Menufy site |
+| `scripts/menu-image-map.ndjson` | **Output data file** (not a script) — one JSON object per line mapping each scraped item to its image URL and price |
+| `scripts/menu-item-aliases.json` | Maps website item names → database item names for matching |
+
+### Running the scraper
+
+```powershell
+# Dry run — scrapes and updates menu-image-map.ndjson but does NOT write to DB
+npm --workspace apps/backend run extract:images
+
+# Full run — scrapes AND updates Menu.image + Menu.price in the database
+npm --workspace apps/backend run extract:images:db
+```
+
+Requires `DATABASE_URL` to be set. Playwright will launch a headless browser automatically.
+
+### Inspecting menu-image-map.ndjson
+
+`menu-image-map.ndjson` is written automatically after each scrape run. Each line is a JSON object:
+
+```json
+{"itemName":"Kalua Pig","imageUrl":"https://...","price":17.99}
+```
+
+To read it:
+
+```powershell
+Get-Content apps/backend/scripts/menu-image-map.ndjson
+```
+
+### Menu deduplication
+
+If duplicate menu rows accumulate (e.g. after re-seeding), use the dedupe script:
+
+```powershell
+# Check for duplicates (safe, read-only)
+npm --workspace apps/backend run menu:dedupe:check
+
+# Remove duplicates and remap FK references
+npm --workspace apps/backend run menu:dedupe:apply
+```

@@ -47,6 +47,60 @@ async function getRowsForName(name) {
   });
 }
 
+async function remapCartItems(tx, fromMenuId, toMenuId) {
+  const duplicateItems = await tx.cartItem.findMany({
+    where: { menuId: fromMenuId },
+    select: {
+      id: true,
+      cartId: true,
+      quantity: true,
+      subtotal: true,
+    },
+  });
+
+  for (const item of duplicateItems) {
+    const existing = await tx.cartItem.findUnique({
+      where: {
+        cartId_menuId: {
+          cartId: item.cartId,
+          menuId: toMenuId,
+        },
+      },
+      select: {
+        id: true,
+        quantity: true,
+        subtotal: true,
+      },
+    });
+
+    if (existing) {
+      // Merge duplicate cart lines to satisfy @@unique([cartId, menuId]).
+      await tx.cartItem.update({
+        where: { id: existing.id },
+        data: {
+          quantity: existing.quantity + item.quantity,
+          subtotal: Number(existing.subtotal) + Number(item.subtotal),
+        },
+      });
+
+      await tx.cartItem.delete({ where: { id: item.id } });
+    } else {
+      await tx.cartItem.update({
+        where: { id: item.id },
+        data: { menuId: toMenuId },
+      });
+    }
+  }
+}
+
+async function remapOrderItems(tx, fromMenuId, toMenuId) {
+  // order_items keep menuName/unitPrice snapshots, but menuId is still useful for analytics.
+  await tx.orderItem.updateMany({
+    where: { menuId: fromMenuId },
+    data: { menuId: toMenuId },
+  });
+}
+
 async function main() {
   const { apply } = parseArgs(process.argv.slice(2));
 
@@ -84,8 +138,10 @@ async function main() {
   }
 
   let deletedTotal = 0;
-  await prisma.$transaction(async (tx) => {
-    for (const group of duplicateGroups) {
+  let cartItemsRemapped = 0;
+  let orderItemsRemapped = 0;
+  for (const group of duplicateGroups) {
+    await prisma.$transaction(async (tx) => {
       const rows = await tx.menu.findMany({
         where: { name: group.name },
         orderBy: [
@@ -96,19 +152,33 @@ async function main() {
         select: { id: true },
       });
 
+      const keepId = rows[0].id;
       const removeIds = rows.slice(1).map((r) => r.id);
       if (removeIds.length === 0) {
-        continue;
+        return;
+      }
+
+      for (const removeId of removeIds) {
+        const cartCount = await tx.cartItem.count({ where: { menuId: removeId } });
+        const orderCount = await tx.orderItem.count({ where: { menuId: removeId } });
+
+        await remapCartItems(tx, removeId, keepId);
+        await remapOrderItems(tx, removeId, keepId);
+
+        cartItemsRemapped += cartCount;
+        orderItemsRemapped += orderCount;
       }
 
       const res = await tx.menu.deleteMany({
         where: { id: { in: removeIds } },
       });
       deletedTotal += res.count;
-    }
-  });
+    }, { timeout: 60000, maxWait: 10000 });
+  }
 
   console.log(`\nDeleted duplicate rows: ${deletedTotal}`);
+  console.log(`Cart items remapped: ${cartItemsRemapped}`);
+  console.log(`Order items remapped: ${orderItemsRemapped}`);
 }
 
 main()
