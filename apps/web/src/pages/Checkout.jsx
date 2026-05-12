@@ -36,7 +36,7 @@ const Checkout = () => {
 			await dispatch(guestLogin({ phone: guestPhone })).unwrap();
 			setGuestStatus("succeeded");
 		} catch (err) {
-			setGuestError(err || "Failed to continue as guest");
+			setGuestError(err?.message || String(err) || "Failed to continue as guest");
 			setGuestStatus("failed");
 		}
 	};
@@ -58,15 +58,19 @@ const Checkout = () => {
 		try {
 			const syncResult = await dispatch(syncCartToBackend()).unwrap();
 
-			const paymentIntent = await paymentService.createIntent({
-				amount: total,
-				method: paymentMethod,
-			});
+			let paymentReference = null;
+			if (paymentMethod !== "cash") {
+				const paymentIntent = await paymentService.createIntent({
+					amount: total,
+					method: paymentMethod,
+				});
+				paymentReference = paymentIntent.intentId;
+			}
 
 			const order = await orderService.placeOrder({
 				cartId: syncResult?.cartId,
 				paymentMethod,
-				paymentReference: paymentIntent.clientSecret,
+				paymentReference,
 			});
 
 			dispatch(clearCart());

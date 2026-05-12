@@ -2,11 +2,11 @@
 // Run via:  npx prisma db seed
 //       or: npm run db:seed   (from apps/backend/)
 
-require("dotenv/config");
-const { PrismaClient } = require("@prisma/client");
-const { PrismaPg } = require("@prisma/adapter-pg");
-const { Pool } = require("pg");
-const { databaseUrl } = require("../src/config/databaseUrl");
+import "dotenv/config";
+import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
+import { databaseUrl } from "../src/config/databaseUrl.js";
 
 const pool = new Pool({ connectionString: databaseUrl });
 const adapter = new PrismaPg(pool);
@@ -86,6 +86,36 @@ const menuData = [
   { name: "Sparkling Water", category: "Uncategorized", price: 0.00, description: "Carbonated water.", isAvailable: false }
 ];
 
+async function seedModifiers() {
+  const modifierDefs = [
+    { name: "No Green Onions", price: 0.0 },
+    { name: "Extra Gravy", price: 1.50 },
+    { name: "All Mac Salad no rice", price: 2.99 },
+  ];
+
+  const modifiers: { id: number }[] = [];
+  for (const def of modifierDefs) {
+    const existing = await prisma.modifier.findFirst({ where: { name: def.name } });
+    if (existing) {
+      console.log(`  ⏭  Skipped modifier (already exists): ${def.name}`);
+      modifiers.push(existing);
+    } else {
+      const created = await prisma.modifier.create({ data: def });
+      console.log(`  ✅ Created modifier: ${def.name}`);
+      modifiers.push(created);
+    }
+  }
+
+  const combo = await prisma.menu.findFirst({ where: { name: "Kalua Pig and Shoyu Chicken Combo" } });
+  if (combo) {
+    await prisma.menu.update({
+      where: { id: combo.id },
+      data: { modifiers: { connect: modifiers.map((m) => ({ id: m.id })) } },
+    });
+    console.log("  ✅ Connected modifiers to: Kalua Pig and Shoyu Chicken Combo");
+  }
+}
+
 async function main() {
   console.log("🌺 Seeding menu items...");
 
@@ -100,34 +130,8 @@ async function main() {
       console.log(`  ✅ Created: ${item.name}`);
     }
   }
-  async function seedModifiers() {
-  // 1. Create global modifiers
-  const noOnions = await prisma.modifier.create({
-    data: { name: "No Green Onions", price: 0.0 }
-  });
-  
-  const extraGravy = await prisma.modifier.create({
-    data: { name: "Extra Gravy", price: 1.50 }
-  });
 
-  const allMac = await prisma.modifier.create({
-    data: { name: "All Mac Salad no rice", price: 2.99 }
-  });
-
-  // 2. Connect them to a specific Menu item (e.g., the Combo Plate)
-  await prisma.menu.update({
-    where: { name: "Kalua Pig and Shoyu Chicken Combo" },
-    data: {
-      modifiers: {
-        connect: [
-          { id: noOnions.id },
-          { id: extraGravy.id },
-          { id: allMac.id }
-        ]
-      }
-    }
-  });
-}
+  await seedModifiers();
   console.log("🌺 Seeding complete.");
 }
 

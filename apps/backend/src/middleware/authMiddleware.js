@@ -2,6 +2,13 @@ const jwt = require("jsonwebtoken");
 
 const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-change-me";
 
+if (process.env.NODE_ENV === "production" && JWT_SECRET === "dev-secret-change-me") {
+  throw new Error(
+    "JWT_SECRET must be set to a secure random value in production. " +
+    "Generate one with: node -e \"console.log(require('crypto').randomBytes(64).toString('hex'))\""
+  );
+}
+
 function parseBearerToken(headerValue) {
   if (!headerValue || typeof headerValue !== "string") {
     return null;

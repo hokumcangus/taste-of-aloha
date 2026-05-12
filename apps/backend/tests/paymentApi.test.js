@@ -50,6 +50,8 @@ describe("POST /api/payments/intent", () => {
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty("clientSecret");
     expect(res.body.clientSecret).toMatch(/^mock_pi_/);
+    expect(res.body).toHaveProperty("intentId");
+    expect(res.body.intentId).toMatch(/^mock_pi_/);
     expect(res.body.amount).toBe(25.99);
     expect(res.body.provider).toBe("mock");
   });

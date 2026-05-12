@@ -17,7 +17,7 @@ export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
-    seed: "node prisma/menu.seed.js",
+    seed: "ts-node prisma/seed.ts",
   },
   datasource: {
     // Use unpooled URL for migrations (shadow DB needs direct connection)

@@ -30,7 +30,7 @@ All secrets must be set in your hosting platform (Vercel/Railway/Render etc.) be
 
 ## 2. Secrets Rotation (IMPORTANT — do before going live)
 
-The Neon DB password in `.env` (`npg_H1aQqebCBU3t`) has been exposed in git history.
+The Neon DB password in `.env` has been exposed in git history and **must be rotated immediately**.
 
 1. Go to [Neon Dashboard](https://console.neon.tech/) → your project → **Settings → Reset password**.
 2. Update `DATABASE_URL` in your hosting platform with the new password.

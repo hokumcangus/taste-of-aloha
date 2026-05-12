@@ -19,8 +19,10 @@ async function createIntent(req, res) {
   const stripe = buildStripe();
 
   if (!stripe) {
+    const mockIntentId = `mock_pi_${Date.now()}`;
     return res.status(201).json({
-      clientSecret: `mock_pi_${Date.now()}`,
+      clientSecret: mockIntentId,
+      intentId: mockIntentId,
       amount: Number(normalizedAmount.toFixed(2)),
       currency: "usd",
       method: method || "card",
@@ -39,6 +41,7 @@ async function createIntent(req, res) {
 
     return res.status(201).json({
       clientSecret: intent.client_secret,
+      intentId: intent.id,
       amount: normalizedAmount,
       currency: "usd",
       method: method || "card",
@@ -62,7 +65,11 @@ async function handleWebhook(req, res) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
   if (!webhookSecret) {
-    console.warn("STRIPE_WEBHOOK_SECRET not set — skipping signature verification");
+    if (process.env.NODE_ENV === "production") {
+      console.error("STRIPE_WEBHOOK_SECRET is not set in production — refusing to process webhook");
+      return res.status(500).json({ message: "Webhook configuration error" });
+    }
+    console.warn("STRIPE_WEBHOOK_SECRET not set — skipping signature verification (development only)");
     return res.status(200).json({ received: true });
   }
 

@@ -171,7 +171,7 @@ async function createOrder(data) {
             userId,
             paymentMethod,
             paymentReference: data.paymentReference || null,
-            paymentStatus: "PAID",
+            paymentStatus: "PENDING",
             total: orderPayload.total,
             itemCount: orderPayload.itemCount,
             items: {

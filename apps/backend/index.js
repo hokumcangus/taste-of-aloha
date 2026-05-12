@@ -14,10 +14,13 @@ const logger = require("./src/utils/logger");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim())
+  : ["http://localhost:5173"];
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 // Stripe webhook requires the raw request body for signature verification.
-// This must be registered before express.json() so the webhook route
-// receives the raw Buffer instead of a parsed object.
+// Must be registered before express.json() so the webhook route receives
+// the raw Buffer instead of a parsed object.
 app.use("/api/payments/webhook", express.raw({ type: "application/json" }));
 app.use(express.json());
 app.use(logger);
