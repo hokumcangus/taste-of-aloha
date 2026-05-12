@@ -4,6 +4,7 @@
 
 import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
+import type { Modifier } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 import { databaseUrl } from "../src/config/databaseUrl.js";
@@ -93,7 +94,7 @@ async function seedModifiers() {
     { name: "All Mac Salad no rice", price: 2.99 },
   ];
 
-  const modifiers: { id: number }[] = [];
+  const modifiers: Modifier[] = [];
   for (const def of modifierDefs) {
     const existing = await prisma.modifier.findFirst({ where: { name: def.name } });
     if (existing) {

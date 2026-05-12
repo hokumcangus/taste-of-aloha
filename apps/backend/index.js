@@ -15,7 +15,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim())
+  ? process.env.ALLOWED_ORIGINS.split(",")
+      .map((o) => o.trim())
+      .filter((o) => /^https?:\/\/.+/.test(o))
   : ["http://localhost:5173"];
 app.use(cors({ origin: allowedOrigins, credentials: true }));
 // Stripe webhook requires the raw request body for signature verification.
