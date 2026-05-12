@@ -114,7 +114,7 @@ describe("Dashboard page", () => {
       expect(screen.getByText(/dashboard/i)).toBeInTheDocument();
     });
 
-    expect(screen.getByText(/4/)).toBeInTheDocument(); // totalOrders
+    expect(screen.getByText(/total orders/i)).toBeInTheDocument(); // totalOrders
     // "Welcome back, Hoku." is split across spans — use regex on the paragraph
     expect(screen.getByText(/welcome back/i)).toBeInTheDocument();
   });

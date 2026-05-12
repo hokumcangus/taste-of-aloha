@@ -108,6 +108,22 @@ const Menu = () => {
               >
                 {menuItem.name}
               </h3>
+              {menuItem.image && (
+                <img
+                  src={`${import.meta.env.VITE_API_URL || "http://localhost:3000"}${menuItem.image}`}
+                  alt={menuItem.name}
+                  style={{
+                    width: "100%",
+                    height: "200px",
+                    objectFit: "cover",
+                    borderRadius: "6px",
+                    marginBottom: "1rem",
+                  }}
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                  }}
+                />
+              )}
               {menuItem.price && (
                 <p
                   style={{

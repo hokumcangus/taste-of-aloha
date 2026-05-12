@@ -22,6 +22,9 @@ app.use("/api/payments/webhook", express.raw({ type: "application/json" }));
 app.use(express.json());
 app.use(logger);
 
+// Serve static files from public directory
+app.use(express.static("public"));
+
 // Routes
 app.use("/api/menu", menuRoutes);
 app.use("/api/cart", cartRoutes);
