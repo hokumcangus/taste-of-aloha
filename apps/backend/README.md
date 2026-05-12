@@ -28,7 +28,7 @@ We use Prisma to interface with PostgreSQL. The schema defines all data models (
 ### Apply Schema Changes
 
 ```bash
-npm run db:migrate
+npm run db:migrate:dev
 # or: npx prisma migrate dev --name <description>
 ```
 
@@ -61,7 +61,7 @@ npm run db:seed
 # or: npx prisma db seed
 ```
 
-`npm run db:seed` and `npx prisma db seed` both run `prisma/menu.seed.js`.
+`npm run db:seed` and `npx prisma db seed` both run `prisma/seed.ts`.
 
 ### Add a Single Menu Item (CLI)
 
@@ -268,7 +268,9 @@ How:
 
 ```powershell
 npm run dev:db
-npm run dev:backend
+npm --workspace apps/backend run dev
+npm --workspace apps/backend run db:migrate:dev
+npm --workspace apps/backend run db:seed
 
 (Invoke-WebRequest -Uri "http://localhost:3000/health" -UseBasicParsing).StatusCode
 (Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing).StatusCode
@@ -285,7 +287,7 @@ $env:PGUSER = "<your_user>"
 $env:PGPASSWORD = "<your_password>"
 $env:DATABASE_URL = "postgresql://<your_user>:<your_password>@<host>/<db>?sslmode=require&channel_binding=require"
 
-npm run dev
-npx prisma db push
-npm run db:seed
+npm --workspace apps/backend run dev
+npm --workspace apps/backend run db:migrate:dev
+npm --workspace apps/backend run db:seed
 ```

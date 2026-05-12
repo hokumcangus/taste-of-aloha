@@ -15,7 +15,7 @@
     "db:migrate:dev": "npx prisma migrate dev",
     "db:migrate:deploy": "npx prisma migrate deploy",
     "db:generate": "npx prisma generate",
-    "db:seed": "node prisma/menu.seed.js",
+    "db:seed": "ts-node prisma/seed.ts",
     "db:reset": "npx prisma migrate reset",
     "db:studio": "npx prisma studio",
     "seed:menu": "node scripts/addMenuItem.js",
@@ -26,7 +26,7 @@
     "extract:images:db": "ts-node scripts/extract-imgs.ts --url=https://www.ordertasteofaloha.com/order --db"
   },
   "prisma": {
-    "seed": "node prisma/menu.seed.js"
+    "seed": "ts-node prisma/seed.ts"
   },
   "keywords": [
     "taste-of-aloha",

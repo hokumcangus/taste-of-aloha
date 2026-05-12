@@ -71,6 +71,25 @@ $env:PGPASSWORD = "<your_password>"
 $env:DATABASE_URL = "postgresql://<your_user>:<your_password>@<host>/<db>?sslmode=require&channel_binding=require"
 
 npm run dev:backend
+npm --workspace apps/backend run db:migrate:dev
 npm --workspace apps/backend run db:seed
 (Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing).StatusCode
+```
+
+## 🗄 DB Sync + Migrate (Repo Root)
+
+Use this flow when your schema changed or you need a clean local sync.
+
+```powershell
+# 1) Start local Postgres (skip if using Neon)
+npm run dev:db
+
+# 2) Apply latest schema changes and create migration (dev)
+npm --workspace apps/backend run db:migrate:dev
+
+# 3) Seed menu data
+npm --workspace apps/backend run db:seed
+
+# 4) Optional: check duplicate menu rows
+npm --workspace apps/backend run menu:dedupe:check
 ```
