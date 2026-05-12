@@ -13,11 +13,24 @@ dotenv.config();
 type ScrapedImage = {
   itemName: string;
   imageUrl: string;
+  price?: number;
 };
 
 const __dirname = path.dirname(process.argv[1]);
 const IMAGE_DIR = path.join(__dirname, '../public/menu-images');
 const OUTPUT_MAP_FILE = path.join(__dirname, 'menu-image-map.ndjson');
+const ALIASES_FILE = path.join(__dirname, 'menu-item-aliases.json');
+
+// Load aliases mapping
+let aliases: Record<string, string> = {};
+try {
+  if (fs.existsSync(ALIASES_FILE)) {
+    const aliasesJson = fs.readFileSync(ALIASES_FILE, 'utf8');
+    aliases = JSON.parse(aliasesJson);
+  }
+} catch (err) {
+  console.warn('Could not load aliases file:', err instanceof Error ? err.message : String(err));
+}
 
 const args = process.argv.slice(2);
 const shouldUpdateDb = args.includes('--db');
@@ -33,6 +46,18 @@ function normalizeName(name: string): string {
     .replace(/&/g, 'and')
     .replace(/[^a-z0-9]+/g, ' ')
     .trim();
+}
+
+function resolveActualName(itemName: string, nameIndex: Map<string, number[]>): { resolved: string; found: boolean } {
+  const normalized = normalizeName(itemName);
+  
+  // Check if alias exists for this normalized name
+  if (aliases[normalized]) {
+    return { resolved: aliases[normalized], found: nameIndex.has(normalizeName(aliases[normalized])) };
+  }
+  
+  // Fall back to direct lookup
+  return { resolved: itemName, found: nameIndex.has(normalized) };
 }
 
 function toFileSafeBase(name: string): string {
@@ -84,14 +109,22 @@ async function scrapeMenuImages(menuUrl: string): Promise<ScrapedImage[]> {
   await page.waitForTimeout(6000);
 
   const rows = await page.evaluate(() => {
-    const found: Array<{ itemName: string; imageUrl: string }> = [];
+    const found: Array<{ itemName: string; imageUrl: string; price?: number }> = [];
 
     const itemCards = Array.from(document.querySelectorAll('new-menufy-item-card[item-image-url]'));
     for (const card of itemCards) {
       const imageUrl = card.getAttribute('item-image-url') || '';
       const itemName = card.getAttribute('item-name') || '';
       if (itemName && imageUrl) {
-        found.push({ itemName: itemName.trim(), imageUrl: imageUrl.trim() });
+        const priceStr = card.getAttribute('item-price') || '';
+        let price: number | undefined;
+        if (priceStr) {
+          price = parseFloat(priceStr);
+          if (isNaN(price)) {
+            price = undefined;
+          }
+        }
+        found.push({ itemName: itemName.trim(), imageUrl: imageUrl.trim(), price });
       }
     }
 
@@ -119,7 +152,7 @@ async function scrapeMenuImages(menuUrl: string): Promise<ScrapedImage[]> {
         continue;
       }
 
-      found.push({ itemName, imageUrl: src });
+      found.push({ itemName, imageUrl: src, price: undefined });
     }
 
     return found;
@@ -136,6 +169,7 @@ async function scrapeMenuImages(menuUrl: string): Promise<ScrapedImage[]> {
     byName.set(key, {
       itemName: row.itemName,
       imageUrl: row.imageUrl,
+      price: row.price
     });
   }
 
@@ -180,6 +214,7 @@ async function migrateImages() {
     await writeImageMappings(items);
 
     let linkedCount = 0;
+    let priceUpdateCount = 0;
     let nameIndex = new Map<string, number[]>();
     if (prisma) {
       const dbMenus = await prisma.menu.findMany({
@@ -198,7 +233,7 @@ async function migrateImages() {
       }
     }
 
-    for (const { itemName, imageUrl } of items) {
+    for (const { itemName, imageUrl, price } of items) {
       const safeBaseName = toFileSafeBase(itemName);
       const extension = getFileExtension(imageUrl);
       const fileName = `${safeBaseName}${extension}`;
@@ -208,23 +243,33 @@ async function migrateImages() {
         await downloadFile(imageUrl, filePath);
 
         if (prisma) {
-          const ids = nameIndex.get(normalizeName(itemName)) || [];
+          const { resolved, found } = resolveActualName(itemName, nameIndex);
+          const ids = nameIndex.get(normalizeName(resolved)) || [];
 
           if (ids.length === 0) {
             console.warn(`No DB match for menu item: ${itemName}`);
             continue;
           }
 
+          const updateData: any = { image: `/menu-images/${fileName}` };
+          if (price !== undefined) {
+            updateData.price = price;
+          }
+
           const updated = await prisma.menu.updateMany({
             where: {
               id: { in: ids },
             },
-            data: { image: `/menu-images/${fileName}` },
+            data: updateData,
           });
           linkedCount += updated.count;
+          if (price !== undefined) {
+            priceUpdateCount += updated.count;
+          }
         }
 
-        console.log(`Saved image: ${itemName} -> /menu-images/${fileName}`);
+        const priceStr = price !== undefined ? ` | $${price.toFixed(2)}` : '';
+        console.log(`Saved image: ${itemName} -> /menu-images/${fileName}${priceStr}`);
       } catch (err) {
         console.error(`Failed for ${itemName}:`, err instanceof Error ? err.message : String(err));
       }
@@ -232,6 +277,9 @@ async function migrateImages() {
 
     if (prisma) {
       console.log(`DB link updates applied: ${linkedCount}`);
+      if (priceUpdateCount > 0) {
+        console.log(`Price updates applied: ${priceUpdateCount}`);
+      }
     } else {
       console.log('Dry-run mode complete (no DB writes). Re-run with --db to update Menu.image values.');
     }
