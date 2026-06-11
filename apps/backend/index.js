@@ -1,6 +1,7 @@
 require("dotenv/config");
 const express = require("express");
 const cors = require("cors");
+const { inject } = require("@vercel/analytics");
 
 const menuRoutes = require("./src/routes/menuRoutes");
 const cartRoutes = require("./src/routes/cartRoutes");
@@ -9,6 +10,9 @@ const logger = require("./src/utils/logger");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Initialize Vercel Analytics
+inject();
 
 app.use(cors());
 app.use(express.json());
