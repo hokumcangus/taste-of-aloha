@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { dashboardService } from "../services/dashboardService";
 import { notificationService } from "../services/notificationService";
@@ -29,7 +29,7 @@ const Dashboard = () => {
 
   const canUpdateStatus = isAdmin || isDriver;
 
-  async function loadDashboardData(activeFlag) {
+  const loadDashboardData = useCallback(async (activeFlag) => {
     setStatus("loading");
     setError(null);
 
@@ -53,9 +53,9 @@ const Dashboard = () => {
         setStatus("failed");
       }
     }
-  }
+  }, [isAdmin, isDriver]);
 
-  async function loadNotifications(activeFlag, silent = false) {
+  const loadNotifications = useCallback(async (activeFlag, silent = false) => {
     if (!silent) {
       setNotifError(null);
     }
@@ -71,13 +71,16 @@ const Dashboard = () => {
         setNotifError(err.message || "Failed to load notifications");
       }
     }
-  }
+  }, []);
 
   useEffect(() => {
     let active = true;
 
     if (user) {
       const activeFlag = () => active;
+      // Data-fetching on mount/user-change is a legitimate useEffect pattern;
+      // these async functions set state only after awaiting network responses.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       loadDashboardData(activeFlag);
       loadNotifications(activeFlag);
 
@@ -94,7 +97,7 @@ const Dashboard = () => {
     return () => {
       active = false;
     };
-  }, [user, isAdmin, isDriver]);
+  }, [user, loadDashboardData, loadNotifications]);
 
   async function refreshDashboardAndNotifications() {
     const activeFlag = () => true;

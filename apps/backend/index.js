@@ -10,6 +10,7 @@ const paymentRoutes = require("./src/routes/paymentRoutes");
 const dashboardRoutes = require("./src/routes/dashboardRoutes");
 const notificationRoutes = require("./src/routes/notificationRoutes");
 const logger = require("./src/utils/logger");
+const { rateLimit } = require("./src/middleware/rateLimit");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,6 +27,10 @@ app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use("/api/payments/webhook", express.raw({ type: "application/json" }));
 app.use(express.json());
 app.use(logger);
+
+// Apply a general rate limit to all API routes (100 requests / minute per IP).
+// Auth routes add a stricter per-route limit on top of this.
+app.use("/api/", rateLimit({ max: 100, windowMs: 60_000 }));
 
 // Serve static files from public directory
 app.use(express.static("public"));

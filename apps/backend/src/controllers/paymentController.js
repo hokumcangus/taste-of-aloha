@@ -3,7 +3,6 @@ const orderModel = require("../models/orderModel");
 function buildStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) return null;
-  // eslint-disable-next-line global-require
   const Stripe = require("stripe");
   return new Stripe(key, { apiVersion: "2024-04-10" });
 }
