@@ -5,10 +5,7 @@ A modern full-stack monorepo for an island-inspired shopping experience.
 ## 🚀 Quick Start
 
 1. **Clone & Install**: `npm install`
-2. **Start DB**: `npm run dev:db`
-3. **Apply Migrations**: `npm --workspace apps/backend run db:migrate`
-4. **Seed Data**: `npm --workspace apps/backend run db:seed`
-5. **Launch Apps**: `npm run dev:backend` and `npm run dev:web`
+2. **Launch Everything**: `npm run dev`
    - Frontend: `http://localhost:5173`
    - Backend: `http://localhost:3000`
 
@@ -16,7 +13,6 @@ A modern full-stack monorepo for an island-inspired shopping experience.
 
 - [Quick Reference Commands](./QUICK_REFERENCE.md) - All the `npm` and `docker` commands you need.
 - [Team Wiki (External)](https://github.com/hokumcangus/taste-of-aloha/wiki) - Architecture, learning guides, and screenshots.
-- [Implementation Contract](./docs/IMPLEMENTATION_INSTRUCTIONS.md) - MVP scope, lifecycle, RBAC, realtime, and deploy checklist.
 
 ## 📂 Project Structure
 
@@ -75,6 +71,25 @@ $env:PGPASSWORD = "<your_password>"
 $env:DATABASE_URL = "postgresql://<your_user>:<your_password>@<host>/<db>?sslmode=require&channel_binding=require"
 
 npm run dev:backend
+npm --workspace apps/backend run db:migrate:dev
 npm --workspace apps/backend run db:seed
 (Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing).StatusCode
+```
+
+## 🗄 DB Sync + Migrate (Repo Root)
+
+Use this flow when your schema changed or you need a clean local sync.
+
+```powershell
+# 1) Start local Postgres (skip if using Neon)
+npm run dev:db
+
+# 2) Apply latest schema changes and create migration (dev)
+npm --workspace apps/backend run db:migrate:dev
+
+# 3) Seed menu data
+npm --workspace apps/backend run db:seed
+
+# 4) Optional: check duplicate menu rows
+npm --workspace apps/backend run menu:dedupe:check
 ```

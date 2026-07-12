@@ -110,5 +110,6 @@ How:
 ```powershell
 $env:DATABASE_URL = "postgresql://<your_user>:<your_password>@<host>/<db>?sslmode=require&channel_binding=require"
 npm run dev:backend
+npm --workspace apps/backend run db:migrate:dev
 npm --workspace apps/backend run db:seed
 ```

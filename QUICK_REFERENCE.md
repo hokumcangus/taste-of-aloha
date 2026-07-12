@@ -11,7 +11,8 @@
 ## 🗄 Database (Prisma)
 
 - `npx prisma studio`: Open database UI.
-- `npm run db:seed`: Reset and re-seed the menu items.
+- `npm --workspace apps/backend run db:migrate:dev`: Create/apply local migrations.
+- `npm --workspace apps/backend run db:seed`: Seed menu data from `apps/backend/prisma/seed.ts`.
 
 ## 🧭 Simple What / Why / How
 
@@ -42,6 +43,7 @@ $env:PGPASSWORD = "<your_password>"
 $env:DATABASE_URL = "postgresql://<your_user>:<your_password>@<host>/<db>?sslmode=require&channel_binding=require"
 
 npm run dev:backend
+npm --workspace apps/backend run db:migrate:dev
 npm --workspace apps/backend run db:seed
 (Invoke-WebRequest -Uri "http://localhost:3000/api/menu" -UseBasicParsing).StatusCode
 ```
@@ -55,7 +57,7 @@ Run from repo root:
 npm run dev:db
 
 # 2) Apply migrations
-npm --workspace apps/backend run db:migrate
+npm --workspace apps/backend run db:migrate:dev
 
 # 3) Seed menu data
 npm --workspace apps/backend run db:seed
@@ -66,11 +68,16 @@ Invoke-RestMethod -Method GET -Uri "http://localhost:3000/api/menu"
 
 Files to update when seed content changes:
 
-- `apps/backend/prisma/seed.js` (main seed dataset)
+- `apps/backend/prisma/seed.ts` (main seed dataset)
 - `apps/backend/prisma/schema.prisma` (DB table/field shape)
-- `apps/backend/prisma/menu.seed.json` (bulk menu data source)
-- `apps/backend/prisma/menu.seed.js` (alternate bulk seed runner)
 - `apps/backend/scripts/addMenuItem.js` (one-off quick inserts)
+
+Optional dedupe after repeated seeds:
+
+```powershell
+npm --workspace apps/backend run menu:dedupe:check
+# npm --workspace apps/backend run menu:dedupe:apply
+```
 
 ## 🧪 Verification (PowerShell)
 

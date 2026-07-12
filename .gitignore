@@ -81,3 +81,11 @@ apps/web/dist
 apps/web/build
 node_modules
 docs/cart-order-flow-guide.md
+
+# Local validation scratch scripts
+apps/backend/scripts/check-prices.cjs
+
+# Local sprint checklist notes
+SPRINT_3_NEXT_STEPS.md
+.vercel
+.env*.local

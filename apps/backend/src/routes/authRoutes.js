@@ -1,16 +1,17 @@
 const express = require("express");
 const authController = require("../controllers/authController");
-const { authenticate } = require("../middleware/auth");
+const { requireAuth, requireRole } = require("../middleware/authMiddleware");
 const { rateLimit } = require("../middleware/rateLimit");
 
 const router = express.Router();
 
-router.post("/login", rateLimit({ max: 10, windowMs: 60000 }), authController.login);
-router.get(
-  "/me",
-  rateLimit({ max: 120, windowMs: 60000 }),
-  authenticate(true),
-  authController.me,
-);
+// Strict rate limit for credential endpoints (10 requests / minute per IP).
+const authRateLimit = rateLimit({ max: 10, windowMs: 60_000 });
+
+router.post("/register", authRateLimit, authController.register);
+router.post("/login", authRateLimit, authController.login);
+router.post("/guest", authRateLimit, authController.guestAuth);
+router.get("/me", requireAuth, authController.me);
+router.patch("/users/:id/role", requireAuth, requireRole("ADMIN"), authController.updateUserRole);
 
 module.exports = router;

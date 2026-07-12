@@ -1,48 +1,170 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { authService } from "../../services/authService";
 
-const initialState = {
-  token: localStorage.getItem("toa_token"),
-  user: JSON.parse(localStorage.getItem("toa_user") || "null"),
-  status: "idle",
-  error: null,
-};
+const AUTH_STORAGE_KEY = "toa_auth_v1";
 
-export const login = createAsyncThunk("auth/login", async (payload) => {
-  return authService.login(payload);
-});
+function getDefaultState() {
+  return {
+    user: null,
+    token: null,
+    status: "idle",
+    error: null,
+  };
+}
+
+function persistAuthState(state) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const payload = {
+    user: state.user,
+    token: state.token,
+  };
+
+  window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(payload));
+}
+
+function loadAuthState() {
+  if (typeof window === "undefined") {
+    return getDefaultState();
+  }
+
+  try {
+    const raw = window.localStorage.getItem(AUTH_STORAGE_KEY);
+    if (!raw) {
+      return getDefaultState();
+    }
+
+    const parsed = JSON.parse(raw);
+    if (!parsed?.token || !parsed?.user) {
+      return getDefaultState();
+    }
+
+    return {
+      ...getDefaultState(),
+      user: parsed.user,
+      token: parsed.token,
+    };
+  } catch {
+    return getDefaultState();
+  }
+}
+
+export const registerUser = createAsyncThunk(
+  "auth/registerUser",
+  async (payload, { rejectWithValue }) => {
+    try {
+      return await authService.register(payload);
+    } catch (error) {
+      return rejectWithValue(error.message || "Registration failed");
+    }
+  },
+);
+
+export const loginUser = createAsyncThunk(
+  "auth/loginUser",
+  async (payload, { rejectWithValue }) => {
+    try {
+      return await authService.login(payload);
+    } catch (error) {
+      return rejectWithValue(error.message || "Login failed");
+    }
+  },
+);
+
+export const fetchMyProfile = createAsyncThunk(
+  "auth/fetchMyProfile",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await authService.me();
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to fetch profile");
+    }
+  },
+);
+
+export const guestLogin = createAsyncThunk(
+  "auth/guestLogin",
+  async (payload, { rejectWithValue }) => {
+    try {
+      return await authService.guestAuth(payload);
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to continue as guest");
+    }
+  },
+);
 
 const authSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState: loadAuthState(),
   reducers: {
-    logout(state) {
-      state.token = null;
+    logout: (state) => {
       state.user = null;
+      state.token = null;
+      state.status = "idle";
       state.error = null;
-      localStorage.removeItem("toa_token");
-      localStorage.removeItem("toa_user");
+      persistAuthState(state);
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(login.pending, (state) => {
+      .addCase(registerUser.pending, (state) => {
         state.status = "loading";
         state.error = null;
       })
-      .addCase(login.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.token = action.payload.token;
         state.user = action.payload.user;
-        localStorage.setItem("toa_token", action.payload.token);
-        localStorage.setItem("toa_user", JSON.stringify(action.payload.user));
+        state.token = action.payload.token;
+        state.error = null;
+        persistAuthState(state);
       })
-      .addCase(login.rejected, (state, action) => {
+      .addCase(registerUser.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message || "Login failed";
+        state.error = action.payload || "Registration failed";
+      })
+      .addCase(loginUser.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.error = null;
+        persistAuthState(state);
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Login failed";
+      })
+      .addCase(fetchMyProfile.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.error = null;
+        persistAuthState(state);
+      })
+      .addCase(fetchMyProfile.rejected, (state, action) => {
+        state.error = action.payload || "Failed to fetch profile";
+      })
+      .addCase(guestLogin.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(guestLogin.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.error = null;
+        persistAuthState(state);
+      })
+      .addCase(guestLogin.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to continue as guest";
       });
   },
 });
 
 export const { logout } = authSlice.actions;
+
 export default authSlice.reducer;

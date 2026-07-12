@@ -6,17 +6,34 @@ import API_BASE_URL from "../config/api.js";
 class ApiClient {
   constructor(baseURL) {
     this.baseURL = baseURL;
+    this.authStorageKey = "toa_auth_v1";
+  }
+
+  getAuthToken() {
+    if (typeof window === "undefined") {
+      return null;
+    }
+
+    try {
+      const raw = window.localStorage.getItem(this.authStorageKey);
+      if (!raw) {
+        return null;
+      }
+
+      const parsed = JSON.parse(raw);
+      return parsed?.token || null;
+    } catch {
+      return null;
+    }
   }
 
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
-    const token = localStorage.getItem("toa_token");
+    const token = this.getAuthToken();
     const config = {
       headers: {
         "Content-Type": "application/json",
-        ...(token
-          ? { Authorization: ["Bearer", token].join(" ") }
-          : {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...options.headers,
       },
       ...options,
@@ -60,15 +77,15 @@ class ApiClient {
     });
   }
 
-  delete(endpoint) {
-    return this.request(endpoint, { method: "DELETE" });
-  }
-
   patch(endpoint, data) {
     return this.request(endpoint, {
       method: "PATCH",
       body: JSON.stringify(data),
     });
+  }
+
+  delete(endpoint) {
+    return this.request(endpoint, { method: "DELETE" });
   }
 }
 

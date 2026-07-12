@@ -1,64 +1,76 @@
 import { useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
-import { login } from "../store/slices/authSlice";
+import { loginUser } from "../store/slices/authSlice";
 
-export default function Login() {
+const Login = () => {
   const dispatch = useDispatch();
-  const { token, status, error, user } = useSelector((state) => state.auth);
-  const [email, setEmail] = useState("customer@tasteofaloha.dev");
-  const [password, setPassword] = useState("password123");
-  const [role, setRole] = useState("CUSTOMER");
+  const navigate = useNavigate();
+  const { user, status, error } = useSelector((state) => state.auth);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  if (token && user) {
-    return <Navigate to={`/dashboard/${user.role.toLowerCase()}`} replace />;
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
   }
 
-  const submit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    await dispatch(login({ email, password, role }));
+
+    try {
+      await dispatch(loginUser({ email, password })).unwrap();
+      navigate("/dashboard");
+    } catch {
+      // Errors are surfaced from Redux state.
+    }
   };
 
   return (
-    <section className="container mx-auto max-w-lg p-6">
-      <h1 className="text-2xl font-semibold mb-4">Login</h1>
-      <p className="text-sm text-gray-600 mb-4">
-        Set <code>ALLOW_DEV_AUTH_BOOTSTRAP=true</code> in backend env for first-time demo user
-        creation.
+    <div className="mx-auto max-w-md px-4 py-8">
+      <h1 className="text-2xl font-semibold">Login</h1>
+      <p className="mt-2 text-sm text-gray-600">
+        Sign in to place orders and view your dashboard.
       </p>
-      <form onSubmit={submit} className="space-y-3 bg-white shadow rounded p-4">
-        <input
-          className="w-full border rounded p-2"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-        />
-        <input
-          className="w-full border rounded p-2"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-        />
-        <select
-          className="w-full border rounded p-2"
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-        >
-          <option value="CUSTOMER">Customer</option>
-          <option value="ADMIN">Admin</option>
-          <option value="KITCHEN">Kitchen</option>
-          <option value="DRIVER">Driver</option>
-        </select>
+
+      <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+        <label className="block text-sm font-medium">
+          Email
+          <input
+            className="mt-1 w-full rounded border border-gray-300 p-2"
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+          />
+        </label>
+
+        <label className="block text-sm font-medium">
+          Password
+          <input
+            className="mt-1 w-full rounded border border-gray-300 p-2"
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+          />
+        </label>
+
+        {error && <p className="text-sm text-red-600">{error}</p>}
+
         <button
+          className="w-full rounded bg-blue-600 px-4 py-2 font-semibold text-white disabled:opacity-60"
           type="submit"
-          className="w-full bg-blue-600 text-white rounded p-2 disabled:opacity-60"
           disabled={status === "loading"}
         >
           {status === "loading" ? "Signing in..." : "Sign in"}
         </button>
-        {error && <p className="text-red-600 text-sm">{error}</p>}
       </form>
-    </section>
+
+      <p className="mt-4 text-sm text-gray-700">
+        Need an account? <Link to="/register" className="text-blue-600">Register</Link>
+      </p>
+    </div>
   );
-}
+};
+
+export default Login;

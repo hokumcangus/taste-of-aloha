@@ -1,6 +1,19 @@
-import apiClient from "./api.js";
+import apiClient from "./api";
 
 export const authService = {
-  login: async (credentials) => apiClient.post("/api/auth/login", credentials),
-  me: async () => apiClient.get("/api/auth/me"),
+  register: async (payload) => {
+    return apiClient.post("/api/auth/register", payload);
+  },
+
+  login: async (payload) => {
+    return apiClient.post("/api/auth/login", payload);
+  },
+
+  me: async () => {
+    return apiClient.get("/api/auth/me");
+  },
+
+  guestAuth: async ({ phone }) => {
+    return apiClient.post("/api/auth/guest", { phone });
+  },
 };

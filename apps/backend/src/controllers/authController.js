@@ -1,59 +1,105 @@
-const bcrypt = require("bcrypt");
-const { prisma } = require("../config/database");
-const { issueToken } = require("../middleware/auth");
+const jwt = require("jsonwebtoken");
+const authModel = require("../models/authModel");
+const { JWT_SECRET } = require("../middleware/authMiddleware");
 
-const VALID_ROLES = ["CUSTOMER", "ADMIN", "KITCHEN", "DRIVER"];
-
-async function login(req, res) {
-  const { email, password } = req.body || {};
-
-  if (!email || !password) {
-    return res.status(400).json({ message: "email and password are required" });
-  }
-
-  const normalizedEmail = String(email).trim().toLowerCase();
-  let user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
-
-  if (!user && process.env.ALLOW_DEV_AUTH_BOOTSTRAP === "true") {
-    const role = VALID_ROLES.includes(req.body?.role)
-      ? req.body.role
-      : "CUSTOMER";
-    const passwordHash = await bcrypt.hash(password, 10);
-    user = await prisma.user.create({
-      data: {
-        email: normalizedEmail,
-        name: req.body?.name || normalizedEmail.split("@")[0],
-        role,
-        passwordHash,
-      },
-    });
-  }
-
-  if (!user?.passwordHash) {
-    return res.status(401).json({ message: "Invalid credentials" });
-  }
-
-  const ok = await bcrypt.compare(password, user.passwordHash);
-  if (!ok) {
-    return res.status(401).json({ message: "Invalid credentials" });
-  }
-
-  return res.json({
-    token: issueToken(user),
-    user: {
-      id: user.id,
+function buildAuthResponse(user) {
+  const token = jwt.sign(
+    {
+      sub: user.id,
       email: user.email,
       name: user.name,
       role: user.role,
     },
-  });
+    JWT_SECRET,
+    { expiresIn: "7d" },
+  );
+
+  return {
+    token,
+    user,
+  };
 }
 
-function me(req, res) {
-  return res.json({ user: req.user || null });
+function handleAuthError(res, error, fallbackMessage) {
+  if (error?.statusCode) {
+    return res.status(error.statusCode).json({ message: error.message });
+  }
+
+  console.error(error);
+  return res.status(500).json({ message: fallbackMessage });
+}
+
+async function register(req, res) {
+  try {
+    const user = await authModel.createUser(req.body || {});
+    return res.status(201).json(buildAuthResponse(user));
+  } catch (error) {
+    return handleAuthError(res, error, "Failed to register");
+  }
+}
+
+async function login(req, res) {
+  try {
+    const user = await authModel.verifyUser(req.body || {});
+    return res.json(buildAuthResponse(user));
+  } catch (error) {
+    return handleAuthError(res, error, "Failed to login");
+  }
+}
+
+async function me(req, res) {
+  try {
+    const user = await authModel.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.json({ user });
+  } catch (error) {
+    return handleAuthError(res, error, "Failed to fetch profile");
+  }
+}
+
+async function updateUserRole(req, res) {
+  const allowed = ["CUSTOMER", "DRIVER", "ADMIN"];
+  const role = String(req.body?.role || "").toUpperCase();
+
+  if (!allowed.includes(role)) {
+    return res.status(400).json({ message: "Role must be CUSTOMER, DRIVER, or ADMIN" });
+  }
+
+  try {
+    const { prisma } = require("../config/database");
+    const updated = await prisma.user.update({
+      where: { id: Number(req.params.id) },
+      data: { role },
+      select: { id: true, email: true, name: true, role: true, createdAt: true, updatedAt: true },
+    });
+
+    return res.json({ user: updated });
+  } catch (error) {
+    if (error?.code === "P2025") {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return handleAuthError(res, error, "Failed to update role");
+  }
+}
+
+async function guestAuth(req, res) {
+  try {
+    const user = await authModel.findOrCreateGuest(req.body?.phone);
+    return res.status(200).json(buildAuthResponse(user));
+  } catch (error) {
+    return handleAuthError(res, error, "Failed to continue as guest");
+  }
 }
 
 module.exports = {
+  register,
   login,
   me,
+  guestAuth,
+  updateUserRole,
 };

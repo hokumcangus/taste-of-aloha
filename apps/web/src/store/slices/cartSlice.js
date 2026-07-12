@@ -91,6 +91,8 @@ export const syncCartToBackend = createAsyncThunk(
   "cart/syncCartToBackend",
   async (_, { getState, rejectWithValue }) => {
     const cartState = getState().cart;
+    const authState = getState().auth;
+    const authenticatedUserId = authState?.user?.id || undefined;
     const itemsPayload = cartState.items.map((item) => ({
       menuId: item.menuId,
       quantity: item.quantity,
@@ -99,6 +101,7 @@ export const syncCartToBackend = createAsyncThunk(
     try {
       if (cartState.cartId) {
         const updated = await cartService.updateCart(cartState.cartId, {
+          userId: authenticatedUserId,
           items: itemsPayload,
         });
 
@@ -109,6 +112,7 @@ export const syncCartToBackend = createAsyncThunk(
       }
 
       const created = await cartService.createCart({
+        userId: authenticatedUserId,
         items: itemsPayload,
       });
 

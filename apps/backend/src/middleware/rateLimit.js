@@ -1,31 +1,20 @@
-const windows = new Map();
+const { rateLimit: _rateLimit } = require("express-rate-limit");
 
-function rateLimit({ max = 60, windowMs = 60000, keyFn } = {}) {
-  return (req, res, next) => {
-    const key =
-      (typeof keyFn === "function" && keyFn(req)) ||
-      req.ip ||
-      req.headers["x-forwarded-for"] ||
-      "unknown";
-    const now = Date.now();
-    const current = windows.get(key) || { count: 0, resetAt: now + windowMs };
-
-    if (now > current.resetAt) {
-      current.count = 0;
-      current.resetAt = now + windowMs;
-    }
-
-    current.count += 1;
-    windows.set(key, current);
-    res.setHeader("X-RateLimit-Limit", String(max));
-    res.setHeader("X-RateLimit-Remaining", String(Math.max(0, max - current.count)));
-
-    if (current.count > max) {
-      return res.status(429).json({ message: "Too many requests" });
-    }
-
-    return next();
-  };
+/**
+ * Returns an express-rate-limit middleware with sensible defaults.
+ * Rate limiting is automatically skipped when NODE_ENV === "test".
+ *
+ * @param {{ max?: number, windowMs?: number }} options
+ */
+function rateLimit({ max = 60, windowMs = 60_000 } = {}) {
+  return _rateLimit({
+    max,
+    windowMs,
+    standardHeaders: true,
+    legacyHeaders: false,
+    skip: () => process.env.NODE_ENV === "test",
+    message: { message: "Too many requests" },
+  });
 }
 
 module.exports = { rateLimit };

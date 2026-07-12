@@ -1,315 +1,321 @@
 const { prisma } = require("../config/database");
-const { canTransition, ORDER_STATUS } = require("../constants/orderLifecycle");
-const realtimeHub = require("../services/realtimeHub");
 
 class OrderValidationError extends Error {
-  constructor(message, statusCode = 400) {
-    super(message);
-    this.name = "OrderValidationError";
-    this.statusCode = statusCode;
-  }
+    constructor(message) {
+        super(message);
+        this.name = "OrderValidationError";
+        this.statusCode = 400;
+    }
 }
 
-function parsePositiveInt(value, name) {
-  const parsed = Number.parseInt(value, 10);
-  if (Number.isNaN(parsed) || parsed <= 0) {
-    throw new OrderValidationError(`Invalid ${name}`);
-  }
-  return parsed;
+function parsePositiveInt(value, fieldName) {
+    const parsed = Number.parseInt(value, 10);
+    if (Number.isNaN(parsed) || parsed <= 0) {
+        throw new OrderValidationError(`Invalid ${fieldName}`);
+    }
+    return parsed;
 }
 
-async function normalizeOrderItems(items) {
-  if (!Array.isArray(items) || items.length === 0) {
-    throw new OrderValidationError("Order items are required");
-  }
+function mapOrderData(order) {
+    return {
+        id: order.id,
+        userId: order.userId,
+        assignedDriverId: order.assignedDriverId ?? null,
+        status: order.status,
+        paymentStatus: order.paymentStatus,
+        paymentMethod: order.paymentMethod,
+        paymentReference: order.paymentReference,
+        total: Number(order.total),
+        itemCount: Number(order.itemCount),
+        items: (order.items || []).map((item) => ({
+            id: item.id,
+            menuId: item.menuId,
+            menuName: item.menuName,
+            unitPrice: Number(item.unitPrice),
+            quantity: item.quantity,
+            subtotal: Number(item.subtotal),
+        })),
+        createdAt: order.createdAt,
+        updatedAt: order.updatedAt,
+        user: order.user
+            ? {
+                  id: order.user.id,
+                  email: order.user.email,
+                  name: order.user.name,
+                  role: order.user.role,
+              }
+            : undefined,
+        assignedDriver: order.assignedDriver
+            ? {
+                  id: order.assignedDriver.id,
+                  email: order.assignedDriver.email,
+                  name: order.assignedDriver.name,
+                  role: order.assignedDriver.role,
+              }
+            : undefined,
+    };
+}
 
-  const normalized = [];
-  for (const rawItem of items) {
-    const quantity = parsePositiveInt(rawItem.quantity, "item quantity");
-    let name = rawItem.name;
-    let unitPrice = Number(rawItem.unitPrice ?? rawItem.price);
-    let menuId = rawItem.menuId ? parsePositiveInt(rawItem.menuId, "menuId") : null;
-
-    if (menuId) {
-      const menu = await prisma.menu.findUnique({ where: { id: menuId } });
-      if (!menu) {
-        throw new OrderValidationError(`Menu item not found: ${menuId}`);
-      }
-      name = name || menu.name;
-      unitPrice = Number.isFinite(unitPrice) ? unitPrice : Number(menu.price);
+function normalizeItems(items) {
+    if (!Array.isArray(items) || items.length === 0) {
+        throw new OrderValidationError("At least one item is required");
     }
 
-    if (!name || !Number.isFinite(unitPrice) || unitPrice < 0) {
-      throw new OrderValidationError(
-        "Each item must include valid name and unitPrice (or menuId)",
-      );
+    const merged = new Map();
+
+    for (const item of items) {
+        const menuId = parsePositiveInt(item.menuId, "menuId");
+        const quantity = parsePositiveInt(item.quantity, "quantity");
+        merged.set(menuId, (merged.get(menuId) || 0) + quantity);
     }
 
-    normalized.push({
-      menuId,
-      name: String(name),
-      unitPrice: Number(unitPrice.toFixed(2)),
-      quantity,
-      subtotal: Number((unitPrice * quantity).toFixed(2)),
-    });
-  }
-
-  return normalized;
+    return Array.from(merged.entries()).map(([menuId, quantity]) => ({
+        menuId,
+        quantity,
+    }));
 }
 
-function mapOrder(order) {
-  return {
-    ...order,
-    total: Number(order.total),
-    items: (order.items || []).map((item) => ({
-      ...item,
-      unitPrice: Number(item.unitPrice),
-      subtotal: Number(item.subtotal),
-    })),
-  };
+async function buildOrderFromItems(items) {
+    const normalized = normalizeItems(items);
+    const menuIds = normalized.map((item) => item.menuId);
+
+    const menus = await prisma.menu.findMany({
+        where: {
+            id: { in: menuIds },
+        },
+        select: {
+            id: true,
+            name: true,
+            price: true,
+        },
+    });
+
+    const byId = new Map(menus.map((menu) => [menu.id, menu]));
+    const missingIds = menuIds.filter((menuId) => !byId.has(menuId));
+
+    if (missingIds.length > 0) {
+        throw new OrderValidationError(
+            `Menu item(s) not found for id(s): ${missingIds.join(", ")}`,
+        );
+    }
+
+    const orderItems = normalized.map((item) => {
+        const menu = byId.get(item.menuId);
+        const unitPrice = Number(menu.price);
+        const subtotal = Number((unitPrice * item.quantity).toFixed(2));
+
+        return {
+            menuId: item.menuId,
+            menuName: menu.name,
+            unitPrice,
+            quantity: item.quantity,
+            subtotal,
+        };
+    });
+
+    const total = Number(
+        orderItems.reduce((sum, item) => sum + item.subtotal, 0).toFixed(2),
+    );
+    const itemCount = orderItems.reduce((sum, item) => sum + item.quantity, 0);
+
+    return { orderItems, total, itemCount };
 }
 
-async function createOrder(payload, actor) {
-  const items = await normalizeOrderItems(payload.items || []);
-  const total = Number(items.reduce((sum, item) => sum + item.subtotal, 0).toFixed(2));
-  const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-
-  const created = await prisma.$transaction(async (tx) => {
-    const order = await tx.order.create({
-      data: {
-        customerId: actor?.id || payload.customerId || null,
-        cartId: payload.cartId || null,
-        total,
-        itemCount,
-        status: ORDER_STATUS.CART_SUBMITTED,
-        items: { create: items },
-      },
-      include: {
-        items: true,
-        statusHistory: { orderBy: { createdAt: "asc" } },
-        deliveryAssignments: true,
-      },
+async function buildOrderFromCart(cartId) {
+    const cart = await prisma.cart.findUnique({
+        where: { id: parsePositiveInt(cartId, "cart id") },
+        include: {
+            items: {
+                include: {
+                    menu: {
+                        select: { name: true },
+                    },
+                },
+            },
+        },
     });
 
-    await tx.orderStatusHistory.create({
-      data: {
-        orderId: order.id,
-        fromStatus: null,
-        toStatus: ORDER_STATUS.CART_SUBMITTED,
-        actorRole: actor?.role || "CUSTOMER",
-        actorUserId: actor?.id || null,
-        note: "Order created",
-      },
-    });
+    if (!cart) {
+        throw new OrderValidationError("Cart not found");
+    }
 
-    return tx.order.findUnique({
-      where: { id: order.id },
-      include: {
-        items: true,
-        statusHistory: { orderBy: { createdAt: "asc" } },
-        deliveryAssignments: true,
-      },
-    });
-  });
+    if (!Array.isArray(cart.items) || cart.items.length === 0) {
+        throw new OrderValidationError("Cart has no items");
+    }
 
-  realtimeHub.publish("order.created", { orderId: created.id, status: created.status });
-  return mapOrder(created);
+    const orderItems = cart.items.map((item) => ({
+        menuId: item.menuId,
+        menuName: item.menu?.name || `Menu #${item.menuId}`,
+        unitPrice: Number(item.price),
+        quantity: item.quantity,
+        subtotal: Number(item.subtotal),
+    }));
+
+    return {
+        orderItems,
+        total: Number(cart.total),
+        itemCount: Number(cart.itemCount),
+    };
 }
 
-async function getOrders(filters = {}) {
-  const where = {};
-  if (filters.status) {
-    where.status = filters.status;
-  }
-  if (filters.customerId) {
-    where.customerId = Number(filters.customerId);
-  }
+async function createOrder(data) {
+    const userId = parsePositiveInt(data.userId, "user id");
+    const paymentMethod = String(data.paymentMethod || "card").toLowerCase();
 
-  const rows = await prisma.order.findMany({
-    where,
-    orderBy: { createdAt: "desc" },
-    include: {
-      items: true,
-      statusHistory: { orderBy: { createdAt: "asc" } },
-      deliveryAssignments: {
-        where: { isActive: true },
+    const orderPayload = data.cartId
+        ? await buildOrderFromCart(data.cartId)
+        : await buildOrderFromItems(data.items);
+
+    const created = await prisma.order.create({
+        data: {
+            userId,
+            paymentMethod,
+            paymentReference: data.paymentReference || null,
+            paymentStatus: "PENDING",
+            total: orderPayload.total,
+            itemCount: orderPayload.itemCount,
+            items: {
+                create: orderPayload.orderItems,
+            },
+        },
+        include: { items: true },
+    });
+
+    return mapOrderData(created);
+}
+
+async function getOrders(scope = {}) {
+    const where = {};
+    if (scope.userId) {
+        where.userId = Number(scope.userId);
+    }
+    if (scope.assignedDriverId) {
+        where.assignedDriverId = Number(scope.assignedDriverId);
+    }
+
+    const orders = await prisma.order.findMany({
+        where,
         orderBy: { createdAt: "desc" },
-      },
-    },
-  });
+        include: {
+            items: true,
+            user: { select: { id: true, email: true, name: true, role: true } },
+            assignedDriver: { select: { id: true, email: true, name: true, role: true } },
+        },
+    });
 
-  return rows.map(mapOrder);
+    return orders.map(mapOrderData);
 }
 
 async function getOrderById(orderId) {
-  const order = await prisma.order.findUnique({
-    where: { id: parsePositiveInt(orderId, "order id") },
-    include: {
-      items: true,
-      statusHistory: { orderBy: { createdAt: "asc" } },
-      deliveryAssignments: { orderBy: { createdAt: "desc" } },
-    },
-  });
-  return order ? mapOrder(order) : null;
-}
-
-async function transitionOrder(orderId, toStatus, actor, note) {
-  const id = parsePositiveInt(orderId, "order id");
-  const existing = await prisma.order.findUnique({ where: { id } });
-  if (!existing) {
-    throw new OrderValidationError("Order not found", 404);
-  }
-
-  if (!canTransition(existing.status, toStatus, actor.role)) {
-    throw new OrderValidationError(
-      `Transition ${existing.status} -> ${toStatus} is not allowed for ${actor.role}`,
-    );
-  }
-
-  if (toStatus === ORDER_STATUS.OUT_FOR_DELIVERY) {
-    const activeAssignment = await prisma.deliveryAssignment.findFirst({
-      where: { orderId: id, isActive: true },
-    });
-    if (!activeAssignment) {
-      throw new OrderValidationError(
-        "Driver must be assigned before moving to OUT_FOR_DELIVERY",
-      );
-    }
-  }
-
-  const order = await prisma.$transaction(async (tx) => {
-    await tx.orderStatusHistory.create({
-      data: {
-        orderId: id,
-        fromStatus: existing.status,
-        toStatus,
-        actorRole: actor.role,
-        actorUserId: actor.id || null,
-        note: note || null,
-      },
+    const order = await prisma.order.findUnique({
+        where: { id: parsePositiveInt(orderId, "order id") },
+        include: {
+            items: true,
+            user: { select: { id: true, email: true, name: true, role: true } },
+            assignedDriver: { select: { id: true, email: true, name: true, role: true } },
+        },
     });
 
-    return tx.order.update({
-      where: { id },
-      data: { status: toStatus },
-      include: {
-        items: true,
-        statusHistory: { orderBy: { createdAt: "asc" } },
-        deliveryAssignments: { orderBy: { createdAt: "desc" } },
-      },
-    });
-  });
-
-  realtimeHub.publish("order.transitioned", {
-    orderId: id,
-    fromStatus: existing.status,
-    toStatus,
-    actorRole: actor.role,
-  });
-  return mapOrder(order);
+    return order ? mapOrderData(order) : null;
 }
 
 async function deleteOrder(orderId) {
-  const id = parsePositiveInt(orderId, "order id");
-  try {
-    const deleted = await prisma.order.delete({
-      where: { id },
-      include: { items: true, statusHistory: true },
-    });
-    realtimeHub.publish("order.deleted", { orderId: id });
-    return deleted;
-  } catch (error) {
-    if (error.code === "P2025") {
-      return null;
+    try {
+        const deleted = await prisma.order.delete({
+            where: { id: parsePositiveInt(orderId, "order id") },
+            include: { items: true },
+        });
+
+        return mapOrderData(deleted);
+    } catch (error) {
+        if (error.code === "P2025") {
+            return null;
+        }
+
+        throw error;
     }
-    throw error;
-  }
 }
 
-async function getKitchenQueue() {
-  return getOrders({
-    status: ORDER_STATUS.PREPARING,
-  });
+function validateStatus(status) {
+    const normalizedStatus = String(status || "").toUpperCase();
+    const allowed = ["PLACED", "PREPARING", "READY", "COMPLETED", "CANCELLED"];
+
+    if (!allowed.includes(normalizedStatus)) {
+        throw new OrderValidationError("Invalid order status");
+    }
+
+    return normalizedStatus;
 }
 
-async function assignDriver(orderId, driverId, actor) {
-  const parsedOrderId = parsePositiveInt(orderId, "order id");
-  const parsedDriverId = parsePositiveInt(driverId, "driver id");
+async function updateOrder(orderId, { status, assignedDriverId } = {}) {
+    const data = {};
 
-  const assignment = await prisma.$transaction(async (tx) => {
-    await tx.deliveryAssignment.updateMany({
-      where: { orderId: parsedOrderId, isActive: true },
-      data: { isActive: false, unassignedAt: new Date() },
+    if (status !== undefined) {
+        data.status = validateStatus(status);
+    }
+
+    if (assignedDriverId !== undefined) {
+        if (assignedDriverId === null || assignedDriverId === "") {
+            data.assignedDriverId = null;
+        } else {
+            data.assignedDriverId = parsePositiveInt(assignedDriverId, "assignedDriverId");
+            const driver = await prisma.user.findUnique({
+                where: { id: data.assignedDriverId },
+                select: { id: true, role: true },
+            });
+
+            if (!driver || driver.role !== "DRIVER") {
+                throw new OrderValidationError("assignedDriverId must belong to a DRIVER user");
+            }
+        }
+    }
+
+    if (Object.keys(data).length === 0) {
+        throw new OrderValidationError("No order changes provided");
+    }
+
+    const updated = await prisma.order.update({
+        where: { id: parsePositiveInt(orderId, "order id") },
+        data,
+        include: {
+            items: true,
+            user: { select: { id: true, email: true, name: true, role: true } },
+            assignedDriver: { select: { id: true, email: true, name: true, role: true } },
+        },
     });
 
-    return tx.deliveryAssignment.create({
-      data: {
-        orderId: parsedOrderId,
-        driverId: parsedDriverId,
-      },
-    });
-  });
-
-  realtimeHub.publish("order.driver_assigned", {
-    orderId: parsedOrderId,
-    driverId: parsedDriverId,
-    assignedBy: actor?.id || null,
-  });
-  return assignment;
+    return mapOrderData(updated);
 }
 
-async function recordDriverLocation(orderId, actor, payload) {
-  const parsedOrderId = parsePositiveInt(orderId, "order id");
-  const activeAssignment = await prisma.deliveryAssignment.findFirst({
-    where: { orderId: parsedOrderId, driverId: actor.id, isActive: true },
-    orderBy: { createdAt: "desc" },
-  });
-
-  if (!activeAssignment) {
-    throw new OrderValidationError(
-      "Active assignment not found for this driver and order",
-      403,
-    );
-  }
-
-  const latitude = Number(payload.latitude);
-  const longitude = Number(payload.longitude);
-  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
-    throw new OrderValidationError("latitude and longitude are required");
-  }
-
-  const ping = await prisma.driverLocationPing.create({
-    data: {
-      assignmentId: activeAssignment.id,
-      orderId: parsedOrderId,
-      driverId: actor.id,
-      latitude,
-      longitude,
-      accuracyMeters: Number(payload.accuracyMeters) || null,
-      headingDegrees: Number(payload.headingDegrees) || null,
-      speedKph: Number(payload.speedKph) || null,
-    },
-  });
-
-  realtimeHub.publish("driver.location", {
-    orderId: parsedOrderId,
-    driverId: actor.id,
-    latitude: ping.latitude,
-    longitude: ping.longitude,
-    recordedAt: ping.recordedAt,
-  });
-
-  return ping;
+async function updateOrderStatus(orderId, status) {
+    return updateOrder(orderId, { status });
 }
 
 module.exports = {
-  OrderValidationError,
-  createOrder,
-  getOrders,
-  getOrderById,
-  transitionOrder,
-  deleteOrder,
-  getKitchenQueue,
-  assignDriver,
-  recordDriverLocation,
+    OrderValidationError,
+    createOrder,
+    getOrders,
+    getOrderById,
+    deleteOrder,
+    updateOrder,
+    updateOrderStatus,
+    markOrderPaidByReference,
 };
+
+async function markOrderPaidByReference(paymentReference) {
+    const order = await prisma.order.findFirst({
+        where: { paymentReference: String(paymentReference) },
+    });
+
+    if (!order) {
+        return null;
+    }
+
+    const updated = await prisma.order.update({
+        where: { id: order.id },
+        data: { paymentStatus: "PAID" },
+        include: { items: true },
+    });
+
+    return mapOrderData(updated);
+}

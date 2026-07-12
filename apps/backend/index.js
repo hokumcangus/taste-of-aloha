@@ -6,22 +6,43 @@ const menuRoutes = require("./src/routes/menuRoutes");
 const cartRoutes = require("./src/routes/cartRoutes");
 const orderRoutes = require("./src/routes/orderRoutes");
 const authRoutes = require("./src/routes/authRoutes");
-const realtimeRoutes = require("./src/routes/realtimeRoutes");
+const paymentRoutes = require("./src/routes/paymentRoutes");
+const dashboardRoutes = require("./src/routes/dashboardRoutes");
+const notificationRoutes = require("./src/routes/notificationRoutes");
 const logger = require("./src/utils/logger");
+const { rateLimit } = require("./src/middleware/rateLimit");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",")
+      .map((o) => o.trim())
+      .filter((o) => /^https?:\/\/.+/.test(o))
+  : ["http://localhost:5173"];
+app.use(cors({ origin: allowedOrigins, credentials: true }));
+// Stripe webhook requires the raw request body for signature verification.
+// Must be registered before express.json() so the webhook route receives
+// the raw Buffer instead of a parsed object.
+app.use("/api/payments/webhook", express.raw({ type: "application/json" }));
 app.use(express.json());
 app.use(logger);
+
+// Apply a general rate limit to all API routes (100 requests / minute per IP).
+// Auth routes add a stricter per-route limit on top of this.
+app.use("/api/", rateLimit({ max: 100, windowMs: 60_000 }));
+
+// Serve static files from public directory
+app.use(express.static("public"));
 
 // Routes
 app.use("/api/menu", menuRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/realtime", realtimeRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.get("/", (req, res) => {
   res.send("Taste of Aloha backend is running 🌺");
@@ -34,7 +55,7 @@ app.get("/health", (req, res) => {
   });
 });
 
-if (require.main === module) {
+if (process.env.NODE_ENV !== "production") {
   app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
   });

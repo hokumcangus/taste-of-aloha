@@ -102,17 +102,18 @@ test("renders component", () => {
 
 ## 📚 Documentation found in gitHub Wiki
 
-- **[Team Wiki](https://github.com/hokumcangus/taste-of-aloha/wiki)** — Learning guides and notes
-- **[Implementation Instructions](../../docs/IMPLEMENTATION_INSTRUCTIONS.md)** — Role dashboards, lifecycle, RBAC, realtime
+- **[Redux Guide](LEARNING_GUIDE)** — State management patterns
+- **[API Integration](BACKEND_API_GUIDE)** — Connecting to backend
 
 ## 🔗 Related
 
-- [Backend Guide](../backend/README.md) — API endpoints
-- [Root README](../../README.md) — Full monorepo overview
+- [Backend Guide](backend/README) — API endpoints
+- [Root README](README) — Full monorepo overview
 
 ## 🔌 Connectivity Verification
 
-Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md).
+Use the canonical connectivity checks in [QUICK_REFERENCE](QUICK_REFERENCE)- Connectivity-verification-powershell.
+Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md#connectivity-verification-powershell).
 
 ## Simple Commands (What / Why / How)
 

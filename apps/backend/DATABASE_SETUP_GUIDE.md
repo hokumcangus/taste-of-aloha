@@ -594,7 +594,7 @@ How:
 
 ```powershell
 npm run dev:db
-npm --workspace apps/backend run db:migrate
+npm --workspace apps/backend run db:migrate:dev
 npm --workspace apps/backend run db:seed
 npm run dev:backend
 ```
@@ -611,6 +611,6 @@ $env:PGPASSWORD = "<your_password>"
 $env:DATABASE_URL = "postgresql://<your_user>:<your_password>@<host>/<db>?sslmode=require&channel_binding=require"
 
 npm run dev:backend
-npx prisma db push
+npm --workspace apps/backend run db:migrate:dev
 npm --workspace apps/backend run db:seed
 ```
