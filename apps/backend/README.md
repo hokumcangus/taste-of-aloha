@@ -95,6 +95,8 @@ cd apps/backend
 npm install
 
 # Ensure .env has the correct DATABASE_URL
+npm run db:migrate
+npm run db:seed
 npm run dev
 ```
 
@@ -246,8 +248,7 @@ Connection URL resolution fallback (used by app runtime and seed scripts):
 ## 📚 Documentation
 
 - **[Database Setup Guide](./DATABASE_SETUP_GUIDE.md)** — Complete PostgreSQL and Prisma setup
-- **[Backend API Guide](../../docs/guides/BACKEND_API_GUIDE.md)** — Detailed API documentation
-- **[Testing Guide](../../docs/guides/TESTING_GUIDE.md)** — Testing patterns and best practices
+- **[Implementation Instructions](../../docs/IMPLEMENTATION_INSTRUCTIONS.md)** — MVP lifecycle, RBAC, realtime, deploy contract
 
 ## 🔗 Related
 
@@ -256,7 +257,7 @@ Connection URL resolution fallback (used by app runtime and seed scripts):
 
 ## 🔌 Connectivity Verification
 
-Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md#connectivity-verification-powershell).
+Use the canonical connectivity checks in [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md).
 
 ## Simple Commands (What / Why / How)
 

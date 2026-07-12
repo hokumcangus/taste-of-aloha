@@ -5,7 +5,10 @@ A modern full-stack monorepo for an island-inspired shopping experience.
 ## 🚀 Quick Start
 
 1. **Clone & Install**: `npm install`
-2. **Launch Everything**: `npm run dev`
+2. **Start DB**: `npm run dev:db`
+3. **Apply Migrations**: `npm --workspace apps/backend run db:migrate`
+4. **Seed Data**: `npm --workspace apps/backend run db:seed`
+5. **Launch Apps**: `npm run dev:backend` and `npm run dev:web`
    - Frontend: `http://localhost:5173`
    - Backend: `http://localhost:3000`
 
@@ -13,6 +16,7 @@ A modern full-stack monorepo for an island-inspired shopping experience.
 
 - [Quick Reference Commands](./QUICK_REFERENCE.md) - All the `npm` and `docker` commands you need.
 - [Team Wiki (External)](https://github.com/hokumcangus/taste-of-aloha/wiki) - Architecture, learning guides, and screenshots.
+- [Implementation Contract](./docs/IMPLEMENTATION_INSTRUCTIONS.md) - MVP scope, lifecycle, RBAC, realtime, and deploy checklist.
 
 ## 📂 Project Structure
 
