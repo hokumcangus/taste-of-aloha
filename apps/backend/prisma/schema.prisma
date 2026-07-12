@@ -6,11 +6,36 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  CUSTOMER
+  ADMIN
+  KITCHEN
+  DRIVER
+}
+
+enum OrderStatus {
+  CART_SUBMITTED
+  CONFIRMED
+  PREPARING
+  READY_FOR_PICKUP
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+  id                  Int                   @id @default(autoincrement())
+  email               String                @unique
+  name                String?
+  passwordHash        String?
+  role                Role                  @default(CUSTOMER)
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  posts               Post[]
+  customerOrders      Order[]               @relation("CustomerOrders")
+  statusTransitions   OrderStatusHistory[]
+  driverAssignments   DeliveryAssignment[]  @relation("DriverAssignments")
+  driverLocationPings DriverLocationPing[]  @relation("DriverLocations")
 }
 
 model Menu {
@@ -24,6 +49,7 @@ model Menu {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   cartItems   CartItem[]
+  orderItems  OrderItem[]
 }
 
 model Post {
@@ -58,4 +84,93 @@ model CartItem {
   menu      Menu     @relation(fields: [menuId], references: [id])
 
   @@unique([cartId, menuId])
+}
+
+model Order {
+  id                  Int                  @id @default(autoincrement())
+  customerId          Int?
+  cartId              Int?
+  status              OrderStatus          @default(CART_SUBMITTED)
+  total               Float                @default(0)
+  itemCount           Int                  @default(0)
+  placedAt            DateTime             @default(now())
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  customer            User?                @relation("CustomerOrders", fields: [customerId], references: [id])
+  items               OrderItem[]
+  statusHistory       OrderStatusHistory[]
+  deliveryAssignments DeliveryAssignment[]
+  locationPings       DriverLocationPing[]
+
+  @@index([status])
+  @@index([customerId, createdAt])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id          Int      @id @default(autoincrement())
+  orderId     Int
+  menuId      Int?
+  name        String
+  unitPrice   Float
+  quantity    Int
+  subtotal    Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menu        Menu?    @relation(fields: [menuId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+}
+
+model OrderStatusHistory {
+  id          Int         @id @default(autoincrement())
+  orderId     Int
+  fromStatus  OrderStatus?
+  toStatus    OrderStatus
+  actorRole   Role
+  actorUserId Int?
+  note        String?
+  createdAt   DateTime    @default(now())
+  order       Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  actorUser   User?       @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([orderId, createdAt])
+}
+
+model DeliveryAssignment {
+  id             Int                @id @default(autoincrement())
+  orderId        Int
+  driverId       Int
+  assignedAt     DateTime           @default(now())
+  unassignedAt   DateTime?
+  isActive       Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  order          Order              @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  driver         User               @relation("DriverAssignments", fields: [driverId], references: [id], onDelete: Restrict)
+  locationPings  DriverLocationPing[]
+
+  @@index([orderId, isActive])
+  @@index([driverId, isActive])
+}
+
+model DriverLocationPing {
+  id               Int                @id @default(autoincrement())
+  assignmentId     Int
+  orderId          Int
+  driverId         Int
+  latitude         Float
+  longitude        Float
+  accuracyMeters   Float?
+  headingDegrees   Float?
+  speedKph         Float?
+  recordedAt       DateTime           @default(now())
+  assignment       DeliveryAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  order            Order              @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  driver           User               @relation("DriverLocations", fields: [driverId], references: [id], onDelete: Restrict)
+
+  @@index([assignmentId, recordedAt])
+  @@index([orderId, recordedAt])
+  @@index([driverId, recordedAt])
 }

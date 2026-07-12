@@ -10,9 +10,13 @@ class ApiClient {
 
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
+    const token = localStorage.getItem("toa_token");
     const config = {
       headers: {
         "Content-Type": "application/json",
+        ...(token
+          ? { Authorization: ["Bearer", token].join(" ") }
+          : {}),
         ...options.headers,
       },
       ...options,
@@ -58,6 +62,13 @@ class ApiClient {
 
   delete(endpoint) {
     return this.request(endpoint, { method: "DELETE" });
+  }
+
+  patch(endpoint, data) {
+    return this.request(endpoint, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
   }
 }
 

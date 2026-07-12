@@ -24,3 +24,15 @@ jobs:
       - name: Run web tests
         # Use the name field from apps/web/package.json
         run: npm --workspace web run test
+
+      - name: Build web app
+        run: npm --workspace web run build
+
+      - name: Generate backend Prisma client
+        run: npm --workspace backend run db:generate
+
+      - name: Backend smoke verification
+        env:
+          DATABASE_URL: postgresql://localhost:5432/taste_of_aloha
+          JWT_SECRET: ci-test-secret
+        run: npm --workspace backend run smoke
