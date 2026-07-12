@@ -9,6 +9,7 @@ const fallbackDbPort = process.env.PRISMA_FALLBACK_DB_PORT ?? "5432";
 const fallbackDbName = process.env.PRISMA_FALLBACK_DB_NAME ?? "taste_of_aloha";
 
 const databaseUrl =
+  process.env.DATABASE_URL_UNPOOLED ??
   process.env.DATABASE_URL ??
   process.env.POSTGRES_PRISMA_URL ??
   process.env.POSTGRES_URL ??
@@ -26,6 +27,7 @@ export default defineConfig({
   datasource: {
     // `prisma generate` does not require a live DB connection, but Prisma config
     // must still have a valid URL at load time (e.g., on Vercel build).
+    // DATABASE_URL_UNPOOLED is preferred for migrations (bypasses Pgbouncer pooler).
     url: databaseUrl,
   },
 });
